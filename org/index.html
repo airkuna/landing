@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>airKUNA — zašto je euro stablecoin važan za lokalnu ekonomiju</title>
+<meta name="description" content="Najstarije hrvatsko sredstvo plaćanja postaje najnovije. Zašto stablecoin 1:1 s eurom, kako nastaje novac, zašto centralizirana likvidnost šteti lokalnoj ekonomiji — i kuharica kako izdati svoj euro stablecoin." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --red:#C0181C; --red-soft:#FBE7E7;
+  --green:#1A7A3C;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.narrow{max-width:820px;margin:0 auto;padding:0 24px}
+section{padding:92px 0}
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h2.title{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,4vw,46px);line-height:1.08;letter-spacing:-.01em;margin:14px 0 0;color:var(--navy)}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--mute);max-width:720px;margin-top:18px}
+.center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
+p.body{font-size:17px;color:var(--ink);margin-top:18px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:21px;color:var(--navy)}
+.brand img{width:34px;height:34px}
+.navlinks{display:flex;gap:28px;font-size:14.5px;font-weight:500}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:900px){.navlinks{display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:13px 24px;border-radius:999px;transition:.2s;cursor:pointer;border:1.5px solid transparent}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7)}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700);transform:translateY(-2px)}
+.btn-sm{padding:9px 18px;font-size:14px}
+
+.hero{position:relative;background:radial-gradient(900px 520px at 80% 5%,rgba(227,175,53,.18),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 58%,var(--navy-800));color:#fff;overflow:hidden;padding:96px 0 104px}
+.hero:after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;opacity:.5}
+.hero .wrap{position:relative;z-index:2;text-align:center}
+.hero .pill{display:inline-block;background:rgba(227,175,53,.16);color:var(--gold-light);font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:999px;letter-spacing:.02em}
+.hero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.02em;margin:22px auto 0;max-width:14ch}
+.hero h1 .gold{color:var(--gold-light)}
+.hero p.sub{font-size:clamp(17px,2.2vw,21px);color:#C9D6EC;margin:24px auto 0;max-width:620px}
+.hero-cta{display:flex;gap:14px;margin-top:36px;justify-content:center;flex-wrap:wrap}
+.hero .hook{margin-top:46px;font-family:Fraunces,serif;font-style:italic;font-size:clamp(20px,2.6vw,28px);color:#fff;opacity:.92}
+
+.eyebrow.red{color:var(--red)}
+.quote{font-family:Fraunces,serif;font-size:clamp(23px,3.3vw,37px);line-height:1.2;color:var(--navy);font-weight:500;text-align:center}
+.quote .gold{color:var(--gold)}.quote .red{color:var(--red)}
+
+.grid{display:grid;gap:22px;margin-top:46px}
+.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow-sm);transition:.25s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.card .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--navy);color:var(--gold-light);font-family:Fraunces,serif;font-weight:600;font-size:19px;margin-bottom:16px}
+.card h3{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.card p{color:var(--mute);font-size:15px}
+
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:42px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.bg-soft{background:var(--soft)}
+.bg-navy{background:radial-gradient(700px 420px at 78% 12%,rgba(227,175,53,.12),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff}
+.bg-navy .title{color:#fff}.bg-navy .lead{color:#B9C8E2}
+.bg-red{background:linear-gradient(160deg,#4a0d0f,#7a1418);color:#fff}
+.bg-red .title{color:#fff}.bg-red .lead{color:#f0cccd}.bg-red .eyebrow{color:#f3a9ab}
+
+/* stat band */
+.statband{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center;margin-top:10px}
+@media(max-width:740px){.statband{grid-template-columns:1fr;gap:34px}}
+.statband .num{font-family:Fraunces,serif;font-weight:600;font-size:clamp(34px,5vw,54px);line-height:1}
+.statband .num.red{color:#ffb4b6}.statband .num.gold{color:var(--gold-light)}
+.statband .lab{font-size:14.5px;margin-top:12px;opacity:.85;max-width:300px;margin-left:auto;margin-right:auto}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:44px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:13px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl .foreign{color:var(--red);font-weight:600;white-space:nowrap}
+.tbl .dom{color:var(--green);font-weight:600;white-space:nowrap}
+.tbl .tot{background:var(--navy-900);color:#fff;font-weight:600}
+.tbl .tot td{border-bottom:0}
+@media(max-width:680px){.tbl{font-size:13px}.tbl th,.tbl td{padding:10px 9px}}
+
+/* vs compare */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:46px}
+@media(max-width:760px){.vs{grid-template-columns:1fr}}
+.vs .col{border-radius:var(--r);padding:30px;background:#fff;border:1px solid var(--line)}
+.vs .old{border-top:5px solid var(--red)}
+.vs .new{border-top:5px solid var(--gold)}
+.vs h3{font-family:Fraunces,serif;font-size:23px;font-weight:600;margin-bottom:4px}
+.vs .old h3{color:var(--red)}.vs .new h3{color:var(--navy)}
+.vs .tag{font-size:13px;color:var(--mute);margin-bottom:18px}
+.vs ul{list-style:none;display:grid;gap:14px}
+.vs li{display:flex;gap:12px;font-size:15px;line-height:1.5}
+.vs li:before{flex:0 0 20px;font-weight:700;font-size:17px}
+.vs .old li:before{content:"\2715";color:var(--red)}
+.vs .new li:before{content:"\2713";color:var(--gold)}
+
+/* cookbook steps */
+.steps{display:grid;gap:18px;margin-top:44px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;box-shadow:var(--shadow-sm)}
+.step .n{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--navy-700),var(--navy));color:var(--gold-light);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:600;font-size:26px}
+.step h3{font-size:19px;color:var(--navy);font-weight:600;margin-bottom:5px}
+.step p{color:var(--mute);font-size:15px}
+
+.fact{background:linear-gradient(160deg,var(--navy-900),var(--navy));color:#fff;border-radius:var(--r);padding:34px;box-shadow:var(--shadow)}
+.fact h3{font-family:Fraunces,serif;font-weight:600;font-size:24px;margin-bottom:18px}
+.fact .frow{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
+.fact .frow:last-child{border-bottom:0}.fact .frow span:first-child{color:#A9BBD8}.fact .frow span:last-child{font-weight:600;text-align:right}
+
+.cta{background:radial-gradient(700px 400px at 80% 20%,rgba(227,175,53,.18),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:26px;padding:64px 40px;text-align:center;box-shadow:var(--shadow)}
+.cta h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,4vw,42px);line-height:1.1}
+.cta p{color:#C9D6EC;max-width:600px;margin:18px auto 30px}
+
+footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);font-size:14px}
+.fgrid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.fnote{max-width:560px;font-size:13px;color:var(--mute);margin-top:26px;line-height:1.7;border-top:1px solid var(--line);padding-top:22px}
+
+.reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.src{font-size:12px;color:#9aa6b8;margin-top:26px;text-align:center}
+.src a{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#stablecoin">Stablecoin</a>
+      <a href="#novac">Kako nastaje novac</a>
+      <a href="#problem">Problem</a>
+      <a href="#banke">Usporedba banaka</a>
+      <a href="#kuharica">Kuharica</a>
+    </nav>
+    <a class="btn btn-navy btn-sm" href="https://airkuna.com">Projekt →</a>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero">
+  <div class="wrap">
+    <span class="pill">Otvoreni koncept · Digitalni euro za lokalnu ekonomiju</span>
+    <h1>Kuna se vraća. <span class="gold">Ovaj put kao euro.</span></h1>
+    <p class="sub">Najstarije hrvatsko sredstvo plaćanja postaje najnovije — regulirani euro stablecoin, pokriven 1:1 eurom. Evo zašto je to važno, i zašto današnji sustav radi protiv lokalne ekonomije.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#problem">Zašto je ovo važno</a>
+      <a class="btn btn-ghost" href="#kuharica">Kuharica: izdaj svoj</a>
+    </div>
+    <div class="hook">„Od krzna do koda."</div>
+  </div>
+</section>
+
+<!-- KUNA STORY -->
+<section id="prica">
+  <div class="narrow center">
+    <span class="eyebrow">Tri života jedne kune</span>
+    <h2 class="title">Valuta nazvana po vrijednosti, ne po novcu</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Kuna je hrvatska riječ za životinju kunu zlaticu. U srednjem vijeku kunje krzno bilo je novac — porez „marturina" plaćao se u krznu. Kuna je sredstvo plaćanja u ovim krajevima već tisuću godina.</p>
+  </div>
+  <div class="wrap">
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico">1994</div><h3>Rođena s državom</h3><p>30. svibnja 1994. kuna postaje službena valuta mlade Hrvatske. Na kovanicama: slavuj, tuna, medvjed.</p></div>
+      <div class="card reveal"><div class="ico">2023</div><h3>Povučena</h3><p>1. siječnja 2023. Hrvatska uvodi euro po tečaju 7,53450 kn = 1 €. Oproštaj je bio emotivan.</p></div>
+      <div class="card reveal"><div class="ico">≡</div><h3>Ponovno rođena</h3><p>Sada kuna oživljava kao digitalni euro — ime koje volite, vrijednost na koju računate: 1 KUNA = 1 EUR.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STABLECOIN 101 -->
+<section id="stablecoin" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Stablecoin u jednoj minuti</span>
+    <h2 class="title">Što je uopće stablecoin?</h2>
+    <p class="body" style="text-align:left">Stablecoin je digitalni token čija je vrijednost <b>vezana 1:1 za stvarni novac</b> — ovdje za euro. Nije špekulacija: za svaki token u optjecaju postoji jedan euro u rezervi, a token možeš u svakom trenutku zamijeniti natrag za euro <b>po nominali</b>. Razlika u odnosu na broj na tvom bankovnom računu? Stablecoin je <b>programabilan, prenosiv u sekundi, 0–24, bez posrednika</b> — i transparentan na javnom lancu.</p>
+  </div>
+  <div class="wrap">
+    <div class="statband" style="color:var(--navy)">
+      <div class="reveal"><div class="num gold">~$33 bilijuna</div><div class="lab">godišnji volumen stablecoina u 2025. — više nego Visa i Mastercard zajedno</div></div>
+      <div class="reveal"><div class="num gold">1 : 1</div><div class="lab">svaki regulirani euro stablecoin pokriven je eurom u rezervi</div></div>
+      <div class="reveal"><div class="num gold">0–24</div><div class="lab">namira u sekundama, bez radnog vremena banke i bez granica</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDOGENOUS MONEY -->
+<section id="novac">
+  <div class="narrow center">
+    <span class="eyebrow">Prvo razumij novac</span>
+    <h2 class="title">Banke ne posuđuju tvoju štednju</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Suprotno udžbeniku: banka pri odobravanju kredita <b>stvara novi novac</b> — upisom na račun zajmoprimca. Krediti stvaraju depozite. Procjenjuje se da je oko <b>97% novca</b> u optjecaju nastalo upravo tako.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  A[Banka odobri kredit]:::bank --> B[(Na računu zajmoprimca<br/>nastaje NOVI depozit)]:::new
+  B --> C[Novac ulazi u ekonomiju]:::flow
+  C --> D{Tko odlučuje o kreditu,<br/>odlucuje sto se gradi}:::key
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef new fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef flow fill:#EAF0FA,stroke:#9aa9c2,color:#14202E;
+  classDef key fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+      </div>
+      <div class="cap">Moć stvaranja novca = moć alokacije kredita. Pitanje je samo: tko je drži i u čiju korist.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM: EXTRACTION -->
+<section id="problem" class="bg-red">
+  <div class="narrow center">
+    <span class="eyebrow">Problem</span>
+    <h2 class="title">Ekstrakcijska ekonomija</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Kad je odlučivanje o kreditu i akumulacija dobiti centralizirana izvan zemlje, lokalno stvorena vrijednost sustavno odlazi. Hrvatski bankarski sektor je gotovo u potpunosti u stranom vlasništvu — i profit putuje matici.</p>
+  </div>
+  <div class="wrap">
+    <div class="statband">
+      <div class="reveal"><div class="num red">88,9%</div><div class="lab">tržišnog udjela bankarskog sektora u Hrvatskoj je u stranom vlasništvu</div></div>
+      <div class="reveal"><div class="num red">~2 mlrd €</div><div class="lab">dividendi isplaćeno stranim vlasnicima u oko 18 mjeseci — gotovo sve izvučeno iz zemlje</div></div>
+      <div class="reveal"><div class="num red">≈ 2,5%</div><div class="lab">hrvatskog BDP-a — toliko je taj odljev kapitala iznosio</div></div>
+    </div>
+    <div class="figure reveal" style="background:rgba(255,255,255,.96)">
+      <div class="mermaid">
+flowchart TB
+  S([Štediše i poduzeća u HR]):::loc --> BANK[Banka u HR]:::bank
+  BANK -- krediti, kamate, naknade --> PROFIT[Lokalno stvorena dobit]:::gold
+  PROFIT -- dividenda --> PARENT[Strana matica<br/>Italija · Austrija · Mađarska]:::out
+  PARENT -. kapital napušta lokalnu ekonomiju .-> X((Inozemstvo)):::out
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Lokalna likvidnost se stvara ovdje — a multiplikator se gubi kad dobit ode van.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BANK TABLE -->
+<section id="banke">
+  <div class="narrow center">
+    <span class="eyebrow red">Tko drži tvoj novac</span>
+    <h2 class="title">Šest banaka, pet stranih matica</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Najveće banke u Hrvatskoj i kamo putuje njihova dobit. Domaće (državno) vlasništvo je iznimka, ne pravilo.</p>
+  </div>
+  <div class="wrap" style="overflow-x:auto">
+    <table class="tbl reveal">
+      <thead><tr><th>Banka</th><th>Matica</th><th>Vlasništvo</th><th>Tržišni udio</th><th>Dobit ide…</th></tr></thead>
+      <tbody>
+        <tr><td>Zagrebačka banka</td><td>UniCredit</td><td class="foreign">Italija</td><td>~25,6%</td><td class="foreign">~431 mil € matici</td></tr>
+        <tr><td>Privredna banka Zagreb (PBZ)</td><td>Intesa Sanpaolo</td><td class="foreign">Italija</td><td>~20,5%</td><td class="foreign">~371 mil € matici</td></tr>
+        <tr><td>Erste &amp; Steiermärkische</td><td>Erste Group</td><td class="foreign">Austrija</td><td>~18,1%</td><td class="foreign">~120 mil € matici</td></tr>
+        <tr><td>OTP banka</td><td>OTP Group</td><td class="foreign">Mađarska</td><td>~10,1%</td><td class="foreign">~75 mil € matici</td></tr>
+        <tr><td>Raiffeisenbank (RBA)</td><td>Raiffeisen</td><td class="foreign">Austrija</td><td>~8,1%</td><td class="foreign">~70 mil € matici</td></tr>
+        <tr><td>Hrvatska poštanska banka (HPB)</td><td>Republika Hrvatska</td><td class="dom">Hrvatska</td><td>~9,4%</td><td class="dom">ostaje u HR</td></tr>
+        <tr class="tot"><td colspan="2">Sektor ukupno</td><td colspan="2">~88,9% strano vlasništvo</td><td>~2 mlrd € / 18 mj. van</td></tr>
+      </tbody>
+    </table>
+    <p class="src">Izvori: HNB / HUB, N1, Bloomberg Adria, Telegram, NHS. Brojke zaokružene; odnose se na dobit 2024. / isplate 2025. i agregat 2023.–2024.</p>
+  </div>
+</section>
+
+<!-- TWO MODELS -->
+<section class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Dva modela, jedna razlika</span>
+    <h2 class="title">Gdje vrijednost ostaje</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Nije riječ o tome da su banke „zle". Riječ je o tome gdje se akumulira likvidnost — i tko kontrolira novčanu infrastrukturu.</p>
+  </div>
+  <div class="wrap">
+    <div class="vs">
+      <div class="col old reveal">
+        <h3>Centralizirani sustav</h3>
+        <div class="tag">ZABA/UniCredit · PBZ/Intesa · Erste · OTP · RBA…</div>
+        <ul>
+          <li>Odluka o kreditu i dobit centralizirane izvan zemlje</li>
+          <li>Dividenda sustavno odlazi stranoj matici</li>
+          <li>Neproziran sustav, radno vrijeme, posrednici</li>
+          <li>Korisnik ne vidi gdje i kako njegov novac „radi"</li>
+          <li>Spori prekogranični prijenosi i naknade</li>
+        </ul>
+      </div>
+      <div class="col new reveal">
+        <h3>Euro stablecoin (1:1)</h3>
+        <div class="tag">airKUNA model · rezerva pod kontrolom, on-chain</div>
+        <ul>
+          <li>Rezerva 100% pokrivena eurom, otkup po nominali</li>
+          <li>Rezerva može stajati u <b>etičkoj banci</b> koja je usmjerava u lokalni kredit</li>
+          <li>Transparentno na javnom lancu — svatko provjeri pokriće</li>
+          <li>Namira u sekundi, 0–24, bez granica, programabilno</li>
+          <li>Vrijednost i platne marže mogu ostati u domaćoj ekonomiji</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COOKBOOK -->
+<section id="kuharica">
+  <div class="narrow center">
+    <span class="eyebrow">Kuharica</span>
+    <h2 class="title">Kako izdati svoj euro stablecoin</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Recept nije tajna — regulatorni okvir (MiCA) je jasan, a tehnologija je open-source. Pet koraka od eura do tokena.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  S1[1 · EMI licenca]:::a --> S2[2 · Rezerva +<br/>safeguarding]:::a
+  S2 --> S3[3 · Smart contract<br/>mint / burn]:::b
+  S3 --> S4[4 · SEPA<br/>on/off-ramp]:::a
+  S4 --> S5[5 · Pravo na otkup<br/>po nominali]:::gold
+  classDef a fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef b fill:#0A3B82,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Pet koraka reguliranog euro stablecoina (MiCA e-money token).</div>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><div><h3>E-money licenca (EMI)</h3><p>Izdavatelj mora biti licencirana institucija za e-novac (ili partner s njom). Licenca u jednoj EU/EEA državi daje passporting kroz cijeli EU i SEPA.</p></div></div>
+      <div class="step reveal"><div class="n">2</div><div><h3>Rezerva i safeguarding</h3><p>Za svaki token jedan euro. Sredstva se drže segregirano u kreditnoj instituciji, u sigurnoj niskorizičnoj imovini, uz neovisni audit i javne atestacije pokrića.</p></div></div>
+      <div class="step reveal"><div class="n">3</div><div><h3>Smart contract: mint i burn</h3><p>Uplata eura → ugovor izdaje (mint) token; otkup → ugovor spaljuje (burn) token. Pravila usklađenosti (KYC, limiti, blacklist) ugrađena su uz svaki transfer.</p></div></div>
+      <div class="step reveal"><div class="n">4</div><div><h3>SEPA on/off-ramp</h3><p>Token povezan s IBAN-om: SEPA uplata na IBAN automatski minta token u walletu; izlaz vraća euro preko SEPA-e (idealno SEPA Instant).</p></div></div>
+      <div class="step reveal"><div class="n">5</div><div><h3>Pravo na otkup po nominali</h3><p>Svaki imatelj može u svakom trenutku zamijeniti token za euro 1:1. To je regulatorni zahtjev — i ujedno glavni izvor povjerenja.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF: MONERIUM -->
+<section class="bg-navy">
+  <div class="wrap">
+    <div class="center"><span class="eyebrow">Nije teorija</span>
+    <h2 class="title">Monerium to već radi</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Recept je dokazan u produkciji. EURe je regulirani euro stablecoin koji radi godinama — airKUNA primjenjuje isti model u hrvatskom i regionalnom kontekstu.</p></div>
+    <div style="max-width:620px;margin:44px auto 0">
+      <div class="fact reveal">
+        <h3>Monerium EURe</h3>
+        <div class="frow"><span>Status</span><span>Prva EMI licenca za on-chain e-novac (2019.)</span></div>
+        <div class="frow"><span>Regulacija</span><span>MiCA e-money token (EMT)</span></div>
+        <div class="frow"><span>IBAN / SEPA</span><span>preko banke LHV Pank</span></div>
+        <div class="frow"><span>Lanci</span><span>Ethereum, Gnosis, Polygon, Base…</span></div>
+        <div class="frow"><span>Volumen</span><span>~€8 mlrd između banaka i DeFi-a</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISION / CTA -->
+<section>
+  <div class="narrow center">
+    <p class="quote reveal">Hrvatska je izgubila kunu 2023.<br/>Mi je vraćamo — ovaj put kao <span class="gold">euro</span>, na lancu, <span class="red">s vrijednošću koja ostaje doma</span>.</p>
+  </div>
+  <div class="wrap" style="margin-top:54px">
+    <div class="cta reveal">
+      <span class="eyebrow" style="color:var(--gold-light)">airKUNA</span>
+      <h2>Digitalna kuna za lokalnu ekonomiju</h2>
+      <p>Koncept je otvoren, tehnologija dokazana, a komercijalni projekt je u izgradnji. Pogledaj kako gradimo regulirani hrvatski euro.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn-gold" href="https://airkuna.com">Komercijalni projekt →</a>
+        <a class="btn btn-ghost" href="#top">Vrati se na početak</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <a class="brand" href="#top"><img src="coin.svg" alt="" style="width:30px" /> airKUNA</a>
+      <div style="display:flex;gap:40px;flex-wrap:wrap">
+        <div><strong style="color:var(--navy)">Razumij</strong><br/><a href="#stablecoin">Stablecoin</a><br/><a href="#novac">Kako nastaje novac</a><br/><a href="#problem">Ekstrakcijska ekonomija</a></div>
+        <div><strong style="color:var(--navy)">Dalje</strong><br/><a href="#kuharica">Kuharica</a><br/><a href="#banke">Usporedba banaka</a><br/><a href="https://airkuna.com">Projekt (.com)</a></div>
+      </div>
+    </div>
+    <p class="fnote">
+      <b>Napomena o nazivu:</b> Hrvatska je u eurozoni od 1. 1. 2023.; kuna više ne postoji kao valuta. „KUNA" je <b>brand</b> (digitalni hrvatski euro), a underlying vrijednost tokena je <b>euro</b>. Pod MiCA-om token je e-money token (EMT) koji referencira euro.<br/><br/>
+      Edukativni i informativni sadržaj — <b>nije financijski savjet</b> ni ponuda. Brojke su zaokružene i potkrijepljene javnim izvorima. © 2026 airKUNA.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
+const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
