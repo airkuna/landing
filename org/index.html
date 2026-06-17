@@ -196,7 +196,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
   </div>
   <div class="wrap">
     <div class="statband" style="color:var(--navy)">
-      <div class="reveal"><div class="num gold">~$33 bilijuna</div><div class="lab">godišnji volumen stablecoina u 2025. — više nego Visa i Mastercard zajedno</div></div>
+      <div class="reveal"><div class="num gold">~$27,6 bilijuna</div><div class="lab">namireno stablecoinima u 2024. — više nego Visa i Mastercard zajedno</div></div>
       <div class="reveal"><div class="num gold">1 : 1</div><div class="lab">svaki regulirani euro stablecoin pokriven je eurom u rezervi</div></div>
       <div class="reveal"><div class="num gold">0–24</div><div class="lab">namira u sekundama, bez radnog vremena banke i bez granica</div></div>
     </div>
@@ -208,7 +208,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
   <div class="narrow center">
     <span class="eyebrow">Prvo razumij novac</span>
     <h2 class="title">Banke ne posuđuju tvoju štednju</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Suprotno udžbeniku: banka pri odobravanju kredita <b>stvara novi novac</b> — upisom na račun zajmoprimca. Krediti stvaraju depozite. Procjenjuje se da je oko <b>97% novca</b> u optjecaju nastalo upravo tako.</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Suprotno udžbeniku: banka pri odobravanju kredita <b>stvara novi novac</b> — upisom na račun zajmoprimca. Krediti stvaraju depozite. Procjenjuje se da je oko <b>97% novca</b> u optjecaju nastalo upravo tako (Bank of England, 2014.).</p>
   </div>
   <div class="wrap">
     <div class="figure reveal">
@@ -216,7 +216,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
 flowchart LR
   A[Banka odobri kredit]:::bank --> B[(Na računu zajmoprimca<br/>nastaje NOVI depozit)]:::new
   B --> C[Novac ulazi u ekonomiju]:::flow
-  C --> D{Tko odlučuje o kreditu,<br/>odlucuje sto se gradi}:::key
+  C --> D{Tko odlučuje o kreditu,<br/>odlučuje što se gradi}:::key
   classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
   classDef new fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
   classDef flow fill:#EAF0FA,stroke:#9aa9c2,color:#14202E;
@@ -224,6 +224,31 @@ flowchart LR
       </div>
       <div class="cap">Moć stvaranja novca = moć alokacije kredita. Pitanje je samo: tko je drži i u čiju korist.</div>
     </div>
+  </div>
+</section>
+
+<!-- CREDIT SIMULATION: BRICK -->
+<section id="simulacija" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Najjednostavniji primjer</span>
+    <h2 class="title">Gdje odlazi kamata: priča o cigli</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Tri susjeda, jedna banka (u stranom vlasništvu). Cigla je proizvedena lokalno, novac je kružio između susjeda — ali kamata trajno napušta zajednicu.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  BANK["Banka<br/>strani vlasnik"]:::out -- "1 · kredit 10.000 €" --> KUPAC["Kupac cigle"]:::loc
+  KUPAC -- "2 · plaća 10.000 €" --> PROIZ["Proizvođač cigle"]:::loc
+  PROIZ -- "3 · depozit 10.000 €" --> BANK
+  KUPAC -- "4 · 10 rata = ~12.950 €" --> BANK
+  BANK -. "5 · ~2.950 € kamate van" .-> X((Inozemstvo)):::out
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Kredit 10.000 € uz 5% na 10 godina → vraća se ~12.950 €. Čistih ~2.950 € kamate odlazi stranom vlasniku banke.</div>
+    </div>
+    <p class="center" style="color:var(--mute);font-size:15px;margin-top:24px;max-width:720px;margin-left:auto;margin-right:auto">Pomnožite to s tisućama kredita i vidite razmjer odljeva. Što je kamata viša i rok dulji — to više vrijednosti napušta zajednicu.</p>
   </div>
 </section>
 
@@ -236,9 +261,9 @@ flowchart LR
   </div>
   <div class="wrap">
     <div class="statband">
-      <div class="reveal"><div class="num red">88,9%</div><div class="lab">tržišnog udjela bankarskog sektora u Hrvatskoj je u stranom vlasništvu</div></div>
-      <div class="reveal"><div class="num red">~2 mlrd €</div><div class="lab">dividendi isplaćeno stranim vlasnicima u oko 18 mjeseci — gotovo sve izvučeno iz zemlje</div></div>
-      <div class="reveal"><div class="num red">≈ 2,5%</div><div class="lab">hrvatskog BDP-a — toliko je taj odljev kapitala iznosio</div></div>
+      <div class="reveal"><div class="num red">~90%</div><div class="lab">bankovne aktive u Hrvatskoj je u stranom vlasništvu</div></div>
+      <div class="reveal"><div class="num red">&gt;3 mlrd €</div><div class="lab">dividendi isplaćeno stranim vlasnicima 2022.–2024. — ~98% izvučeno iz zemlje</div></div>
+      <div class="reveal"><div class="num red">1,53 mlrd €</div><div class="lab">rekordna dobit bankarskog sektora u 2024. (HNB)</div></div>
     </div>
     <div class="figure reveal" style="background:rgba(255,255,255,.96)">
       <div class="mermaid">
@@ -281,8 +306,64 @@ flowchart TB
   </div>
 </section>
 
+<!-- OWNERSHIP TREE -->
+<section id="vlasnistvo">
+  <div class="narrow center">
+    <span class="eyebrow red">Tko zapravo zarađuje</span>
+    <h2 class="title">Lanac ne staje kod „strane matice"</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Kamata i naknada koju platiš svojoj banci putuje preko Milana i Torina sve do fonda na Wall Streetu — i zaklade stare 460 godina.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart TD
+  KLIJENT(["Klijent u Hrvatskoj"]):::loc --> ZABA["Zagrebačka banka"]:::bank
+  KLIJENT --> PBZ["Privredna banka Zagreb"]:::bank
+  ZABA -- "96,2%" --> UC["UniCredit · Italija"]:::out
+  PBZ -- "100%" --> IS["Intesa Sanpaolo · Italija"]:::out
+  UC --> BR1["BlackRock 7,38% · SAD"]:::own
+  UC --> NB1["Norges Bank 3,01% · Norveška"]:::own
+  UC --> CRT["Fondazione CRT 2,29%<br/>štedionica iz 19. st."]:::own
+  IS --> CSP["Compagnia di San Paolo 6,63%<br/>osnovana 1563."]:::own
+  IS --> CARI["Fondazione Cariplo 5,52%<br/>osnovana 1823."]:::own
+  IS --> BR2["BlackRock ~5% · SAD"]:::own
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef own fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+      </div>
+      <div class="cap">BlackRock i Vanguard drže dionice u ime klijenata (mirovinski fondovi, ušteđevine). Talijanske zaklade financiraju kulturne projekte u Italiji — dijelom dobiti iz Hrvatske.</div>
+    </div>
+    <p class="src">Izvori: UniCredit / Intesa Sanpaolo IR; simplywall.st; Wikipedia (Compagnia di San Paolo 1563., Cariplo 1823.).</p>
+  </div>
+</section>
+
+<!-- HISTORY: SELL-OFF -->
+<section id="povijest" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Kako smo došli dovde</span>
+    <h2 class="title">Platili, prodali, pa plaćamo opet</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Porezni obveznici sanirali su banke, država ih je prodala ispod cijene sanacije, a strani vlasnici od tada izvlače dobit.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  A["1991.–2002.<br/>SANACIJA<br/>~5,5 mlrd $<br/>23% BDP-a"]:::out --> B["1999.–2002.<br/>PRIVATIZACIJA<br/>prodano za<br/>~1–1,5 mlrd €"]:::bank
+  B --> C["2003.–2024.<br/>EKSTRAKCIJA<br/>&gt;10 mlrd €<br/>dobiti van"]:::out
+  B -. "da je uloženo<br/>u S&amp;P 500" .-> E(("≈ 8,2 mlrd €<br/>danas")):::gold
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Broj banaka pao je sa 60 (1997.) na ~20 (2025.). Da su prihodi od 4 ključne prodaje uloženi u S&P 500, danas bi vrijedili ~8,2 mlrd €.</div>
+    </div>
+    <p class="src">Izvori: HNB, DAB; inflacijske i S&P 500 vrijednosti zaokružene na 2025./2026.</p>
+  </div>
+</section>
+
 <!-- TWO MODELS -->
-<section class="bg-soft">
+<section class="bg-soft" style="border-top:1px solid var(--line)">
   <div class="narrow center">
     <span class="eyebrow">Dva modela, jedna razlika</span>
     <h2 class="title">Gdje vrijednost ostaje</h2>
@@ -313,6 +394,36 @@ flowchart TB
         </ul>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- CREATOR ECONOMY -->
+<section id="kreator">
+  <div class="narrow center">
+    <span class="eyebrow">Kome ovo pomaže</span>
+    <h2 class="title">Kreator iz Hrvatske gubi 15–40%</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Konkretno lice problema: kad naplatiš pretplatu ili donaciju, svaki posrednik uzme svoj dio. Na mikro-iznose to premaši pola.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  P(["Patron plaća 1,00 €"]):::loc --> PF["−10% platforma<br/>0,90 €"]:::out
+  PF --> PR["−processing<br/>0,75 €"]:::out
+  PR --> K(["Kreatoru ostaje<br/>0,75 €"]):::out
+  K -. "isti iznos on-chain" .-> SOL(["euro on-chain<br/>naknada ~0,00025 €"]):::gold
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Četvrtina svake €1 donacije nestane u naknadama. On-chain euro naplaćuje djelić centa — pa vrijednost ostaje kreatoru.</div>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico">%</div><h3>15–40% naknada</h3><p>platforme (Patreon 10%), kartice i konverzija valute zajedno pojedu velik dio prihoda kreatora.</p></div>
+      <div class="card reveal"><div class="ico">€</div><h3>~28–33 mlrd €</h3><p>vrijednost EU creator-economy segmenta (2025.); do €135 mlrd 2032.</p></div>
+      <div class="card reveal"><div class="ico">+</div><h3>Merchant of Record</h3><p>regulirani subjekt preuzima PDV i usklađenost umjesto kreatora — bez prijave PDV-a po 27 zemalja.</p></div>
+    </div>
+    <p class="src">Izvori: Patreon Help Center; Stripe; Goldman Sachs; BNP Paribas. Solana naknada: solana.com.</p>
   </div>
 </section>
 
@@ -356,13 +467,41 @@ flowchart LR
     <div style="max-width:620px;margin:44px auto 0">
       <div class="fact reveal">
         <h3>Monerium EURe</h3>
-        <div class="frow"><span>Status</span><span>Prva EMI licenca za on-chain e-novac (2019.)</span></div>
+        <div class="frow"><span>Status</span><span>Prvi EMI za e-novac na blockchainu (osn. 2016.)</span></div>
         <div class="frow"><span>Regulacija</span><span>MiCA e-money token (EMT)</span></div>
         <div class="frow"><span>IBAN / SEPA</span><span>preko banke LHV Pank</span></div>
-        <div class="frow"><span>Lanci</span><span>Ethereum, Gnosis, Polygon, Base…</span></div>
-        <div class="frow"><span>Volumen</span><span>~€8 mlrd između banaka i DeFi-a</span></div>
+        <div class="frow"><span>Lanci</span><span>Ethereum, Gnosis, Polygon, Arbitrum, Base, Linea</span></div>
+        <div class="frow"><span>Izdano</span><span>~€25 mil reguliranog e-novca</span></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SCALE + GNOSIS -->
+<section id="razmjer">
+  <div class="narrow center">
+    <span class="eyebrow">Razmjer i infrastruktura</span>
+    <h2 class="title">Sićušan u količini — moćan u sposobnosti</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">U EURe se nalazi tek ~25 mil € — oko <b>dvije milijuntine</b> ukupnog euro novca u opticaju. A taj isti euro on-chain putuje za djelić centa, namiruje se u sekundama i troši na Visa kartici.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  M1["Euro M1<br/>~11.270.000 mil €"]:::big -.-> EURE["EURe<br/>~25 mil €<br/>≈ 2 milijuntine"]:::small
+  EURE --> CAP["Ali: namira ~5 s ·<br/>naknada djelić centa ·<br/>80M+ Visa mjesta"]:::cap
+  classDef big fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef small fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef cap fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Za svaki 1 € u EURe postoji ~60.000 € papirnatog eura — a EURe ipak radi sve što gotovina ne može.</div>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico">⛓</div><h3>Gnosis Chain</h3><p>Matični lanac za EURe. Naknada <b>~0,001–0,01 $</b> po transakciji, blok ~5 s; plin se plaća stablecoinom (xDAI) pa je cijena predvidiva.</p></div>
+      <div class="card reveal"><div class="ico">▦</div><h3>Gnosis Pay</h3><p>Self-custody <b>Visa kartica</b> koja troši EURe izravno na <b>80+ milijuna</b> Visa mjesta — on-chain euro u stvarnom životu.</p></div>
+      <div class="card reveal"><div class="ico">↑</div><h3>Golem prostor</h3><p>Sav on-chain euro je tek ~395 mil €. Baza je minimalna, sposobnost dokazana — nedostaje regionalni igrač.</p></div>
+    </div>
+    <p class="src">Izvori: CoinGecko / CoinMarketCap (EURe); ECB (euro M1/M3); Gnosis.io, Gnosisscan, Gnosis Pay.</p>
   </div>
 </section>
 
@@ -378,7 +517,7 @@ flowchart LR
       <p>Koncept je otvoren, tehnologija dokazana, a komercijalni projekt je u izgradnji. Pogledaj kako gradimo regulirani hrvatski euro.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
         <a class="btn btn-gold" href="https://airkuna.com">Komercijalni projekt →</a>
-        <a class="btn btn-ghost" href="#top">Vrati se na početak</a>
+        <a class="btn btn-ghost" href="mailto:matija@airkuna.com?subject=airKUNA%20%E2%80%94%20pridru%C5%BEujem%20se">Javi se / pridruži se</a>
       </div>
     </div>
   </div>
@@ -389,8 +528,8 @@ flowchart LR
     <div class="fgrid">
       <a class="brand" href="#top"><img src="coin.svg" alt="" style="width:30px" /> airKUNA</a>
       <div style="display:flex;gap:40px;flex-wrap:wrap">
-        <div><strong style="color:var(--navy)">Razumij</strong><br/><a href="#stablecoin">Stablecoin</a><br/><a href="#novac">Kako nastaje novac</a><br/><a href="#problem">Ekstrakcijska ekonomija</a></div>
-        <div><strong style="color:var(--navy)">Dalje</strong><br/><a href="#kuharica">Kuharica</a><br/><a href="#banke">Usporedba banaka</a><br/><a href="https://airkuna.com">Projekt (.com)</a></div>
+        <div><strong style="color:var(--navy)">Razumij</strong><br/><a href="#novac">Kako nastaje novac</a><br/><a href="#simulacija">Priča o cigli</a><br/><a href="#problem">Ekstrakcijska ekonomija</a><br/><a href="#vlasnistvo">Tko zapravo zarađuje</a><br/><a href="#povijest">Povijest rasprodaje</a></div>
+        <div><strong style="color:var(--navy)">Dalje</strong><br/><a href="#banke">Usporedba banaka</a><br/><a href="#kreator">Za kreatore</a><br/><a href="#razmjer">Razmjer i Gnosis</a><br/><a href="#kuharica">Kuharica</a><br/><a href="https://airkuna.com">Projekt (.com)</a></div>
       </div>
     </div>
     <p class="fnote">
