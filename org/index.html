@@ -136,6 +136,21 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
 .fgrid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
 .fnote{max-width:560px;font-size:13px;color:var(--mute);margin-top:26px;line-height:1.7;border-top:1px solid var(--line);padding-top:22px}
 
+/* feature row (investor) */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:900px){.row{grid-template-columns:1fr;gap:36px}}
+.bullets{list-style:none;margin-top:22px;display:grid;gap:16px}
+.bullets li{display:flex;gap:14px;font-size:15.5px}
+.bullets .b{flex:0 0 26px;height:26px;border-radius:50%;background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:14px;margin-top:1px}
+.bullets b{color:var(--navy)}
+/* live stack */
+.live{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+@media(max-width:760px){.live{grid-template-columns:1fr}}
+.live a{display:block;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;transition:.2s}
+.live a:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+.live .u{font-weight:600;color:var(--navy);font-size:16px}
+.live .d{color:var(--mute);font-size:14px;margin-top:7px}
+
 .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
 .src{font-size:12px;color:#9aa6b8;margin-top:26px;text-align:center}
@@ -153,8 +168,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
       <a href="#problem">Problem</a>
       <a href="#banke">Usporedba banaka</a>
       <a href="#kuharica">Kuharica</a>
+      <a href="#partneri">Za partnere</a>
     </nav>
-    <a class="btn btn-navy btn-sm" href="https://airkuna.com">Projekt →</a>
+    <a class="btn btn-navy btn-sm" href="https://airkuna.com">Digitalni identitet →</a>
   </div>
 </header>
 
@@ -506,19 +522,77 @@ flowchart LR
   </div>
 </section>
 
+<!-- MARKET / OPPORTUNITY -->
+<section id="trziste" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Tržište i prilika</span>
+    <h2 class="title">Najmanji segment — koji raste najbrže</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Euro stablecoini su manje od 1% globalnog tržišta, ali su nakon MiCA-e eksplodirali. Regulatorni jaz je zatvoren, a prostor za regionalnog igrača je otvoren.</p>
+  </div>
+  <div class="wrap">
+    <div class="grid g4">
+      <div class="card reveal"><div class="ico">$</div><h3>&gt;280 mlrd $</h3><p>ukupna kapitalizacija stablecoina (ECB, stu 2025.); ~8% kripto tržišta.</p></div>
+      <div class="card reveal"><div class="ico">€</div><h3>~99% USD</h3><p>tržišta je u dolarima — euro segment je svega ~395 mil €, golem prostor.</p></div>
+      <div class="card reveal"><div class="ico">◔</div><h3>2 bilijuna $</h3><p>projekcija veličine tržišta stablecoina do 2028. (ECB).</p></div>
+      <div class="card reveal"><div class="ico">★</div><h3>CEE prostor</h3><p>nema dominantnog regionalnog euro stablecoina. Tko prvi poveže SEPA i mint, definira standard.</p></div>
+    </div>
+    <p class="src">Izvori: ECB Financial Stability Review 11/2025.</p>
+  </div>
+</section>
+
+<!-- BUSINESS MODEL / TREASURY -->
+<section id="poslovni">
+  <div class="wrap row">
+    <div>
+      <span class="eyebrow">Poslovni model</span>
+      <h2 class="title">Treasury yield — kao USDC i EURe</h2>
+      <p class="lead">Rezerve se drže u kamatonosnim, niskorizičnim eurskim instrumentima. Prinos na rezervu (treasury yield) primarni je izvor prihoda — a u DAO modelu može teći natrag u zajednicu i lokalni kredit.</p>
+      <ul class="bullets">
+        <li><span class="b">·</span><div>Kod Circlea (USDC) <b>~94% prihoda</b> dolazi upravo od prinosa na rezervu.</div></li>
+        <li><span class="b">·</span><div>Prihod skalira <b>linearno</b> s opticajem tokena.</div></li>
+        <li><span class="b">·</span><div>Rezerva može biti i <b>stabilna depozitna baza</b> za etičku banku koja je usmjerava u realnu ekonomiju.</div></li>
+      </ul>
+    </div>
+    <div class="fact reveal">
+      <h3>Ilustrativno</h3>
+      <div class="frow"><span>Rezerva (primjer)</span><span>€25.000.000</span></div>
+      <div class="frow"><span>Godišnji prinos</span><span>~2,5%</span></div>
+      <div class="frow"><span>Godišnje za podjelu</span><span>≈ €625.000</span></div>
+      <div class="frow"><span>Skaliranje</span><span>linearno s opticajem</span></div>
+      <p style="color:#8FA3C4;font-size:12.5px;margin-top:16px">Ilustrativno, nije ponuda. Prinosi u eurima niži su od dolarskih.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE STACK -->
+<section id="live" class="bg-navy">
+  <div class="narrow center">
+    <span class="eyebrow">Već radi danas</span>
+    <h2 class="title">Nije prototip — cijeli stack je live</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Pravi Monerium IBAN (LHV), stvarne transakcije na Gnosis Chainu. Otvori na mobitelu i probaj.</p>
+  </div>
+  <div class="wrap">
+    <div class="live">
+      <a href="https://wallet.domovina.ai" target="_blank"><div class="u">wallet.domovina.ai →</div><div class="d">Self-custody EURe novčanik — passkey (Face ID), bez seed fraze. SEPA → EURe i slanje.</div></a>
+      <a href="https://pay.domovina.ai" target="_blank"><div class="u">pay.domovina.ai →</div><div class="d">Uplatni kodovi: SEPA EPC QR, HUB3 (FINA), on-chain EIP-681.</div></a>
+      <a href="https://mpt.domovina.ai" target="_blank"><div class="u">mpt.domovina.ai →</div><div class="d">Backend: Monerium API, mint/burn orkestracija (Safe + Zodiac Roles).</div></a>
+    </div>
+  </div>
+</section>
+
 <!-- VISION / CTA -->
-<section>
+<section id="partneri">
   <div class="narrow center">
     <p class="quote reveal">Hrvatska je izgubila kunu 2023.<br/>Mi je vraćamo — ovaj put kao <span class="gold">euro</span>, na lancu, <span class="red">s vrijednošću koja ostaje doma</span>.</p>
   </div>
   <div class="wrap" style="margin-top:54px">
     <div class="cta reveal">
-      <span class="eyebrow" style="color:var(--gold-light)">airKUNA</span>
+      <span class="eyebrow" style="color:var(--gold-light)">airKUNA DAO · za partnere i zajednicu</span>
       <h2>Digitalna kuna za lokalnu ekonomiju</h2>
-      <p>Koncept je otvoren, tehnologija dokazana, a komercijalni projekt je u izgradnji. Pogledaj kako gradimo regulirani hrvatski euro.</p>
+      <p>Koncept je otvoren, tehnologija dokazana. Stablecoinom je zamišljeno da upravlja <b>airKUNA DAO</b> (u nastajanju) — kao javno dobro zajednice. Tražimo partnere, etičke bankarske partnere i suradnike.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-        <a class="btn btn-gold" href="https://airkuna.com">Komercijalni projekt →</a>
-        <a class="btn btn-ghost" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20pridru%C5%BEujem%20se">Javi se / pridruži se</a>
+        <a class="btn btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20pridru%C5%BEujem%20se">Javi se / pridruži se</a>
+        <a class="btn btn-ghost" href="https://airkuna.com">Digitalni identitet (Personhood) →</a>
       </div>
     </div>
   </div>
@@ -530,7 +604,7 @@ flowchart LR
       <a class="brand" href="#top"><img src="coin.svg" alt="" style="width:30px" /> airKUNA</a>
       <div style="display:flex;gap:40px;flex-wrap:wrap">
         <div><strong style="color:var(--navy)">Razumij</strong><br/><a href="#novac">Kako nastaje novac</a><br/><a href="#simulacija">Priča o cigli</a><br/><a href="#problem">Ekstrakcijska ekonomija</a><br/><a href="#vlasnistvo">Tko zapravo zarađuje</a><br/><a href="#povijest">Povijest rasprodaje</a></div>
-        <div><strong style="color:var(--navy)">Dalje</strong><br/><a href="#banke">Usporedba banaka</a><br/><a href="#kreator">Za kreatore</a><br/><a href="#razmjer">Razmjer i Gnosis</a><br/><a href="#kuharica">Kuharica</a><br/><a href="https://airkuna.com">Projekt (.com)</a></div>
+        <div><strong style="color:var(--navy)">Dalje</strong><br/><a href="#banke">Usporedba banaka</a><br/><a href="#kuharica">Kuharica</a><br/><a href="#trziste">Tržište</a><br/><a href="#poslovni">Poslovni model</a><br/><a href="#partneri">Za partnere</a><br/><a href="https://airkuna.com">Digitalni identitet (.com)</a></div>
       </div>
     </div>
     <p class="fnote">

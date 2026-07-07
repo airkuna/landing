@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Whitepaper — Proof of Croatian Personhood (v0.2) · airKUNA</title>
+<meta name="description" content="Otvoreni protokol za onchain dokaz osobnosti ukorijenjen u hrvatskom/EU eID-u. Whitepaper v0.2: problem, nullifier primitiv, onchain arhitektura, pluggable verifier, GDPR, roadmap." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:820px;margin:0 auto;padding:0 24px}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy)}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:24px;font-size:14.5px;font-weight:500;color:var(--ink)}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:720px){.navlinks{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+/* doc hero */
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:640px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+/* prose */
+.prose{padding:58px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:52px 0 6px;letter-spacing:-.01em;scroll-margin-top:80px}
+.prose h2:first-child{margin-top:0}
+.prose h2 .no{color:var(--gold);font-size:.7em;margin-right:10px;font-variant-numeric:tabular-nums}
+.prose h3{font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy);margin:34px 0 4px}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul,.prose ol{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82}
+.prose pre{background:var(--navy-900);color:#eaf0fb;border-radius:14px;padding:20px 22px;margin-top:20px;overflow-x:auto;font-size:14px;line-height:1.6;box-shadow:var(--shadow-sm)}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:13.5px}
+.prose hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:#C0181C;background:#FCF3F3}
+.callout.warn b{color:#8f1114}
+.lead-note{background:linear-gradient(160deg,var(--navy-900),var(--navy));color:#dfe8f7;border-radius:14px;padding:22px 26px;margin-top:8px;font-size:15px}
+.lead-note b{color:#fff}
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tblwrap{overflow-x:auto}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.mvp{background:var(--green-soft);color:var(--green)}
+.badge.next{background:var(--gold-soft);color:#7a5a12}
+.badge.f2{background:var(--soft);color:var(--mute);border:1px solid var(--line)}
+
+/* toc */
+.toc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px 26px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+.toc strong{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.toc ol{columns:2;column-gap:34px;margin:14px 0 0;padding-left:18px;font-size:14.5px}
+.toc li{margin-top:7px}
+.toc a{color:var(--navy);font-weight:500}
+.toc a:hover{color:var(--gold)}
+@media(max-width:560px){.toc ol{columns:1}}
+
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:40px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:820px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="../#rjesenje">Rješenje</a>
+      <a href="../#kako">Kako radi</a>
+      <a href="../#roadmap">Roadmap</a>
+      <a href="../funding/">One-pager (EN)</a>
+    </nav>
+    <a class="btn btn-navy" href="../#financiranje">Podrži projekt</a>
+  </div>
+</header>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Whitepaper · v0.2 (nacrt)</span>
+    <h1>Proof of Croatian Personhood</h1>
+    <p>Otvoreni protokol za onchain dokaz osobnosti ukorijenjen u hrvatskom/EU eID-u. Certilia danas → EUDI Wallet sutra.</p>
+    <div class="docmeta">
+      <span>Projekt: airKUNA (ITalk d.o.o.)</span>
+      <span>Chain: Gnosis</span>
+      <span>Licenca (namjera): Apache-2.0 / MIT</span>
+      <span>2026-07-07</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <div class="toc">
+      <strong>Sadržaj</strong>
+      <ol>
+        <li><a href="#s0">Sažetak</a></li>
+        <li><a href="#s1">Problem</a></li>
+        <li><a href="#s2">Nullifier, ne novčanik</a></li>
+        <li><a href="#s3">Onchain arhitektura</a></li>
+        <li><a href="#s4">Most eID → onchain</a></li>
+        <li><a href="#s5">Verifier mreža (Faza 2)</a></li>
+        <li><a href="#s6">Privatnost i glasanje</a></li>
+        <li><a href="#s7">GDPR / compliance</a></li>
+        <li><a href="#s8">Pozicioniranje vs prior-art</a></li>
+        <li><a href="#s9">Open-source & financiranje</a></li>
+        <li><a href="#s10">Roadmap</a></li>
+        <li><a href="#s11">Otvorena pitanja / rizici</a></li>
+      </ol>
+    </div>
+
+    <div class="lead-note">
+      <b>Ovo je whitepaper</b> (cjelina + motivacija + mehanizam, za zajednicu i grantove). Ključne odluke izvedene su kao zasebni ADR-ovi u <code>docs/decisions/</code> (airKUNA vlastita ADR baza). Status: <b>NACRT v0.2</b>, dorađeno nakon dva kruga prior-art istraživanja.
+    </div>
+
+    <h2 id="s0"><span class="no">0</span>Sažetak</h2>
+    <p><b>Problem:</b> Hrvati imaju vrhunski digitalni identitet — <b>Certilia MobileID</b> (AKD, preko MUP-a, eIDAS <b>razina High</b>) — ali je centraliziran. Onchain svijet nema pouzdan, Sybil-otporan dokaz „ovo je jedinstvena stvarna osoba", što blokira legitimno <b>onchain glasanje</b>, demokratsko upravljanje i pravedno raspoređivanje resursa.</p>
+    <p><b>Rješenje:</b> Otvoreni protokol koji verificiranu eID prijavu pretvara u <b>soulbound token (SBT) osobnosti</b> na Gnosisu. Jedinstvenost se ne veže za novčanik nego za <b>nullifier izveden iz OIB-a</b> (<code>nullifier = HMAC-SHA256(OIB, pepper)</code>), pa jedna osoba može imati više Safe novčanika, ali samo jedan identitet. Sirovi OIB nikad ne napušta backend (GDPR-first). Dizajn je <b>source-agnostičan</b>: Certilia danas, <b>EU EUDI Wallet</b> sutra — isti onchain sloj radi za svih 27 zemalja EU.</p>
+    <p><b>Ključni uvid (iz prior-art analize):</b> za MVP <b>ne treba</b> skupa hardverska infrastruktura ni vlastita mreža potpisnika. Sybil-otpornost se postiže klijentskim dokazom (zkTLS nad Certilia OIDC-om, ili NFC čitanje eOI čipa) + onchain nullifier registrom. <b>Decentralizirana Android verifier mreža je Faza 2</b> — poboljšava decentralizaciju povjerenja, nije preduvjet za rad.</p>
+
+    <h2 id="s1"><span class="no">1</span>Problem</h2>
+    <ol>
+      <li><b>Centralizirano povjerenje.</b> Certilia/AKD je jedina točka istine. Za onchain demokraciju trebamo dokaz osobnosti koji ne ovisi o jednom entitetu koji sve može sam kovati.</li>
+      <li><b>Sybil napadi.</b> Bez dokaza osobnosti, jedna osoba otvori 1000 novčanika i preglasa poštene.</li>
+      <li><b>Vezanost za novčanik.</b> Naivni „KYC po novčaniku" ne radi: ljudi imaju više novčanika (hladni, topli, Safe za udrugu, Safe za tvrtku), a identitet mora biti <i>iznad</i> njih.</li>
+      <li><b>Privatnost &amp; GDPR.</b> OIB je osjetljiv PII. Ne smije završiti onchain ni u plaintext bazi.</li>
+      <li><b>Nasljeđe/oporavak.</b> Izgubljeni novčanik ne smije značiti izgubljeni identitet.</li>
+    </ol>
+
+    <h2 id="s2"><span class="no">2</span>Temeljni primitiv: nullifier, ne novčanik</h2>
+    <pre><code>nullifier = HMAC-SHA256(OIB, TAJNI_PEPPER)</code></pre>
+    <ul>
+      <li><b>Deterministički</b> (isti OIB → uvijek isti nullifier) i <b>nepovratan</b> (HMAC jednosmjeran, pepper tajan).</li>
+      <li><b>Jedinstvenost na razini osobe, ne novčanika.</b> 100 Safeova iste osobe → isti OIB → isti nullifier → ugovor odbija drugi mint. Ovo je Sybil-otpornost.</li>
+      <li>Već dokazano u produkciji: <code>domovina-api</code> radi <code>oib_hash = HMAC-SHA256(oib, key)</code> s <code>unique</code> ograničenjem → jedan OIB = jedan račun.</li>
+    </ul>
+
+    <h2 id="s3"><span class="no">3</span>Onchain arhitektura</h2>
+    <p>Tri open-source ugovora na Gnosisu:</p>
+    <h3>3.1 IdentityRegistry</h3>
+    <pre><code>mapping(bytes32 nullifier =&gt; Identity) registry;
+struct Identity { address anchor; uint64 loa; uint64 verifiedAt; uint64 reverifiedAt; }
+
+function claim(Attestation calldata a, bytes calldata proof) external {
+    require(registry[a.nullifier].anchor == address(0), "one person, one identity");
+    require(_verify(a, proof), "invalid attestation");   // vidi 4. — pluggable verifier
+    registry[a.nullifier] = Identity(a.anchor, a.loa, _now(), _now());
+    sbt.mint(a.anchor, a.nullifier);
+}</code></pre>
+    <h3>3.2 PersonhoodSBT (EIP-5484)</h3>
+    <p>Non-transferable bedž vezan uz <i>anchor</i> Safe. Nosi LoA i vremenske oznake; čita se iz glasačkih ugovora.</p>
+    <h3>3.3 Razrješavanje više novčanika</h3>
+    <ul>
+      <li>SBT živi u <b>jednom anchor Safeu</b>.</li>
+      <li>Ostali novčanici se razrješavaju u nullifier: (a) potpisom iz anchor Safea (ERC-1271 <code>LinkedWallets</code>), ili (b) <b>zk članstvom</b> (glasaju bez otkrivanja koji su — vidi §6).</li>
+      <li><b>Oporavak = eID.</b> Izgubiš anchor? Ponovni Certilia login → isti nullifier → <code>migrateAnchor()</code> na novi Safe. Tvoj eID je tvoj recovery.</li>
+    </ul>
+
+    <h2 id="s4"><span class="no">4</span>Most eID → onchain (pluggable verifier) — i zašto mesh nije MVP</h2>
+    <p><code>_verify()</code> je apstrakcija s više implementacija, biramo po fazi:</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Verifier</th><th>Kako</th><th>Decentralizacija</th><th>Faza</th></tr></thead>
+      <tbody>
+        <tr><td><b>A · zkTLS nad Certilia OIDC</b></td><td>Klijent dokaže (Reclaim/zkTLS) da je Certilia JWKS potpisao id_token s njegovim OIB-om; ugovor verificira zk proof</td><td>Nema oraklske mreže; oslanja se na Certilia PKI</td><td><span class="badge mvp">MVP</span></td></tr>
+        <tr><td><b>B · NFC eOI (eOsobna) čip</b></td><td>Klijent pasivno autenticira potpis izdavača čipa (tip Rarimo/zkPassport), izvede nullifier lokalno</td><td>Nema oraklske mreže; oslanja se na državnu PKI</td><td><span class="badge mvp">MVP alt.</span></td></tr>
+        <tr><td><b>C · EIP-712 attestation orakl</b></td><td>Off-chain verifier validira id_token (JWKS/iss/aud), potpiše <code>{nullifier,anchor,loa}</code>; ugovor provjeri potpisnika</td><td>Jedan potpisnik = centralno</td><td><span class="badge next">Prijelazno</span></td></tr>
+        <tr><td><b>D · M-of-N Android verifier mesh</b></td><td>Kao C, ali M nezavisnih Android nodeova (StrongBox + Key Attestation) supotpisuje</td><td><b>Visoka</b> — nitko sam ne kuje</td><td><span class="badge f2">Faza 2</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><b>Ključni uvid iz prior-arta (potvrđeno u 2 kruga):</b> verifieri A i B daju Sybil-otpornost <b>bez ikakve mreže potpisnika</b>, jer se dokument/sesija sama kriptografski dokazuje. Dodatna potvrda: <b>World ID</b> radi personhood samo s nullifier-registrom + Semaphore zk, bez ikakvog signer-mesha — dokazani industrijski standard. Mesh (D) opravdavaju samo: (1) živi-OIDC root koji se ne može klijentski dokazati, i (2) politička priča „ni AKD ni ITalk ne mogu sami kovati". Zato: <b>gradi A/B za MVP; mesh je Faza 2, ne preduvjet.</b></div>
+    <p>Ako ipak gradiš mesh (Faza 2): razmotri <b>Acurast kao SUBSTRAT</b>, ne gradi od nule. Acurast procesori (250k+ telefona) imaju vlastitu EVM adresu, code-bound hardverski ključ, hardversku atestaciju i mogu potpisati/settlati onchain. M-of-N Safe co-signing je custom logika <i>na</i> Acurastu — pretvara „kupi i pokreni telefone" u „deploy custom verifier na postojeću mrežu".</p>
+    <div class="callout warn"><b>⚠ Caveat za sve HW-atestacijske pristupe:</b> Android Key Attestation lanac korijeni u <b>Googleu</b> (Google potpisuje attestation ključ). Dakle mesh na Android atestaciji je <b>trust-minimized, ne trustless</b> — Google je root of trust. Pošteno to reci; mitigacija = miješanje vendora (Samsung Knox + Titan + Qualcomm) da nijedan proizvođač nije jedina točka.</div>
+
+    <h2 id="s5"><span class="no">5</span>Verifier mreža (Faza 2): geolokalizirani Android signer-mesh</h2>
+    <p><i>Dizajn zadržan jer daje jaku decentralizaciju povjerenja; nije MVP.</i></p>
+    <ul>
+      <li><b>Signer-only, bez execution layera.</b> Telefoni se spajaju read-only na Gnosis RPC; ne drže chain state → nema skupog hardvera/SSD-a. Uloga = offline M-of-N supotpisnici Safe multisiga.</li>
+      <li><b>Izvršenje.</b> Relayer plaća gas i submitta pre-potpisani <code>execTransaction</code>, ili svaki telefon drži malo xDAI-a pa je „zadnji potpisnik u krugu" nezavisni executor. Relayer nikad nije vlasnik → ne može krivotvoriti.</li>
+      <li><b>Hardverski korijen.</b> StrongBox/TEE ključ + Android Key Attestation (certifikatski lanac dokazuje da ključ nikad nije napustio certificirani secure element).</li>
+      <li><b>DAO upravljanje.</b> airKUNA DAO (Safe multisig) odobrava nove nodeove; statusi: <code>pending → active → offline → ejected</code>. Poznat ljudski operater po nodeu.</li>
+      <li><b>Geolokacija &amp; anti-spoof.</b> Nodeovi se prikazuju na karti (MapLibre). GPS lažiranje se kažnjava staking/slashing ekonomijom (tip GEODNET/XYO proof-of-location).</li>
+    </ul>
+
+    <h2 id="s6"><span class="no">6</span>Privatnost i glasanje</h2>
+    <ul>
+      <li><b>Transparentno glasanje</b> (udruge, javni identiteti): obični SBT + nullifier dovoljni.</li>
+      <li><b>Anonimno glasanje:</b> MACI / Semaphore — zk dokaz članstva u skupu verificiranih građana + per-poll nullifier <code>H(secret, pollId)</code> sprječava dvostruko glasanje bez povezivanja novčanika; MACI dodaje receipt-freeness (otpornost na kupovinu glasova). Chain nikad ne nauči „ovaj Safe = taj građanin".</li>
+    </ul>
+
+    <h2 id="s7"><span class="no">7</span>GDPR / compliance</h2>
+    <ul>
+      <li><b>Sirovi OIB nikad onchain ni u plaintext bazi.</b> Onchain ide samo <code>nullifier</code> (nepovratan).</li>
+      <li>Ako backend privremeno vidi OIB (verifier C/D), odmah ga hashira i odbaci; šifriranje at-rest (pgcrypto).</li>
+      <li>Poklapa se s eIDAS načelima <b>data minimisation / selective disclosure</b> → prednost pred regulatorom i u grant prijavama.</li>
+      <li>ITalk = <b>non-custodial software provider</b>; regulirane funkcije (eID izdavanje, KYC) rade licencirani (AKD/Certilia, kasnije EUDI).</li>
+    </ul>
+
+    <h2 id="s8"><span class="no">8</span>Pozicioniranje vs prior-art</h2>
+    <p>Puni stack ne postoji kao jedan proizvod, ali komponente imaju jak prior-art (Acurast, Lit, Rarimo/zkPassport, GEODNET, Reclaim/zkTLS, EBSI). <b>Potvrđeno u istraživanju: „živi eID-OIDC → onchain SBT preko decentralizirane verifier mreže" je genuino nezauzet prostor.</b> Naša diferencijacija nije patent nego:</p>
+    <ul>
+      <li><b>Certilia/EUDI (hrvatski/EU eID) root</b> — ne putovnica, ne biometrija; eIDAS High LoA. Ovo je jezgra novosti.</li>
+      <li><b>Gnosis-native composable personhood SBT</b> — javni chain, DeFi/DAO-composable (za razliku od permissioned EBSI).</li>
+      <li><b>Nullifier-registar + zk = ista obitelj kao World ID</b> (dokazan pattern); razlika je izvor, ne mehanizam.</li>
+      <li><b>First-mover u Hrvatskoj</b> + integracija s postojećim airKUNA/domovina stackom (pay/sms/karta).</li>
+    </ul>
+    <div class="callout warn"><b>Patent / Freedom-to-Operate:</b> ⚠ <b>nChain US 11,347,838 B2</b> pokriva „identity tokeni → fiksni skup glasača → brojanje onchain signala → otpuštanje sredstava na prag" = izravno preklapa personhood-za-glasanje; treba FTO mišljenje prije komercijalizacije. Izbor <b>M zasebnih EIP-712 potpisnika (ne pravi threshold ECDSA/MPC)</b> ruta oko nChain threshold-ECDSA patenata. Patentiranje samo defenzivno, uz zastupnika.</div>
+
+    <h2 id="s9"><span class="no">9</span>Open-source &amp; financiranje</h2>
+    <ul>
+      <li><b>Open-source</b> ugovori + verifier node + dokumentacija; ITalk vodi razvoj koji svi koriste.</li>
+      <li><b>EU NGI Pilots (cascade) — realan prvi ulaz:</b> kapa ~€60.000 po primatelju, BEZ konzorcija.</li>
+      <li><b>Digital Europe</b> WALLET (~€129,6M) / MDL (~€77M) za EUDI — veći novac, ali preko konzorcija i LSP-ova (POTENTIAL/EWC/NOBID/DC4EU).</li>
+      <li><b>Crypto-native dopuna:</b> Gnosis/GnosisDAO ecosystem grants, Optimism RetroPGF / Octant / Gitcoin.</li>
+    </ul>
+
+    <h2 id="s10"><span class="no">10</span>Roadmap</h2>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Faza</th><th>Isporuka</th></tr></thead>
+      <tbody>
+        <tr><td><b>0 — MVP</b></td><td><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> + verifier A (zkTLS/Certilia) ili B (NFC eOI); mock issuer/verifier lokalno</td></tr>
+        <tr><td><b>1</b></td><td>Drugi neovisni izvor (phone-SBT preko sms.domovina.ai reverse-OTP) + credibility score; karta nodeova</td></tr>
+        <tr><td><b>2</b></td><td>M-of-N Android verifier mesh (M zasebnih EIP-712 potpisnika, ne MPC) + DAO onboarding + statusi + slashing</td></tr>
+        <tr><td><b>3</b></td><td>Socijalna atestacija (web-of-trust score)</td></tr>
+        <tr><td><b>4</b></td><td>zk anonimno glasanje (MACI/Semaphore)</td></tr>
+        <tr><td><b>5</b></td><td>EUDI Wallet izvor (SD-JWT VC/mDoc preko OpenID4VP) — pan-EU</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2 id="s11"><span class="no">11</span>Otvorena pitanja / rizici</h2>
+    <ul>
+      <li><b>Nužnost mesha</b> — istraživanje jako sugerira da A/B daju ~90% vrijednosti bez mesha; dokazati na MVP-u prije gradnje D.</li>
+      <li><b>zkTLS zrelost</b> za Certilia OIDC endpoint (custom flow preko proxyja).</li>
+      <li><b>Pepper governance</b> — tko drži <code>pepper</code>? Ako curi, nullifieri se mogu brute-force korelirati s OIB-om (prostor ~10¹¹) → pepper mora biti u threshold/HSM custody, ili per-epoch rotacija.</li>
+      <li><b>Google root-of-trust</b> — Android Key Attestation korijeni u Googleu → mesh je trust-minimized, ne trustless; priznati u svakom pitchu.</li>
+      <li><b>eOI kao NFC</b> — podržava li hrvatska eOsobna pasivnu autentikaciju čipa kao putovnica? (Provjeriti.)</li>
+      <li><b>FTO rizik (nChain US 11,347,838 B2)</b> — glasačko-identitetski patent; FTO mišljenje prije komercijalizacije.</li>
+    </ul>
+
+    <hr/>
+    <h3>Dodatak: ADR baza</h3>
+    <p>airKUNA ima vlastitu ADR bazu (<code>docs/decisions/</code>, kreće od 0001):</p>
+    <ul>
+      <li><b>0001</b> — nullifier-registar vs per-wallet SBT (jedinstvenost na razini osobe).</li>
+      <li><b>0002</b> — pluggable verifier (A zkTLS / B NFC eOI / C EIP-712 orakl / D Android mesh); MVP = A/B, mesh = Faza 2.</li>
+      <li><b>0003</b> — pepper custody (threshold/HSM, rotacija).</li>
+    </ul>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Natrag na Personhood</a>
+    </div>
+    <p class="fnote">
+      Whitepaper v0.2 (nacrt). Protokol je u razvoju; Faza 0 (MVP) izgrađena i dokazana lokalno, ostalo označeno kao „u planu". Nije investicijski ni pravni savjet.<br/><br/>
+      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o. za informacijske tehnologije</b> · IX. Južna obala 20, 10000 Zagreb · OIB: 54872935051 · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · Licenca (namjera): Apache-2.0 / MIT · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

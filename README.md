@@ -1,16 +1,18 @@
 # airKUNA — landing stranice
 
-Dvije premium, samostojeće (self-contained) landing stranice za airKUNA brand. Bez build koraka: čisti HTML + CSS, fontovi (Fraunces + Inter) i MermaidJS preko CDN-a.
+Samostojeće (self-contained) landing stranice za airKUNA brand. Bez build koraka: čisti HTML + CSS, fontovi (Fraunces + Inter) i MermaidJS preko CDN-a.
 
 | Folder | Domena | Svrha | Ton |
 |---|---|---|---|
-| [`com/`](com) | **airkuna.com** | Komercijalni projekt za investitore/partnere (kao Monerium) | Fintech, samouvjeren, VC-facing |
-| [`org/`](org) | **airkuna.org** | Pokret/edukacija: zašto stablecoin, kako nastaje novac, ekstrakcijska ekonomija, kuharica | Edukativan, narativan, argumentiran |
+| [`com/`](com) | **airkuna.com** | **Proof of Croatian Personhood** — protokol dokaza osobnosti onchain + prikupljanje sredstava (ITalk d.o.o.) | Tehnički, javno dobro, grant/partner-facing |
+| [`org/`](org) | **airkuna.org** | **Stablecoin** — edukacija + investitorski sadržaj; airKUNA DAO / javno dobro zajednice | Edukativan, narativan + investitorski |
+
+> **Napomena (raspored):** `.com` = **ITalk d.o.o.** (firma koja razvija personhood protokol i traži funding). `.org` = **airKUNA DAO** (upravlja stablecoinom kao javnim dobrom). Stranice su cross-linkane: com „Stablecoin" ⇄ org „Digitalni identitet".
 
 ## Sadržaj
 
-- **com** — hero, tržišne brojke, kako radi (mint/burn Mermaid flow), dokazani Monerium model, tržište/prilika, treasury yield, live (domovina.ai), CTA.
-- **org** — priča kune (od krzna do koda), stablecoin 101, endogeni novac (Mermaid), ekstrakcijska ekonomija (Mermaid odljev kapitala), usporedna tablica HR banaka (ZABA/UniCredit, PBZ/Intesa, Erste, OTP, RBA, HPB), dva modela side-by-side, kuharica (5 koraka + Mermaid), Monerium dokaz, vizija.
+- **com** (personhood) — hero, problem (Sybil + centraliziran eID), rješenje (eID→SBT, nullifier, GDPR, source-agnostično), kako radi (Mermaid eID→onchain flow), pluggable verifier tablica (A/B=MVP, D=Faza 2), zašto javno dobro/ITalk, roadmap (Faza 0→5), status (izgrađeno vs u planu), financiranje (NGI ~€60k, Gnosis, RetroPGF) + CTA. Pod-stranice: [`com/whitepaper/`](com/whitepaper) (docs/16, HR) i [`com/funding/`](com/funding) (docs/17, EN one-pager za grantove).
+- **org** (stablecoin) — priča kune (od krzna do koda), stablecoin 101, endogeni novac (Mermaid), ekstrakcijska ekonomija, usporedna tablica HR banaka, dva modela side-by-side, kuharica (5 koraka + Mermaid), Monerium dokaz, razmjer/Gnosis, **tržište/prilika**, **treasury yield**, **live stack (domovina.ai)**, DAO/partner CTA.
 
 ## Brand
 

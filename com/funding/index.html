@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Funding One-Pager — Proof of Croatian Personhood · airKUNA</title>
+<meta name="description" content="An open-source, eID-rooted onchain proof-of-personhood layer for Sybil-resistant EU digital democracy. Built by ITalk d.o.o. (airKUNA) on Gnosis Chain. Funding ask: EU NGI Pilots ~€60k for the MVP." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:820px;margin:0 auto;padding:0 24px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy)}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:24px;font-size:14.5px;font-weight:500;color:var(--ink)}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:720px){.navlinks{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:660px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+.prose{padding:58px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:50px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82}
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl .amt{font-family:Fraunces,serif;color:var(--gold);font-weight:600;white-space:nowrap}
+.tblwrap{overflow-x:auto}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;background:var(--green-soft);color:var(--green)}
+
+.mile{display:grid;gap:14px;margin-top:24px}
+.mile .m{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow-sm)}
+.mile .q{font-family:Fraunces,serif;font-weight:600;font-size:15px;color:var(--gold);white-space:nowrap;padding-top:2px}
+.mile h4{font-size:16px;color:var(--navy);font-weight:600}
+.mile p{font-size:14.5px;color:var(--mute);margin-top:4px}
+
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:40px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:820px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7);font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="../#rjesenje">Solution</a>
+      <a href="../#roadmap">Roadmap</a>
+      <a href="../#financiranje">Funding</a>
+      <a href="../whitepaper/">Whitepaper (HR)</a>
+    </nav>
+    <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=Proof%20of%20Croatian%20Personhood%20%E2%80%94%20funding">Contact</a>
+  </div>
+</header>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Funding One-Pager</span>
+    <h1>Proof of Croatian Personhood</h1>
+    <p>An open-source, eID-rooted onchain proof-of-personhood layer for Sybil-resistant EU digital democracy.</p>
+    <div class="docmeta">
+      <span>ITalk d.o.o. (airKUNA)</span>
+      <span>Gnosis Chain</span>
+      <span>Apache-2.0 / MIT</span>
+      <span>Zagreb, Croatia</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <h2>The problem</h2>
+    <p>Onchain governance and public-goods funding are broken by <b>Sybil attacks</b>: one person spins up thousands of wallets and drowns out honest voters. Existing fixes are weak or centralized — biometrics (privacy-hostile), social graphs (collusion-prone), or single-company KYC (a new gatekeeper).</p>
+    <p>Meanwhile, every EU citizen is getting a <b>state-issued digital identity</b> (eIDAS 2.0 EUDI Wallet, mandatory by end-2026; in Croatia already live as <b>Certilia</b>, eIDAS <b>High</b> assurance). That trust anchor exists — but there is <b>no open, privacy-preserving bridge from it to a public blockchain.</b></p>
+
+    <h2>What we build</h2>
+    <p>A protocol that turns a <b>verified national eID login</b> into a <b>soulbound token (SBT)</b> on Gnosis Chain, where <b>one person = one identity across any number of wallets</b>, enforced by a non-reversible <code>nullifier = HMAC(OIB)</code> — the raw national ID <b>never touches the chain or any plaintext store</b> (GDPR by design).</p>
+    <ul>
+      <li><b>Source-agnostic:</b> Certilia today, <b>EUDI Wallet (SD-JWT VC / mDoc)</b> tomorrow → works for all 27 EU states.</li>
+      <li><b>Composable:</b> a public-chain SBT usable by any DAO, quadratic-funding round, or onchain vote — unlike the EU's permissioned EBSI.</li>
+      <li><b>Private voting:</b> MACI / Semaphore zk-nullifiers give one-person-one-vote <b>without linking vote to citizen</b>, with receipt-freeness (anti-vote-buying).</li>
+    </ul>
+
+    <h2>Why it's novel (verified prior-art scan)</h2>
+    <p>Every component has neighbors (World ID, Rarimo/zkPassport, EBSI, Acurast), but <b>the specific bridge — a live national eID (OIDC) → onchain personhood SBT — is an unoccupied space.</b> World ID uses biometrics; Rarimo uses passport NFC; EBSI is permissioned and off-DeFi. <b>We root in the EU's own mandatory eID and land it on a public, composable chain.</b> The nullifier-registry + zk design mirrors proven practice (World ID); our differentiator is the <b>eID root + EU-standard alignment + Croatian first-mover.</b></p>
+
+    <h2>Why fund it as a public good</h2>
+    <ul>
+      <li><b>100% open source</b> — contracts, verifier node, docs. ITalk is a <b>non-custodial software provider</b>; regulated identity issuance stays with licensed parties (AKD/Certilia, EUDI). Minimal GDPR surface.</li>
+      <li><b>EU-strategy aligned</b> — directly complements eIDAS 2.0 / EUDI Wallet rollout (2024–2027) with the self-sovereign, composable layer the regulation itself gestures at (Recital 14: "zero-knowledge proof").</li>
+      <li><b>Reusable by everyone</b> — municipalities, associations (<i>udruge</i>), cooperatives, DAOs, participatory budgets.</li>
+    </ul>
+
+    <h2>What we're asking for</h2>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Track</th><th>Program</th><th>Ask</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge">Now</span></td><td><b>EU NGI Pilots</b> (cascade funding, no consortium needed)</td><td class="amt">~€60,000</td><td>MVP: <code>IdentityRegistry</code> + <code>PersonhoodSBT</code> + verifier-A (zkTLS-over-Certilia), open-sourced</td></tr>
+        <tr><td>Next</td><td>Gnosis / GnosisDAO ecosystem grant</td><td class="amt">€25–100k</td><td>Deploy, audit prep, Safe/relayer integration</td></tr>
+        <tr><td>Next</td><td>Optimism RetroPGF / Octant / Gitcoin</td><td class="amt">retro</td><td>Reward shipped public-good usage</td></tr>
+        <tr><td>Later</td><td>Digital Europe / EUDI Large-Scale Pilot (via consortium: POTENTIAL/EWC/NOBID/DC4EU)</td><td class="amt">consortium share</td><td>EUDI Wallet source (SD-JWT VC/mDoc), pan-EU</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2>Milestones (12 months)</h2>
+    <div class="mile">
+      <div class="m"><div class="q">M0–M3</div><div><h4>MVP</h4><p>Nullifier registry + SBT contracts on Gnosis testnet; verifier-A (zkTLS/Certilia) PoC; mock issuer/verifier harness.</p></div></div>
+      <div class="m"><div class="q">M4–M6</div><div><h4>Pilot</h4><p>First real Croatian-eID mints; a live association (<i>udruga</i>) vote; nodes on the public map.</p></div></div>
+      <div class="m"><div class="q">M7–M9</div><div><h4>Privacy</h4><p>MACI/Semaphore anonymous voting; pepper threshold-custody.</p></div></div>
+      <div class="m"><div class="q">M10–M12</div><div><h4>Decentralize &amp; EU</h4><p>Optional Android verifier mesh (on Acurast substrate); EUDI Wallet verifier track; security audit.</p></div></div>
+    </div>
+
+    <h2>Team &amp; assets</h2>
+    <p>ITalk d.o.o. (est. 2016, Zagreb) — already ships the surrounding stack: <b>Certilia eID verification in production</b> (<code>domovina-api</code>), a <b>self-custody EURe wallet + Safe/relayer rail</b> (<code>pay.domovina.ai</code>), an <b>out-of-band SMS proof gateway</b> (<code>sms.domovina.ai</code>), and a <b>public GIS map of Croatia</b> (<code>karta</code>) to visualize the node network. This protocol is the identity layer that ties them together.</p>
+
+    <div class="callout"><b>Contact:</b> ms@airkuna.com · italk.hr<br/><br/><i>Not investment/legal advice. Freedom-to-operate note: a formal patent/FTO review is planned before any commercialization; the protocol is released as an open public good, not a patented product.</i></div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=Proof%20of%20Croatian%20Personhood%20%E2%80%94%20funding%2Fpartnership">Contact for grants &amp; partnership</a>
+      <a class="btn-outline" href="../whitepaper/">Read the whitepaper (HR)</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Back to Personhood</a>
+    </div>
+    <p class="fnote">
+      Protocol in development. Phase 0 (MVP) is built and proven locally; everything else is honestly marked as planned. airKUNA / ITalk is a non-custodial software provider — regulated functions (eID issuance, KYC) are performed by licensed parties. Not investment or legal advice.<br/><br/>
+      <b>airKUNA</b> is a project of <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Croatia · OIB: 54872935051 · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · License (intent): Apache-2.0 / MIT · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
