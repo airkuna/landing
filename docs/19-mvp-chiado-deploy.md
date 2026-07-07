@@ -38,8 +38,37 @@ Pokrenuto protiv `anvil` (chainId 31337; identičan EVM kao Chiado, razlika je s
 
 ## Deploy na Chiado (runbook)
 
-**Preduvjeti:** funded EOA na Chiadu (xDAI s [Chiado faucet-a](https://faucet.chiadochain.net));
-Foundry (`~/.foundry/bin`). RPC/chainId u `contracts/foundry.toml` (`chiado`, chainId **10200**).
+**Preduvjeti:** funded EOA na Chiadu (xDAI); Foundry (`~/.foundry/bin`). RPC/chainId u
+`contracts/foundry.toml` (`chiado`, chainId **10200**).
+
+### Fundiranje (faucet) — nema čistog programskog puta
+
+Provjereno (2026-07): Chiado faucet-i su **namjerno anti-bot** — nema javnog HTTP API-ja
+koji bi zaobišao zaštitu. Podjela posla: **captcha je ljudska (30 s), sve poslije je skriptabilno.**
+
+| Faucet | Unos adrese? | Zaštita | Napomena |
+|---|---|---|---|
+| [gnosisfaucet.com](https://gnosisfaucet.com) | ✅ proizvoljna adresa | CAPTCHA | odaberi **Chiado**; najmanje trenja |
+| [faucet.chiadochain.net](https://faucet.chiadochain.net) | ✅ proizvoljna adresa | CAPTCHA | službeni |
+| [faucets.chain.link/gnosis-chiado-testnet](https://faucets.chain.link/gnosis-chiado-testnet) | wallet-connect | wallet + CAPTCHA (+ povijesno mainnet ETH anti-sybil) | traži uvoz ključa u wallet |
+| [ETHGlobal](https://ethglobal.com/faucet/gnosis-chiado-10200) | wallet-connect | login | 0.05 xDAI/dan |
+
+**Preporuka:** zalijepi deployer adresu u gnosisfaucet.com/faucet.chiadochain.net, riješi captcha.
+Ne moraš uvoziti ključ u MetaMask jer ovi faucet-i šalju na proizvoljnu adresu.
+
+> **Gotcha (LINK ≠ gas):** Chainlink faucet po defaultu dispenzira **25 test LINK** (ERC-20),
+> što NE plaća gas. Za deploy treba **native xDAI**. Ili odaberi native/gas opciju na
+> Chainlink faucetu, ili uzmi native s faucet.chiadochain.net / gnosisfaucet.com.
+> (Provjera: `cast balance $ADDR` = native; ERC-20 stanje ne pomaže deployu.)
+
+Programski dio koji JEST moguć — poll balansa dok ne stigne (pa auto-deploy):
+
+```bash
+export PATH="$HOME/.foundry/bin:$PATH"
+ADDR=$(cast wallet address --private-key $(grep -oP 'PRIVATE_KEY=\K.*' contracts/.env))
+until [ "$(cast balance "$ADDR" --rpc-url chiado)" != "0" ]; do sleep 15; done
+echo "funded: $(cast balance "$ADDR" --rpc-url chiado --ether) xDAI"
+```
 
 ```bash
 # 1. deploy ugovora (gov/admin/oracleSigner default = deployer)
