@@ -1,0 +1,12 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.24"
+optimizer = true
+optimizer_runs = 200
+
+# Gnosis Chain (chainId 100) — deploy target. Chiado testnet (chainId 10200) for MVP.
+[rpc_endpoints]
+gnosis = "https://rpc.gnosischain.com"
+chiado = "https://rpc.chiadochain.net"
