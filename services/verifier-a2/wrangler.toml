@@ -1,0 +1,19 @@
+name = "airkuna-verifier-a2"
+main = "src/app.ts"
+compatibility_date = "2024-11-06"
+compatibility_flags = ["nodejs_compat"]
+
+# Non-secret config (override per environment). Secrets (PEPPER, SIGNER_KEY,
+# MOCK_ISSUER_JWK) are set with `wrangler secret put <NAME>` — NEVER commit them.
+[vars]
+MODE = "mock"
+CHAIN_ID = "10200"
+ATTESTATION_TTL_SEC = "600"
+# VERIFYING_CONTRACT = "0x..."   # EIP712Verifier address (set after deploy)
+# CERTILIA_ISSUER = "https://idp.certilia.com"
+# CERTILIA_CLIENT_ID = "..."     # (prod)
+
+# Secrets to set before deploy:
+#   wrangler secret put PEPPER
+#   wrangler secret put SIGNER_KEY
+#   wrangler secret put MOCK_ISSUER_JWK   # (mock mode only)
