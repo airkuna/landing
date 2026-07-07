@@ -1,0 +1,19 @@
+# Copy to .dev.vars (Cloudflare) or .env (Bun) and fill in. NEVER commit the real file.
+# For MODE=mock, all of these have DEV-ONLY embedded defaults (see src/config.ts),
+# so you can run the e2e with an empty env. Only set them to override.
+
+MODE=mock
+CHAIN_ID=10200
+ATTESTATION_TTL_SEC=600
+
+# EIP712Verifier address (required by /verify unless passed in the request body)
+# VERIFYING_CONTRACT=0x...
+
+# Secrets (ADR 0003 — behind KMS/HSM in prod):
+# PEPPER=change-me
+# SIGNER_KEY=0x...            # EIP-712 oracle key; its address must be addSigner'd
+# MOCK_ISSUER_JWK={"crv":"Ed25519",...}   # mock mode only
+
+# Prod (Certilia) — only for MODE=prod:
+# CERTILIA_ISSUER=https://idp.certilia.com
+# CERTILIA_CLIENT_ID=...

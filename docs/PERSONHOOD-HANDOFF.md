@@ -39,8 +39,11 @@ software provider.
 - `docs/16-whitepaper-proof-of-croatian-personhood.md` — **whitepaper v0.2**
 - `docs/17-funding-one-pager.md` — funding one-pager (EN, cilja NGI €60k)
 - `docs/18-android-verifier-node-i-mvp-verifier-a.md` — Android node + MVP verifier-A PoC plan
+- `docs/19-mvp-chiado-deploy.md` — **MVP deploy & e2e runbook** (testovi/deploy/verifier-A2/Chiado adrese)
 - `docs/decisions/` — ADR baza: README (cross-repo politika), 0000-index, 0001 nullifier, 0002 verifier, 0003 pepper
 - `contracts/` — Solidity reference: `IdentityRegistry.sol`, `PersonhoodSBT.sol` (EIP-5484), `EIP712Verifier.sol`, interfaces
+  - `contracts/test/` — **Foundry testovi** (55, `forge test` zeleno); `contracts/script/DeployMVP.s.sol` — deploy skripta
+- `services/verifier-a2/` — **off-chain verifier A2** (Bun/CF Worker): mock issuer + `/verify` (EIP-712 atestacija) + `scripts/e2e.ts`
 
 ## Povezani repozitoriji (drugdje na disku)
 
@@ -63,5 +66,7 @@ software provider.
 
 - (A) Whitepaper v0.2 ✅ + ADR baza ✅
 - (B) Funding one-pager ✅ (`docs/17`)
-- (C) Solidity reference ugovori ✅ (`contracts/`)
+- (C) Solidity reference ugovori ✅ (`contracts/`) + **Foundry testovi (55) + DeployMVP skripta** ✅
 - (D) Android node dizajn + MVP verifier-A plan ✅ (`docs/18`)
+- **MVP A2 harness** ✅ — mock issuer → verifier A2 → `claim` → SBT mint; dupli OIB revertira; `migrateAnchor` radi
+  (dokazano e2e na lokalnom EVM-u; Chiado deploy čeka funded EOA — `docs/19`).
