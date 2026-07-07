@@ -17,7 +17,9 @@ contract PersonhoodSBT is IPersonhoodSBT {
     /// @dev EIP-5484 burn authorization. Here: Both (issuer=registry and owner may burn).
     enum BurnAuth { IssuerOnly, OwnerOnly, Both, Neither }
 
-    address public immutable registry;
+    /// @dev Set once via setRegistry() after deploy, to break the SBT↔Registry constructor cycle.
+    address public registry;
+    address private immutable _deployer;
 
     mapping(uint256 tokenId => address owner) private _owner;
     mapping(address owner => uint256 count) private _balance;
@@ -28,6 +30,8 @@ contract PersonhoodSBT is IPersonhoodSBT {
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 
     error OnlyRegistry();
+    error OnlyDeployer();
+    error RegistryAlreadySet();
     error Soulbound();
     error AlreadyMinted();
     error NotMinted();
@@ -37,7 +41,15 @@ contract PersonhoodSBT is IPersonhoodSBT {
         _;
     }
 
-    constructor(address registry_) {
+    constructor() {
+        _deployer = msg.sender;
+    }
+
+    /// @notice One-time wiring of the registry after both contracts are deployed.
+    ///         Deploy order: PersonhoodSBT → IdentityRegistry(sbt) → sbt.setRegistry(registry).
+    function setRegistry(address registry_) external {
+        if (msg.sender != _deployer) revert OnlyDeployer();
+        if (registry != address(0)) revert RegistryAlreadySet();
         registry = registry_;
     }
 
