@@ -12,16 +12,23 @@ treba funding. Prvo pročitaj, tim redom:
 (i `docs/00-ssot-index.md` za ton/brand).
 
 **Zatečeno stanje (provjeri sam):**
-- `com/index.html` = airKUNA **stablecoin** landing (regulirani hrvatski euro stablecoin).
-- `org/index.html` = šira misija/vizija stranica.
+- `com/index.html` = TRENUTNO airKUNA **stablecoin** landing (regulirani hrvatski euro stablecoin).
+- `org/index.html` = TRENUTNO šira misija/vizija stranica.
 - Oba su **single-file HTML** s istim dizajn-sustavom (CSS varijable navy `#002F6C` / gold `#C8912A`,
   fontovi Fraunces + Inter, `.wrap/.eyebrow/.title/.lead` klase, `coin.svg`). Deploy je Cloudflare
-  (`.wrangler/` postoji) — **prije deploya utvrdi točan mehanizam** (README, `.wrangler`, `wrangler pages`).
+  (`.wrangler/` postoji, remote `airkuna/landing`) — **prije deploya utvrdi točan mehanizam** (README, `.wrangler`, `wrangler pages`).
+
+**CILJANI RASPORED (odluka korisnika — OBRNUTO od trenutnog):**
+- **`com` = Proof of Personhood FUNDING landing.** Razlog: `.com` je **ITalk d.o.o. (firma)** koja traži
+  funding da razvije protokol — day-zero transparentno. Ovdje ide personhood priča + funding CTA.
+- **`org` = stablecoin.** Razlog: `.org` je **airKUNA DAO** koji upravlja stablecoinom (javno dobro / zajednica).
+- **Migracija:** trenutni stablecoin sadržaj je u `com/index.html` → **premjesti ga u `org/index.html`**
+  (spoji sa/zamijeni postojeću org misiju po dogovoru), pa **`com/index.html` postane personhood-funding**.
 
 **Zadaci:**
 
-1. **Odluči raspored (pročitaj obje stranice pa predloži):** personhood = otvoreno javno dobro →
-   prirodno na **org** (misija + funding), s **teaser sekcijom + cross-linkom** na `com`. Potvrdi s korisnikom.
+1. **Reorganiziraj com↔org prema ciljanom rasporedu gore.** Pročitaj obje postojeće stranice, predloži
+   korisniku konkretan plan migracije (što ide gdje, što s postojećom org misijom) i **potvrdi prije velikih izmjena**.
 
 2. **Napiši personhood funding sekciju/stranicu** — sadržaj destiliraj iz `docs/16` + `docs/17`, na
    hrvatskom za javnost (one-pager `docs/17` je EN za grantove — zadrži i EN verziju za grant link):
@@ -50,6 +57,6 @@ treba funding. Prvo pročitaj, tim redom:
 - Ne izmišljaj donacijske adrese — traži ih od korisnika.
 - Commitaj semantički; **NE deployaj bez potvrde**.
 
-**Done kad:** personhood funding sadržaj postoji na org (+ teaser/cross-link na com), izgleda nativno
+**Done kad:** personhood funding sadržaj je na **com** i stablecoin na **org** (+ cross-link), izgleda nativno
 uz postojeći dizajn, ima jasan "za što treba novac" + CTA, lokalno preview OK, i — nakon potvrde —
 deployano na airkuna.org/.com.
