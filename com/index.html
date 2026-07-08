@@ -100,19 +100,32 @@ header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.82);backdro
 .bullets li{display:flex;gap:14px;font-size:15.5px}
 .bullets .b{flex:0 0 26px;height:26px;border-radius:50%;background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:14px;margin-top:1px}
 .bullets b{color:var(--navy)}
+/* bullets žive u .bg-navy sekciji → navy bold bi bio nevidljiv; zlatni + svijetli tekst za kontrast */
+.bg-navy .bullets li{color:#E4ECF8}
+.bg-navy .bullets b{color:var(--gold-light)}
 
 /* fact box */
 .fact{background:linear-gradient(160deg,var(--navy-900),var(--navy));color:#fff;border-radius:var(--r);padding:34px;box-shadow:var(--shadow)}
 .fact h3{font-family:Fraunces,serif;font-weight:600;font-size:24px;margin-bottom:18px;color:#fff}
 .fact .frow{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
 .fact .frow:last-child{border-bottom:0}
-.fact .frow span:first-child{color:#A9BBD8}
+.fact .frow span:first-child{color:#A9BBD8;flex:0 0 auto}
 .fact .frow span:last-child{font-weight:600;text-align:right}
+.fact .fval{display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:0}
+.fact .fval .lnks{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.fact .fval em{font-style:normal;font-weight:400;font-size:12.5px;color:#8FA6C9;line-height:1.35}
+.fact a{color:var(--gold-light);text-decoration:none;border-bottom:1px solid rgba(227,175,53,.45);white-space:nowrap}
+.fact a:hover{border-bottom-color:var(--gold-light)}
+@media(max-width:560px){.fact .frow{flex-direction:column;align-items:flex-start;gap:5px}.fact .fval,.fact .fval .lnks{align-items:flex-start;justify-content:flex-start;text-align:left}.fact .frow span:last-child{text-align:left}}
 
 /* mermaid figure */
 .figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:42px;overflow-x:auto}
 .figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
 .mermaid{display:flex;justify-content:center}
+/* mermaid default edge-label je zeleni okvir + bijeli tekst → semantički kriv (zeleno=success) i nevidljiv na bijeloj kartici; forsiraj neutralno */
+.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
+/* na uskom ekranu dijagram zadrži čitljivu veličinu i scrolla unutar kartice */
+@media(max-width:640px){.figure .mermaid{justify-content:flex-start}.figure .mermaid svg{min-width:520px}}
 .bg-soft{background:var(--soft)}
 .bg-navy{background:radial-gradient(700px 420px at 78% 12%,rgba(227,175,53,.12),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff}
 .bg-navy .title,.bg-navy h2{color:#fff}.bg-navy .lead{color:#B9C8E2}
@@ -150,6 +163,9 @@ header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.82);backdro
 .checks .tick{flex:0 0 26px;height:26px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-weight:800;font-size:15px}
 .checks b{color:var(--navy)}
 .checks .plan{background:var(--gold-soft);color:#7a5a12}
+.checks .srcs{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:9px}
+.checks a.src{color:var(--gold);font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap;border-bottom:1px solid rgba(200,145,42,.35)}
+.checks a.src:hover{border-bottom-color:var(--gold)}
 
 /* fund cards */
 .live{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
@@ -234,9 +250,42 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
     <div class="center"><span class="eyebrow">Problem koji rješavamo</span>
     <h2 class="title">Onchain demokracija ne radi bez dokaza osobnosti</h2>
     <p class="lead">Građani dobivaju vrhunski digitalni identitet, a onchain svijet nema način da provjeri „ovo je jedna stvarna osoba". Dva jaza blokiraju legitimno glasanje i raspodjelu javnih sredstava.</p></div>
-    <div class="grid g2">
-      <div class="card reveal"><div class="ico">×N</div><h3>Sybil napadi</h3><p>Bez dokaza osobnosti jedna osoba otvori tisuću novčanika i preglasa poštene. Onchain glasanje, kvadratno financiranje i DAO upravljanje time postaju nepouzdani.</p></div>
-      <div class="card reveal"><div class="ico">◉</div><h3>Centraliziran eID</h3><p>Hrvatska ima <b>Certilia MobileID</b> (AKD, preko MUP-a, eIDAS <b>razina High</b>) — ali je centraliziran. Za onchain demokraciju treba dokaz koji ne ovisi o jednom entitetu koji sve može sam „iskovati".</p></div>
+
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart TB
+  A(["Jedna osoba<br/>(napadač)"]):::person --> W1["Novčanik 1"]:::bad
+  A --> W2["Novčanik 2"]:::bad
+  A --> W3["Novčanik …1000"]:::bad
+  W1 --> V{{"Glasanje · QF · DAO"}}:::warn
+  W2 --> V
+  W3 --> V
+  H(["Poštena osoba<br/>1 glas"]):::good --> V
+  V --> R["Rezultat iskrivljen<br/>napadač preglasa poštene"]:::bad
+  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap"><b>Sybil napad.</b> Bez dokaza osobnosti 1 čovjek = 1000 glasova → onchain glasanje, QF i DAO postaju nepouzdani.</div>
+    </div>
+
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart TB
+  U1(["Građanin"]):::person --> C
+  U2(["Građanin"]):::person --> C
+  U3(["Građanin"]):::person --> C
+  C["Certilia / AKD<br/>jedina točka istine · eIDAS High"]:::warn --> X{{"Može sam iskovati ili<br/>uskratiti identitet"}}:::bad
+  X -. "sve ovisi o jednom entitetu" .-> D["Nema decentraliziranog<br/>povjerenja"]:::bad
+  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap"><b>Centraliziran eID.</b> Hrvatska ima vrhunski eID (Certilia MobileID, eIDAS High) — ali jedan entitet = jedna točka kvara.</div>
     </div>
     <div class="notewrap reveal">
       <b>Zašto postojeća rješenja ne valjaju:</b> biometrija je privatnosti neprijateljska, društveni grafovi su podložni dogovaranju, a KYC jedne tvrtke stvara novog vratara. Trebamo dokaz koji je <b>privatan, ukorijenjen u državnom eID-u</b> i upotrebljiv na javnom lancu.
@@ -250,6 +299,28 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
     <div class="center"><span class="eyebrow">Rješenje</span>
     <h2 class="title">eID → soulbound token osobnosti</h2>
     <p class="lead">Protokol pretvara verificiranu eID prijavu u <b>soulbound token (SBT)</b> na Gnosisu. Jedinstvenost se ne veže za novčanik nego za osobu — pa jedna osoba može imati više Safe novčanika, ali samo jedan identitet.</p></div>
+
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  E(["eID prijava<br/>Certilia → EUDI"]):::person -->|"HMAC(OIB)"| N["nullifier<br/>OIB nikad onchain"]:::good
+  N -->|"jednom po osobi"| I["Jedan identitet<br/>SBT (soulbound)"]:::good
+  I --> W1["Safe 1"]:::entity
+  I --> W2["Safe 2"]:::entity
+  I --> W3["Safe 3"]:::entity
+  W1 -->|"isti identitet"| V{{"1 osoba = 1 glas"}}:::good
+  W2 --> V
+  W3 --> V
+  V --> OK["Sybil-otporno<br/>glasanje radi"]:::good
+  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap"><b>Vizija — riješeno.</b> eID → jedan nepovratan identitet → koliko god novčanika, samo jedan glas.</div>
+    </div>
+
     <div class="grid g3">
       <div class="card reveal"><div class="ico">1</div><h3>Jedna osoba, jedan identitet</h3><p>Iz OIB-a se izvede <b>nullifier = HMAC(OIB, tajni pepper)</b> — deterministički i nepovratan. Sto novčanika iste osobe → isti nullifier → ugovor odbija drugi mint. To je Sybil-otpornost.</p></div>
       <div class="card reveal"><div class="ico">⌘</div><h3>OIB nikad onchain</h3><p>Sirovi OIB nikad ne napušta backend ni u plaintext bazi. Onchain ide samo nepovratan nullifier. GDPR-first, usklađeno s eIDAS načelom minimizacije podataka.</p></div>
@@ -323,11 +394,11 @@ flowchart LR
       </ul>
     </div>
     <div class="fact reveal">
-      <h3>Zašto baš mi</h3>
-      <div class="frow"><span>Certilia eID verifikacija</span><span>u produkciji (domovina-api)</span></div>
-      <div class="frow"><span>EURe wallet + Safe/relayer</span><span>u produkciji (pay.domovina.ai)</span></div>
-      <div class="frow"><span>SMS out-of-band dokaz</span><span>u produkciji (sms.domovina.ai)</span></div>
-      <div class="frow"><span>Javna GIS karta Hrvatske</span><span>u produkciji (karta)</span></div>
+      <h3>Zašto baš mi <span style="font-weight:400;font-size:14px;color:#8FA6C9">· sve u produkciji, isprobaj</span></h3>
+      <div class="frow"><span>Certilia eID verifikacija</span><span class="fval"><span class="lnks"><a href="https://domovina.ai/" target="_blank" rel="noopener">domovina.ai</a><a href="https://pinka.io/" target="_blank" rel="noopener">pinka.io</a></span><em>„Login with Certilia" (isti SSO backend)</em></span></div>
+      <div class="frow"><span>EURe wallet + Safe/relayer</span><span class="fval"><span class="lnks"><a href="https://pay.domovina.ai/" target="_blank" rel="noopener">pay.domovina.ai</a></span><em>offline QR + PDF417 barkodovi</em></span></div>
+      <div class="frow"><span>SMS out-of-band dokaz</span><span class="fval"><span class="lnks"><a href="https://sms.domovina.ai/" target="_blank" rel="noopener">sms.domovina.ai</a><a href="https://otp.domovina.ai/" target="_blank" rel="noopener">otp.domovina.ai</a></span><em>otp koristi sms infrastrukturu</em></span></div>
+      <div class="frow"><span>Javna GIS karta Hrvatske</span><span class="fval"><span class="lnks"><a href="https://gis.domovina.ai/" target="_blank" rel="noopener">gis.domovina.ai</a></span><em>brza WebGL karta: JLS, klubovi, stadioni, Pinka kampanje, zračne luke</em></span></div>
       <div class="frow"><span>ITalk d.o.o.</span><span>Zagreb, osn. 2016.</span></div>
     </div>
   </div>
@@ -360,10 +431,10 @@ flowchart LR
   </div>
   <div class="wrap">
     <ul class="checks">
-      <li class="reveal"><span class="tick">✓</span><div><b>Whitepaper v0.2 + vlastita ADR baza</b> — protokol, mehanizam i ključne odluke dokumentirani (nullifier, pluggable verifier, pepper custody).</div></li>
-      <li class="reveal"><span class="tick">✓</span><div><b>Solidity referentni ugovori</b> — <code>IdentityRegistry</code>, <code>PersonhoodSBT</code> (EIP-5484), EIP-712 verifier + <b>55 Foundry testova (zeleno)</b> i deploy skripta.</div></li>
-      <li class="reveal"><span class="tick">✓</span><div><b>Off-chain verifier A2 harness</b> — mock issuer → verifier → <code>claim</code> → SBT mint; dupli OIB revertira; oporavak (<code>migrateAnchor</code>) radi. Dokazano e2e na lokalnom EVM-u.</div></li>
-      <li class="reveal"><span class="tick">✓</span><div><b>Android verifier node dizajn</b> + MVP verifier-A plan (Faza 2 substrat: Acurast).</div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Whitepaper v0.2 + vlastita ADR baza</b> — protokol, mehanizam i ključne odluke dokumentirani (nullifier, pluggable verifier, pepper custody).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/16-whitepaper-proof-of-croatian-personhood.md" target="_blank" rel="noopener">whitepaper ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/docs/decisions" target="_blank" rel="noopener">ADR baza ↗</a></div></div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Solidity referentni ugovori</b> — <code>IdentityRegistry</code>, <code>PersonhoodSBT</code> (EIP-5484), EIP-712 verifier + <b>55 Foundry testova (zeleno)</b> i deploy skripta.<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/tree/main/contracts/src" target="_blank" rel="noopener">ugovori ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/contracts/test" target="_blank" rel="noopener">testovi ↗</a><a class="src" href="https://github.com/airkuna/landing/blob/main/contracts/script/DeployMVP.s.sol" target="_blank" rel="noopener">deploy skripta ↗</a></div></div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Off-chain verifier A2 harness</b> — mock issuer → verifier → <code>claim</code> → SBT mint; dupli OIB revertira; oporavak (<code>migrateAnchor</code>) radi. Dokazano e2e na lokalnom EVM-u.<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/tree/main/services/verifier-a2" target="_blank" rel="noopener">verifier-a2 ↗</a></div></div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Android verifier node dizajn</b> + MVP verifier-A plan (Faza 2 substrat: Acurast).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/18-android-verifier-node-i-mvp-verifier-a.md" target="_blank" rel="noopener">dizajn + plan ↗</a></div></div></li>
       <li class="reveal"><span class="tick plan">◷</span><div><b>U planu:</b> deploy na Gnosis testnet (Chiado), verifier A na pravoj Certiliji, security audit, mreža potpisnika, EUDI track.</div></li>
     </ul>
   </div>
