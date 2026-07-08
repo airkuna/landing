@@ -11,7 +11,7 @@ Samostojeće (self-contained) landing stranice za airKUNA brand. Bez build korak
 
 ## Sadržaj
 
-- **com** (personhood) — hero, problem (Sybil + centraliziran eID), rješenje (eID→SBT, nullifier, GDPR, source-agnostično), kako radi (Mermaid eID→onchain flow), pluggable verifier tablica (A/B=MVP, D=Faza 2), zašto javno dobro/ITalk, roadmap (Faza 0→5), status (izgrađeno vs u planu), financiranje (NGI ~€60k, Gnosis, RetroPGF) + CTA. Pod-stranice: [`com/whitepaper/`](com/whitepaper) (docs/16, HR) i [`com/funding/`](com/funding) (docs/17, EN one-pager za grantove).
+- **com** (personhood) — hero, problem (Sybil + centraliziran eID), rješenje (eID→SBT, nullifier, GDPR, source-agnostično), kako radi (Mermaid eID→onchain flow), pluggable verifier tablica (A/B=MVP, D=Faza 2), zašto javno dobro/ITalk, roadmap (Faza 0→5), status (izgrađeno vs u planu), financiranje (NGI ~€60k, Gnosis, RetroPGF) + CTA. Pod-stranice (HR primarne, linkane): [`com/whitepaper/`](com/whitepaper) (HR whitepaper), [`com/sazetak/`](com/sazetak) (HR funding one-pager), [`com/zamasnjak/`](com/zamasnjak) (HR treasury-flywheel investitorski explainer). **Engleske varijante skrivene** (`noindex`, van navigacije) do finalizacije HR sadržaja: [`com/funding/`](com/funding), [`com/flywheel/`](com/flywheel). Vidi [`docs/handoffs/04-jezik-hrvatski-primarni.md`](docs/handoffs/04-jezik-hrvatski-primarni.md).
 - **org** (stablecoin) — priča kune (od krzna do koda), stablecoin 101, endogeni novac (Mermaid), ekstrakcijska ekonomija, usporedna tablica HR banaka, dva modela side-by-side, kuharica (5 koraka + Mermaid), Monerium dokaz, razmjer/Gnosis, **tržište/prilika**, **treasury yield**, **live stack (domovina.ai)**, DAO/partner CTA.
 
 ## Brand

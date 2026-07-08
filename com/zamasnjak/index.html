@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zamašnjak riznice — DeFi financiranje bez razvodnjavanja udjela · airKUNA</title>
+<meta name="description" content="Iskreno objašnjenje za ulagatelje: kako se razvoj airKUNA-e može financirati konzervativnim zajmom uz kolateral u vlastitom skrbništvu nad SOL-om, koristeći postojeće neovisne DeFi primitivce (Solflare, Squads, Hobba, Jupiter, Circle EURC, Monerium). Nije investicijski savjet." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy)}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:24px;font-size:14.5px;font-weight:500;color:var(--ink)}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:720px){.navlinks{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:720px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+.prose{padding:58px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:56px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:17px;color:var(--navy);font-weight:700;margin:26px 0 0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82}
+.lede{font-size:18px!important;color:var(--mute)!important}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+
+/* stack cards */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:26px}
+.stack .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.stack .layer{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.stack .name{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:var(--navy);margin-top:6px}
+.stack .who{font-size:12.5px;color:var(--mute);margin-top:2px}
+.stack .desc{font-size:14px;color:var(--ink);margin-top:9px}
+
+/* mermaid figure */
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:34px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
+/* .prose p leaks color/size into mermaid html-labels; let node-label <p> inherit its classDef span colour */
+.figure .mermaid p{margin:0;font-size:inherit;line-height:1.4}
+.mermaid .nodeLabel p{color:inherit}
+@media(max-width:640px){.figure .mermaid{justify-content:flex-start}.figure .mermaid svg{min-width:640px}}
+
+/* tables */
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+
+/* calculator */
+.calc{margin-top:30px;background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.10),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:28px 26px;box-shadow:var(--shadow)}
+.calc h3{color:#fff;font-family:Fraunces,serif;font-weight:600;font-size:20px}
+.calc .sub{color:#B9C8E2;font-size:13.5px;margin-top:4px}
+.calc .grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:22px}
+@media(max-width:760px){.calc .grid2{grid-template-columns:1fr;gap:22px}}
+.fields{display:grid;gap:16px}
+.field label{display:flex;justify-content:space-between;font-size:13px;color:#C9D6EC;font-weight:600}
+.field label b{color:var(--gold-light);font-variant-numeric:tabular-nums}
+.field input[type=range]{width:100%;margin-top:9px;accent-color:var(--gold-light)}
+.field input[type=number]{width:100%;margin-top:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:9px;color:#fff;padding:9px 12px;font-size:15px;font-variant-numeric:tabular-nums}
+.field input[type=number]:focus{outline:none;border-color:var(--gold-light)}
+.outs{display:grid;gap:12px;align-content:start}
+.out{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px}
+.out .k{font-size:12px;color:#A9BBD8;font-weight:600;display:flex;justify-content:space-between;gap:10px}
+.out .v{font-family:Fraunces,serif;font-weight:600;font-size:22px;color:#fff;margin-top:3px;font-variant-numeric:tabular-nums}
+.out .v.gold{color:var(--gold-light)}
+.out .hint{font-size:11.5px;color:#8FA3C4;margin-top:2px}
+.hfbar{height:9px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:9px}
+.hfbar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--gold-light) 40%,#3fae63);transition:width .25s}
+.hfrow{display:flex;justify-content:space-between;font-size:11px;color:#8FA3C4;margin-top:5px}
+.calc .disc{font-size:11.5px;color:#8FA3C4;margin-top:20px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;line-height:1.6}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:50px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7);font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#stack">Slojevi</a>
+      <a href="#flow">Kako radi</a>
+      <a href="#calc">Model</a>
+      <a href="#risk">Rizici</a>
+      <a href="../sazetak/">Financiranje / grantovi</a>
+    </nav>
+    <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20Treasury%20Flywheel%20%E2%80%94%20investor">Kontakt</a>
+  </div>
+</header>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Objašnjenje za ulagatelje · Financiranje riznice</span>
+    <h1>Zamašnjak riznice airKUNA-e</h1>
+    <p>Način financiranja razvoja airKUNA-e bez razvodnjavanja udjela: konzervativan zajam uz kolateral u vlastitom skrbništvu nad SOL-om, usmjeren u eure kroz postojeće neovisne DeFi primitivce — uz iskren prikaz onoga što jest, i onoga što nije.</p>
+    <div class="docmeta">
+      <span>ITalk d.o.o. (airKUNA)</span>
+      <span>Vlastito skrbništvo (Solflare · Squads)</span>
+      <span>~10% LTV, konzervativno</span>
+      <span>Nije investicijski savjet</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <!-- THESIS -->
+    <p class="lede" style="margin-top:0">U jednoj rečenici: ulagatelj unosi kapital kao <b>SOL</b>, koji se drži u <b>multisig novčaniku u vlastitom skrbništvu kojim on upravlja</b>. Uz njega se podiže mali, prekomjerno kolateralizirani zajam (~10% LTV) i isplaćuje u <b>eure</b> radi financiranja razvoja airKUNA-e. Budući da je zajam sitan u odnosu na kolateral, prinos koji kolateral zarađuje višestruko premašuje kamatu na zajam — pa se zajam otplaćuje iz nosivog prinosa (carry), a ulagatelj zadržava svoju izloženost SOL-u uz to i alokaciju u airKUNA-i.</p>
+
+    <div class="callout good">
+      <b>Zašto ovo može biti iskreno, a ne napuhano.</b> Pri ~10% LTV prinos se obračunava na <b>cijeli</b> kolateral (npr. ~7% × €108k ≈ €7,5k/god.), dok se kamata naplaćuje samo na <b>mali</b> dug (npr. ~5% × €10,8k ≈ €0,5k/god.). Neto nosivi prinos otplaćuje dug za <b>~18 mjeseci uz nikakav rast cijene.</b> Rast SOL-a je bonus na zadržanu glavnicu — <b>a ne</b> pogon otplate. Ta razlika je cijela poanta.
+    </div>
+
+    <div class="callout warn">
+      <b>Što nije.</b> Nije bez rizika i nije "otporno na likvidaciju". To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima, gubitku pariteta stablecoina i tečajnom riziku. Ako SOL padne dovoljno duboko, ili LST/stablecoin izgubi paritet, ili prinos padne ispod kamate, teza se ruši. Odjeljci u nastavku kvantificiraju svaku od tih stavki umjesto da ih otklanjaju odmahivanjem ruke.
+    </div>
+
+    <!-- STACK -->
+    <h2 id="stack">Slojevi — neovisni, kompozabilni primitivci</h2>
+    <p>Nijedan dio financiranja ne ovisi o tome da airKUNA izgradi nešto novo. Svaki je sloj postojeći, neovisno vođen protokol; airKUNA je tek <b>primatelj u riznicu</b> na kraju kanala.</p>
+    <div class="stack">
+      <div class="card"><div class="layer">Novčanik · vlastito skrbništvo</div><div class="name">Solflare</div><div class="who">Solana novčanik treće strane</div><div class="desc">Ključevi i potpisivanje ostaju kod ulagatelja. airKUNA nikad ne preuzima skrbništvo.</div></div>
+      <div class="card"><div class="layer">Skrbništvo · upravljanje</div><div class="name">Squads</div><div class="who">Solana multisig treće strane</div><div class="desc">Odobrenja M-od-N nad trezorom kolaterala — nijedna pojedinačna strana ne može pomaknuti sredstva.</div></div>
+      <div class="card"><div class="layer">Posudba · upravljanje rizikom</div><div class="name">Hobba</div><div class="who">Optimizator posudbe treće strane (preko Kamino, Jupiter, MarginFi…)</div><div class="desc">Usmjerava na najbolju kamatu na posudbu; njegov mehanizam rizika smanjuje polugu prije likvidacije. Automatizirano, nije zajamčeno.</div></div>
+      <div class="card"><div class="layer">Zamjena</div><div class="name">Jupiter</div><div class="who">Solana DEX agregator treće strane</div><div class="desc">USDC/USDT → EURC uz najbolje izvršenje kroz likvidnosne bazene.</div></div>
+      <div class="card"><div class="layer">Euro stablecoin</div><div class="name">Circle EURC</div><div class="who">Circle, EU e-novac / MiCA okvir</div><div class="desc">Euro token pokriven fiatom, mjesečne potvrde (attestations). Model pune rezerve.</div></div>
+      <div class="card"><div class="layer">Isplata u eure · SEPA</div><div class="name">Monerium</div><div class="who">EU-licencirani e-novac · Gnosis kanal</div><div class="desc">Eure na lancu → 1:1 SEPA na bankovni račun riznice airKUNA-e.</div></div>
+      <div class="card"><div class="layer">Primatelj</div><div class="name">Riznica airKUNA-e (ITalk d.o.o.)</div><div class="who">Ovaj projekt</div><div class="desc">Čisti euri financiraju pravne poslove, razvoj i operacije.</div></div>
+    </div>
+    <div class="callout"><b>Napomena o podrijetlu.</b> Neki od ovih alata potječu iz šire regionalne / neovisne inženjerske scene, no ova stranica ne iznosi neprovjerene tvrdnje o nacionalnosti ili vlasništvu. Svaki je opisan prema tome <b>što radi</b> i <b>tko ga vodi</b>. Ulagatelji bi trebali provesti vlastitu dubinsku analizu svakog protokola treće strane u kanalu.</div>
+
+    <!-- FLOW -->
+    <h2 id="flow">Kako radi — stroj stanja</h2>
+    <p>Kapital prolazi kroz šest stanja. Jedina dionica koja dotiče airKUNA-u jest polog u riznicu; sve ostalo je vlastita pozicija ulagatelja u vlastitom skrbništvu.</p>
+
+    <div class="figure">
+      <div class="mermaid">
+flowchart TB
+  I(["Kapital ulagatelja<br/>EUR ili SOL"]):::person --> S0
+  S0["S0 · Raspored<br/>EUR → SOL (spot)"]:::entity --> S1
+  S1["S1 · Vlastito skrbništvo i zaključavanje<br/>Squads multisig · Solflare"]:::entity --> S2
+  S2["S2 · Kolateralizacija<br/>SOL → LST (npr. JitoSOL) preko Hobbe · ~10% LTV"]:::good --> S3
+  S3["S3 · Posudba i isplata u eure<br/>USDC → EURC (Jupiter) → SEPA (Monerium)"]:::warn --> T
+  T[["Riznica airKUNA-e<br/>pravno · razvoj · operacije"]]:::entity
+  S2 -->|"kolateral i dalje zarađuje ~7% APY"| S4
+  S3 -. "dug se obračunava ~5% APY na malom saldu" .-> S4
+  S4{{"S4 · Nosivi prinos &gt; kamata<br/>neto prinos otplaćuje zajam"}}:::good --> S5
+  S5["S5 · Izlaz<br/>zajam otplaćen · ulagatelj zadržava SOL + alokaciju u airKUNA-i"]:::good
+  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap"><b>Petlja financiranja u šest stanja.</b> Zeleno = vrijednost koja pripada ulagatelju; zlatno = dionica poluge/isplate u eure; navy = protokol/entitet. Petlja se zatvara kada neto nosivi prinos (S4) otplati zajam podignut u S3.</div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <h2 id="calc">Isprobajte model sami</h2>
+    <p>Prilagodite pretpostavke. Model je namjerno konzervativan: samootplatu zajma procjenjuje <b>samo iz nosivog prinosa</b>, držeći cijenu SOL-a nepromijenjenom, a potencijal rasta cijene prikazuje zasebno. Sve je ilustracija, a ne ponuda.</p>
+
+    <div class="calc" id="calcbox">
+      <h3>Model Zamašnjaka riznice</h3>
+      <div class="sub">Sve brojke su okvirne. Pretpostavljeni prag likvidacije je 70% (uobičajen za SOL kolateral). Otplata iz prinosa pretpostavlja da se prinos mjesečno prikuplja za servisiranje duga, uz nepromijenjenu cijenu.</div>
+      <div class="grid2">
+        <div class="fields">
+          <div class="field"><label>Glavnica ulaganja <b><span id="lPrincipal">€100,000</span></b></label><input type="range" id="principal" min="10000" max="1000000" step="10000" value="100000" /></div>
+          <div class="field"><label>Trenutna cijena SOL-a (USD) <b><span id="lSol">$75</span></b></label><input type="range" id="sol" min="30" max="200" step="1" value="75" /></div>
+          <div class="field"><label>Ciljna cijena SOL-a (USD) <b><span id="lTarget">$250</span></b></label><input type="range" id="target" min="75" max="600" step="5" value="250" /></div>
+          <div class="field"><label>LST prinos APY <b><span id="lLst">7%</span></b></label><input type="range" id="lst" min="0" max="15" step="0.5" value="7" /></div>
+          <div class="field"><label>Kamata na posudbu stablecoina APY <b><span id="lBorrow">5%</span></b></label><input type="range" id="borrow" min="0" max="20" step="0.5" value="5" /></div>
+          <div class="field"><label>Omjer zajma i vrijednosti (LTV) <b><span id="lLtv">10%</span></b></label><input type="range" id="ltv" min="5" max="50" step="1" value="10" /></div>
+          <div class="field"><label>Tečaj EUR/USD <b><span id="lFx">1.08</span></b></label><input type="range" id="fx" min="0.90" max="1.30" step="0.01" value="1.08" /></div>
+        </div>
+        <div class="outs">
+          <div class="out"><div class="k"><span>Nabavljen kolateral</span></div><div class="v" id="oColl">1,440 SOL</div><div class="hint" id="oCollv">≈ $108,000 vrijednosti kolaterala</div></div>
+          <div class="out"><div class="k"><span>Trenutno financirana riznica</span></div><div class="v gold" id="oTreas">€10,000</div><div class="hint">posuđeno i isplaćeno u eure airKUNA-i</div></div>
+          <div class="out"><div class="k"><span>Faktor zdravlja</span><span id="oHfnum">7.0×</span></div>
+            <div class="hfbar"><i id="oHfbar" style="width:88%"></i></div>
+            <div class="hfrow"><span>likvidacija pri <b id="oLiq" style="color:#E3AF35">$10.71</b></span><span id="oLiqpct">−86%</span></div>
+          </div>
+          <div class="out"><div class="k"><span>Neto godišnji nosivi prinos</span></div><div class="v" id="oCarry">€6,500</div><div class="hint" id="oCarryh">prinos − kamata (otplaćuje zajam)</div></div>
+          <div class="out"><div class="k"><span>Zajam se samootplaćuje za</span></div><div class="v" id="oMonths">~18 mjeseci</div><div class="hint">iz nosivog prinosa, uz nepromijenjenu cijenu SOL-a</div></div>
+          <div class="out"><div class="k"><span>Zadržani SOL pri cilju</span></div><div class="v gold" id="oRetain">€333,333</div><div class="hint" id="oMult">≈ 3.3× glavnice (potencijal rasta cijene, nije zajamčen)</div></div>
+        </div>
+      </div>
+      <div class="disc">Samo ilustrativan model — nije ponuda, nudba, projekcija ni investicijski savjet. Prinose, kamate na posudbu, LTV granice i pragove likvidacije određuju protokoli trećih strana i neprestano se mijenjaju. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
+    </div>
+
+    <!-- RISK -->
+    <h2 id="risk">Mehanizam rizika — jasno izrečeno</h2>
+    <p>Arhitektura umanjuje neke rizike, a druge prihvaća. Ne uklanja ih. Slijedi svaki bitan rizik, kako se ublažava i preostala izloženost.</p>
+
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Rizik</th><th>Ublažavanje</th><th>Preostala izloženost</th></tr></thead>
+      <tbody>
+        <tr><td><b>Pad vrijednosti SOL-a → likvidacija</b></td><td>~10% LTV drži cijenu likvidacije ~85% ispod spot cijene; Hobbin mehanizam rizika može automatski smanjiti polugu prije toga.</td><td><span class="badge y">umjereno</span> Brz, dubok pad i dalje može prestići automatsko smanjenje poluge; orakli mogu kasniti.</td></tr>
+        <tr><td><b>Gubitak pariteta LST-a</b> (npr. JitoSOL)</td><td>Vrhunski (blue-chip) LST-ovi, konzervativni faktori kolaterala, dinamičko rebalansiranje.</td><td><span class="badge y">umjereno</span> Trajni gubitak pariteta LST-a snižava vrijednost kolaterala i može pokrenuti likvidaciju.</td></tr>
+        <tr><td><b>Nagli skok kamate na posudbu</b></td><td>Dug je sitan u odnosu na kolateral, pa kamata može višestruko porasti prije nego nosivi prinos postane negativan.</td><td><span class="badge g">nisko</span> Zagrize tek ako kamata na posudbu APY premaši prinos APY na cijelom kolateralu.</td></tr>
+        <tr><td><b>Rizik stablecoina</b> (USDC/EURC)</td><td>Puna rezerva, potvrđeni izdavatelji u MiCA okviru; kratak prozor držanja tijekom isplate u eure.</td><td><span class="badge y">umjereno</span> Neuspjeh izdavatelja/rezervi/regulatorni neuspjeh moguć je, iako malo vjerojatan za vrhunske (blue-chip) izdavatelje.</td></tr>
+        <tr><td><b>Tečaj (USD/EUR)</b></td><td>Isplata u eure događa se gotovo trenutno, čime se prozor izloženosti svodi na minimum.</td><td><span class="badge g">nisko</span> Dug i riznica nakon isplate su oboje denominirani u eurima.</td></tr>
+        <tr><td><b>Pametni ugovor / most</b></td><td>Uhodani protokoli, revizije, multisig nad trezorom.</td><td><span class="badge r">visok učinak</span> Eksploatacije se događaju. To je repni rizik koji može poništiti poziciju.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout warn"><b>Stav o sistemskom riziku — iskreno uokviren.</b> Ovaj model počiva na neprekinutom radu nekoliko neovisnih protokola (kreditno tržište, LST, DEX agregator, izdavatelj stablecoina, SEPA kanal). Koreliran neuspjeh među njima oštetio bi ili uništio poziciju. <b>Ne</b> otklanjamo to kao "zanemarivo"; tretiramo ga kao glavni, svjestan rizik strategije i sukladno tome određujemo veličinu pozicija.</div>
+
+    <!-- WHAT IT IS -->
+    <h2>Što ulagatelj dobiva</h2>
+    <ul>
+      <li><b>Zadržanu izloženost SOL-u</b> — glavnica ostaje ulagateljeva, u vlastitom skrbništvu, s punim potencijalom rasta (i pada) SOL-a.</li>
+      <li><b>Alokaciju u airKUNA-i</b> — isplaćeni euri financiraju razvoj; veličinu i instrument bilo kakvog vlasničkog udjela/alokacije utvrđuje zaseban, formalan ugovor, a ne ova stranica.</li>
+      <li><b>Financiranje airKUNA-e bez razvodnjavanja udjela</b> — razvoj se financira bez prodaje temeljnog vlasničkog udjela ili tokena na dnu tržišta.</li>
+    </ul>
+
+    <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, nudba, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Tvrdnje protokola trećih strana (prinosi, MiCA status, revizije) treba neovisno provjeriti.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20Treasury%20Flywheel%20%E2%80%94%20discuss">Razgovarajte s timom</a>
+      <a class="btn-outline" href="../sazetak/">Pogledajte kanal financiranja grantovima</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Natrag na airKUNA</a>
+    </div>
+    <p class="fnote">
+      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. Brojke su okvirne i ovise o protokolima trećih strana izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
+</script>
+
+<script>
+(function(){
+  var LIQ_THRESHOLD = 0.70; // assumed liquidation threshold for SOL collateral
+  var $ = function(id){ return document.getElementById(id); };
+  var ids = ['principal','sol','target','lst','borrow','ltv','fx'];
+  var eur = function(n){ return '€' + Math.round(n).toLocaleString('en-US'); };
+  var usd = function(n){ return '$' + Math.round(n).toLocaleString('en-US'); };
+  var mjeseci = function(n){ var d=n%10, dd=n%100; if(d===1&&dd!==11)return 'mjesec'; if(d>=2&&d<=4&&(dd<12||dd>14))return 'mjeseca'; return 'mjeseci'; };
+
+  function monthsToRepay(collUSD, debtUSD, lstApy, borrowApy){
+    // conservative: price held flat, monthly harvest of yield applied to debt
+    var d = debtUSD, m = 0, cap = 600;
+    var mYield = collUSD * lstApy / 12;           // yield on full collateral, per month
+    if (mYield <= collUSD*0) return Infinity;
+    while (d > 0 && m < cap){
+      var interest = d * borrowApy / 12;
+      var net = mYield - interest;                // net carry available to repay
+      if (net <= 0) return Infinity;              // carry can't outrun interest
+      d -= net;
+      m++;
+    }
+    return m >= cap ? Infinity : m;
+  }
+
+  function calc(){
+    var principalEUR = +$('principal').value;
+    var solNow = +$('sol').value;
+    var solTarget = +$('target').value;
+    var lstApy = +$('lst').value / 100;
+    var borrowApy = +$('borrow').value / 100;
+    var ltv = +$('ltv').value / 100;
+    var fx = +$('fx').value; // EUR->USD
+
+    // labels
+    $('lPrincipal').textContent = eur(principalEUR);
+    $('lSol').textContent = usd(solNow);
+    $('lTarget').textContent = usd(solTarget);
+    $('lLst').textContent = (lstApy*100).toFixed(lstApy*100%1?1:0) + '%';
+    $('lBorrow').textContent = (borrowApy*100).toFixed(borrowApy*100%1?1:0) + '%';
+    $('lLtv').textContent = Math.round(ltv*100) + '%';
+    $('lFx').textContent = fx.toFixed(2);
+
+    var collUSD = principalEUR * fx;
+    var collSOL = collUSD / solNow;
+    var debtUSD = collUSD * ltv;
+    var treasuryEUR = debtUSD / fx;
+
+    // health factor & liquidation
+    var hf = LIQ_THRESHOLD / ltv;                       // e.g. 0.70/0.10 = 7
+    var liqPrice = solNow * (ltv / LIQ_THRESHOLD);      // price at which HF = 1
+    var liqPct = (liqPrice / solNow - 1) * 100;         // negative
+
+    // carry
+    var carryUSD = collUSD * lstApy - debtUSD * borrowApy;
+    var months = monthsToRepay(collUSD, debtUSD, lstApy, borrowApy);
+
+    // upside
+    var retainUSD = collSOL * solTarget;
+    var retainEUR = retainUSD / fx;
+    var mult = retainEUR / principalEUR;
+
+    // render
+    $('oColl').textContent = Math.round(collSOL).toLocaleString('en-US') + ' SOL';
+    $('oCollv').textContent = '≈ ' + usd(collUSD) + ' vrijednosti kolaterala';
+    $('oTreas').textContent = eur(treasuryEUR);
+    $('oHfnum').textContent = hf.toFixed(1) + '×';
+    var hfPct = Math.max(4, Math.min(100, hf/10*100)); // 10× -> full bar
+    $('oHfbar').style.width = hfPct + '%';
+    $('oLiq').textContent = usd(liqPrice);
+    $('oLiqpct').textContent = (liqPct>0?'+':'') + Math.round(liqPct) + '%';
+    $('oCarry').textContent = (carryUSD>=0?'':'−') + eur(Math.abs(carryUSD)/fx);
+    $('oCarryh').textContent = carryUSD>=0 ? 'prinos − kamata (otplaćuje zajam)' : 'negativno — kamata premašuje prinos';
+    $('oMonths').textContent = months===Infinity ? 'ne samootplaćuje se' : ('~' + months + ' ' + mjeseci(months));
+    $('oRetain').textContent = eur(retainEUR);
+    $('oMult').textContent = '≈ ' + mult.toFixed(1) + '× glavnice (potencijal rasta cijene, nije zajamčen)';
+  }
+
+  ids.forEach(function(id){ $(id).addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>

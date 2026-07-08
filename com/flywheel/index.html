@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Hidden: Croatian is primary (com/zamasnjak/). This EN version is frozen until 1:1 EN translation phase. See docs/handoffs/04-jezik-hrvatski-primarni.md -->
+<meta name="robots" content="noindex, nofollow" />
+<title>Treasury Flywheel — Non-dilutive DeFi financing · airKUNA</title>
+<meta name="description" content="An honest investor explainer: how airKUNA development can be funded with a conservative, self-custodied collateralized loan against SOL, using existing independent DeFi primitives (Solflare, Squads, Hobba, Jupiter, Circle EURC, Monerium). Not investment advice." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy)}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:24px;font-size:14.5px;font-weight:500;color:var(--ink)}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:720px){.navlinks{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:720px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+.prose{padding:58px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:56px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:17px;color:var(--navy);font-weight:700;margin:26px 0 0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82}
+.lede{font-size:18px!important;color:var(--mute)!important}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+
+/* stack cards */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:26px}
+.stack .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.stack .layer{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.stack .name{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:var(--navy);margin-top:6px}
+.stack .who{font-size:12.5px;color:var(--mute);margin-top:2px}
+.stack .desc{font-size:14px;color:var(--ink);margin-top:9px}
+
+/* mermaid figure */
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:34px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
+/* .prose p leaks color/size into mermaid html-labels; let node-label <p> inherit its classDef span colour */
+.figure .mermaid p{margin:0;font-size:inherit;line-height:1.4}
+.mermaid .nodeLabel p{color:inherit}
+@media(max-width:640px){.figure .mermaid{justify-content:flex-start}.figure .mermaid svg{min-width:640px}}
+
+/* tables */
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+
+/* calculator */
+.calc{margin-top:30px;background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.10),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:28px 26px;box-shadow:var(--shadow)}
+.calc h3{color:#fff;font-family:Fraunces,serif;font-weight:600;font-size:20px}
+.calc .sub{color:#B9C8E2;font-size:13.5px;margin-top:4px}
+.calc .grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:22px}
+@media(max-width:760px){.calc .grid2{grid-template-columns:1fr;gap:22px}}
+.fields{display:grid;gap:16px}
+.field label{display:flex;justify-content:space-between;font-size:13px;color:#C9D6EC;font-weight:600}
+.field label b{color:var(--gold-light);font-variant-numeric:tabular-nums}
+.field input[type=range]{width:100%;margin-top:9px;accent-color:var(--gold-light)}
+.field input[type=number]{width:100%;margin-top:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:9px;color:#fff;padding:9px 12px;font-size:15px;font-variant-numeric:tabular-nums}
+.field input[type=number]:focus{outline:none;border-color:var(--gold-light)}
+.outs{display:grid;gap:12px;align-content:start}
+.out{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px}
+.out .k{font-size:12px;color:#A9BBD8;font-weight:600;display:flex;justify-content:space-between;gap:10px}
+.out .v{font-family:Fraunces,serif;font-weight:600;font-size:22px;color:#fff;margin-top:3px;font-variant-numeric:tabular-nums}
+.out .v.gold{color:var(--gold-light)}
+.out .hint{font-size:11.5px;color:#8FA3C4;margin-top:2px}
+.hfbar{height:9px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:9px}
+.hfbar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--gold-light) 40%,#3fae63);transition:width .25s}
+.hfrow{display:flex;justify-content:space-between;font-size:11px;color:#8FA3C4;margin-top:5px}
+.calc .disc{font-size:11.5px;color:#8FA3C4;margin-top:20px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;line-height:1.6}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:50px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7);font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#stack">The stack</a>
+      <a href="#flow">How it works</a>
+      <a href="#calc">Model</a>
+      <a href="#risk">Risks</a>
+      <a href="../funding/">Grant funding</a>
+    </nav>
+    <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20Treasury%20Flywheel%20%E2%80%94%20investor">Contact</a>
+  </div>
+</header>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Investor Explainer · Treasury Financing</span>
+    <h1>The airKUNA Treasury Flywheel</h1>
+    <p>A non-dilutive way to fund airKUNA development: a conservative, self-custodied collateralized loan against SOL, routed to EUR through existing independent DeFi primitives — with an honest account of what it is, and what it is not.</p>
+    <div class="docmeta">
+      <span>ITalk d.o.o. (airKUNA)</span>
+      <span>Self-custody (Solflare · Squads)</span>
+      <span>~10% LTV, conservative</span>
+      <span>Not investment advice</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <!-- THESIS -->
+    <p class="lede" style="margin-top:0">In one sentence: an investor supplies capital as <b>SOL</b>, held in a <b>self-custodied multisig they control</b>. A small, over-collateralized loan (~10% LTV) is drawn against it and off-ramped to <b>EUR</b> to fund airKUNA’s development. Because the loan is tiny relative to the collateral, the yield the collateral earns exceeds the loan interest many times over — so the loan is retired from carry, and the investor keeps their SOL exposure plus an allocation in airKUNA.</p>
+
+    <div class="callout good">
+      <b>Why this can be honest, not hype.</b> At ~10% LTV the yield accrues on the <b>whole</b> collateral (e.g. ~7% × €108k ≈ €7.5k/yr) while interest is charged only on the <b>small</b> debt (e.g. ~5% × €10.8k ≈ €0.5k/yr). Net carry retires the debt in <b>~18 months with zero price appreciation.</b> SOL upside is a bonus on retained principal — <b>not</b> the repayment engine. That distinction is the whole point.
+    </div>
+
+    <div class="callout warn">
+      <b>What it is not.</b> It is not risk-free and not “liquidation-proof.” It is a <b>leveraged directional position in SOL</b> plus smart-contract, stablecoin de-peg and FX exposure. If SOL falls far enough, or an LST/stablecoin de-pegs, or the yield collapses below the interest, the thesis breaks. The sections below quantify each of these instead of waving them away.
+    </div>
+
+    <!-- STACK -->
+    <h2 id="stack">The stack — independent, composable primitives</h2>
+    <p>None of the financing depends on airKUNA building anything new. Every layer is an existing, independently-operated protocol; airKUNA is only the <b>treasury recipient</b> at the end of the rail.</p>
+    <div class="stack">
+      <div class="card"><div class="layer">Wallet · self-custody</div><div class="name">Solflare</div><div class="who">Third-party Solana wallet</div><div class="desc">Keys and signing stay with the investor. airKUNA never takes custody.</div></div>
+      <div class="card"><div class="layer">Custody · governance</div><div class="name">Squads</div><div class="who">Third-party Solana multisig</div><div class="desc">M-of-N approvals on the collateral vault — no single party can move funds.</div></div>
+      <div class="card"><div class="layer">Borrow · risk mgmt</div><div class="name">Hobba</div><div class="who">Third-party borrow optimizer (over Kamino, Jupiter, MarginFi…)</div><div class="desc">Routes to the best borrow rate; its risk engine de-leverages before liquidation. Automated, not guaranteed.</div></div>
+      <div class="card"><div class="layer">Swap</div><div class="name">Jupiter</div><div class="who">Third-party Solana DEX aggregator</div><div class="desc">USDC/USDT → EURC at best execution across pools.</div></div>
+      <div class="card"><div class="layer">Euro stablecoin</div><div class="name">Circle EURC</div><div class="who">Circle, EU e-money / MiCA framework</div><div class="desc">Fiat-backed euro token, monthly attestations. Full-reserve model.</div></div>
+      <div class="card"><div class="layer">Off-ramp · SEPA</div><div class="name">Monerium</div><div class="who">EU-licensed e-money · Gnosis rail</div><div class="desc">On-chain EUR → 1:1 SEPA to the airKUNA treasury bank account.</div></div>
+      <div class="card"><div class="layer">Recipient</div><div class="name">airKUNA Treasury (ITalk d.o.o.)</div><div class="who">This project</div><div class="desc">Clean EUR funds legal, development and operations.</div></div>
+    </div>
+    <div class="callout"><b>Provenance note.</b> Some of these tools originate in the broader regional / independent engineering scene, but this page makes no unverified nationality or ownership claims. Each is described by <b>what it does</b> and <b>who operates it</b>. Investors should do their own due diligence on every third-party protocol in the rail.</div>
+
+    <!-- FLOW -->
+    <h2 id="flow">How it works — the state machine</h2>
+    <p>The capital moves through six states. The only leg that touches airKUNA is the treasury deposit; everything else is the investor’s own self-custodied position.</p>
+
+    <div class="figure">
+      <div class="mermaid">
+flowchart TB
+  I(["Investor capital<br/>EUR or SOL"]):::person --> S0
+  S0["S0 · Deploy<br/>EUR → SOL (spot)"]:::entity --> S1
+  S1["S1 · Self-custody &amp; lock<br/>Squads multisig · Solflare"]:::entity --> S2
+  S2["S2 · Collateralize<br/>SOL → LST (e.g. JitoSOL) via Hobba · ~10% LTV"]:::good --> S3
+  S3["S3 · Borrow &amp; off-ramp<br/>USDC → EURC (Jupiter) → SEPA (Monerium)"]:::warn --> T
+  T[["airKUNA Treasury<br/>legal · dev · ops"]]:::entity
+  S2 -->|"collateral keeps earning ~7% APY"| S4
+  S3 -. "debt accrues ~5% APY on a small balance" .-> S4
+  S4{{"S4 · Carry &gt; interest<br/>net yield repays the loan"}}:::good --> S5
+  S5["S5 · Exit<br/>loan retired · investor keeps SOL + airKUNA allocation"]:::good
+  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap"><b>Six-state financing loop.</b> Green = value that accrues to the investor; gold = the leverage/off-ramp leg; navy = protocol/entity. The loop closes when net carry (S4) retires the loan drawn in S3.</div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <h2 id="calc">Model it yourself</h2>
+    <p>Adjust the assumptions. The model is deliberately conservative: it estimates loan self-repayment from <b>carry only</b>, holding SOL price flat, then shows price upside separately. Everything is an illustration, not a quote.</p>
+
+    <div class="calc" id="calcbox">
+      <h3>Treasury Flywheel model</h3>
+      <div class="sub">All figures indicative. Liquidation threshold assumed at 70% (typical for SOL collateral). Carry-repayment assumes yield is harvested monthly to service debt, price held flat.</div>
+      <div class="grid2">
+        <div class="fields">
+          <div class="field"><label>Investment principal <b><span id="lPrincipal">€100,000</span></b></label><input type="range" id="principal" min="10000" max="1000000" step="10000" value="100000" /></div>
+          <div class="field"><label>Current SOL price (USD) <b><span id="lSol">$75</span></b></label><input type="range" id="sol" min="30" max="200" step="1" value="75" /></div>
+          <div class="field"><label>Target SOL price (USD) <b><span id="lTarget">$250</span></b></label><input type="range" id="target" min="75" max="600" step="5" value="250" /></div>
+          <div class="field"><label>LST yield APY <b><span id="lLst">7%</span></b></label><input type="range" id="lst" min="0" max="15" step="0.5" value="7" /></div>
+          <div class="field"><label>Stablecoin borrow APY <b><span id="lBorrow">5%</span></b></label><input type="range" id="borrow" min="0" max="20" step="0.5" value="5" /></div>
+          <div class="field"><label>Loan-to-value (LTV) <b><span id="lLtv">10%</span></b></label><input type="range" id="ltv" min="5" max="50" step="1" value="10" /></div>
+          <div class="field"><label>EUR/USD rate <b><span id="lFx">1.08</span></b></label><input type="range" id="fx" min="0.90" max="1.30" step="0.01" value="1.08" /></div>
+        </div>
+        <div class="outs">
+          <div class="out"><div class="k"><span>Collateral acquired</span></div><div class="v" id="oColl">1,440 SOL</div><div class="hint" id="oCollv">≈ $108,000 collateral value</div></div>
+          <div class="out"><div class="k"><span>Treasury funded now</span></div><div class="v gold" id="oTreas">€10,000</div><div class="hint">borrowed &amp; off-ramped to airKUNA</div></div>
+          <div class="out"><div class="k"><span>Health factor</span><span id="oHfnum">7.0×</span></div>
+            <div class="hfbar"><i id="oHfbar" style="width:88%"></i></div>
+            <div class="hfrow"><span>liquidation at <b id="oLiq" style="color:#E3AF35">$10.71</b></span><span id="oLiqpct">−86%</span></div>
+          </div>
+          <div class="out"><div class="k"><span>Net annual carry</span></div><div class="v" id="oCarry">€6,500</div><div class="hint" id="oCarryh">yield − interest (repays the loan)</div></div>
+          <div class="out"><div class="k"><span>Loan self-repays in</span></div><div class="v" id="oMonths">~18 months</div><div class="hint">from carry, SOL price held flat</div></div>
+          <div class="out"><div class="k"><span>Retained SOL at target</span></div><div class="v gold" id="oRetain">€333,333</div><div class="hint" id="oMult">≈ 3.3× principal (price upside, not guaranteed)</div></div>
+        </div>
+      </div>
+      <div class="disc">Illustrative model only — not a quote, offer, projection or investment advice. Yields, borrow rates, LTV limits and liquidation thresholds are set by third-party protocols and vary continuously. Crypto assets are volatile and can lose all value.</div>
+    </div>
+
+    <!-- RISK -->
+    <h2 id="risk">Risk engine — stated plainly</h2>
+    <p>The architecture reduces some risks and accepts others. It does not eliminate them. Here is each material risk, how it is mitigated, and the residual exposure.</p>
+
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Risk</th><th>Mitigation</th><th>Residual exposure</th></tr></thead>
+      <tbody>
+        <tr><td><b>SOL drawdown → liquidation</b></td><td>~10% LTV keeps the liquidation price ~85% below spot; Hobba’s risk engine can auto-deleverage before that.</td><td><span class="badge y">moderate</span> A fast, deep crash can still outrun automated deleveraging; oracles can lag.</td></tr>
+        <tr><td><b>LST de-peg</b> (e.g. JitoSOL)</td><td>Blue-chip LSTs, conservative collateral factors, dynamic rebalancing.</td><td><span class="badge y">moderate</span> A sustained LST de-peg lowers collateral value and can trigger liquidation.</td></tr>
+        <tr><td><b>Borrow-rate spike</b></td><td>Debt is tiny vs collateral, so interest can rise several-fold before carry turns negative.</td><td><span class="badge g">low</span> Only bites if borrow APY exceeds yield APY on the whole collateral.</td></tr>
+        <tr><td><b>Stablecoin risk</b> (USDC/EURC)</td><td>Full-reserve, attested, MiCA-framework issuers; short holding window during off-ramp.</td><td><span class="badge y">moderate</span> Issuer/reserve/regulatory failure is possible, if unlikely for blue-chips.</td></tr>
+        <tr><td><b>FX (USD/EUR)</b></td><td>Off-ramp to EUR happens near-immediately, minimizing the window of exposure.</td><td><span class="badge g">low</span> Debt and treasury are both EUR-denominated after off-ramp.</td></tr>
+        <tr><td><b>Smart-contract / bridge</b></td><td>Established protocols, audits, multisig on the vault.</td><td><span class="badge r">high impact</span> Exploits happen. This is the tail risk that can zero the position.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout warn"><b>Systemic-risk stance — honestly framed.</b> This model rests on the continued function of several independent protocols (a lending market, an LST, a DEX aggregator, a stablecoin issuer, a SEPA rail). A correlated failure among them would impair or destroy the position. We do <b>not</b> argue this away as “negligible”; we treat it as the principal, conscious risk of the strategy and size positions accordingly.</div>
+
+    <!-- WHAT IT IS -->
+    <h2>What the investor gets</h2>
+    <ul>
+      <li><b>Retained SOL exposure</b> — the principal stays the investor’s, in self-custody, with full upside (and downside) on SOL.</li>
+      <li><b>An allocation in airKUNA</b> — the off-ramped EUR funds development; the size and instrument of any equity/allocation are set by a separate, formal agreement, not by this page.</li>
+      <li><b>Non-dilutive funding for airKUNA</b> — development is financed without selling core equity or tokens at a market bottom.</li>
+    </ul>
+
+    <div class="callout"><b>Legal &amp; regulatory note.</b> This page is an <b>explainer</b>, not an offer of securities, a solicitation, a financial promotion, or investment/tax/legal advice. Any actual participation would be documented in a formal agreement, subject to suitability and applicable law (incl. MiCA / MiFID II and Croatian regulation). airKUNA / ITalk is a non-custodial software company and does not provide regulated financial services. Third-party protocol claims (yields, MiCA status, audits) should be independently verified.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20Treasury%20Flywheel%20%E2%80%94%20discuss">Discuss with the team</a>
+      <a class="btn-outline" href="../funding/">See the grant-funding track</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Back to airKUNA</a>
+    </div>
+    <p class="fnote">
+      Illustrative investor explainer. Not an offer, solicitation, financial promotion, or investment/legal/tax advice. Figures are indicative and depend on third-party protocols outside airKUNA’s control. Crypto assets are volatile and can lose all value. airKUNA / ITalk is a non-custodial software provider; regulated functions are performed by licensed parties.<br/><br/>
+      <b>airKUNA</b> is a project of <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Croatia · OIB: 54872935051 · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
+</script>
+
+<script>
+(function(){
+  var LIQ_THRESHOLD = 0.70; // assumed liquidation threshold for SOL collateral
+  var $ = function(id){ return document.getElementById(id); };
+  var ids = ['principal','sol','target','lst','borrow','ltv','fx'];
+  var eur = function(n){ return '€' + Math.round(n).toLocaleString('en-US'); };
+  var usd = function(n){ return '$' + Math.round(n).toLocaleString('en-US'); };
+
+  function monthsToRepay(collUSD, debtUSD, lstApy, borrowApy){
+    // conservative: price held flat, monthly harvest of yield applied to debt
+    var d = debtUSD, m = 0, cap = 600;
+    var mYield = collUSD * lstApy / 12;           // yield on full collateral, per month
+    if (mYield <= collUSD*0) return Infinity;
+    while (d > 0 && m < cap){
+      var interest = d * borrowApy / 12;
+      var net = mYield - interest;                // net carry available to repay
+      if (net <= 0) return Infinity;              // carry can't outrun interest
+      d -= net;
+      m++;
+    }
+    return m >= cap ? Infinity : m;
+  }
+
+  function calc(){
+    var principalEUR = +$('principal').value;
+    var solNow = +$('sol').value;
+    var solTarget = +$('target').value;
+    var lstApy = +$('lst').value / 100;
+    var borrowApy = +$('borrow').value / 100;
+    var ltv = +$('ltv').value / 100;
+    var fx = +$('fx').value; // EUR->USD
+
+    // labels
+    $('lPrincipal').textContent = eur(principalEUR);
+    $('lSol').textContent = usd(solNow);
+    $('lTarget').textContent = usd(solTarget);
+    $('lLst').textContent = (lstApy*100).toFixed(lstApy*100%1?1:0) + '%';
+    $('lBorrow').textContent = (borrowApy*100).toFixed(borrowApy*100%1?1:0) + '%';
+    $('lLtv').textContent = Math.round(ltv*100) + '%';
+    $('lFx').textContent = fx.toFixed(2);
+
+    var collUSD = principalEUR * fx;
+    var collSOL = collUSD / solNow;
+    var debtUSD = collUSD * ltv;
+    var treasuryEUR = debtUSD / fx;
+
+    // health factor & liquidation
+    var hf = LIQ_THRESHOLD / ltv;                       // e.g. 0.70/0.10 = 7
+    var liqPrice = solNow * (ltv / LIQ_THRESHOLD);      // price at which HF = 1
+    var liqPct = (liqPrice / solNow - 1) * 100;         // negative
+
+    // carry
+    var carryUSD = collUSD * lstApy - debtUSD * borrowApy;
+    var months = monthsToRepay(collUSD, debtUSD, lstApy, borrowApy);
+
+    // upside
+    var retainUSD = collSOL * solTarget;
+    var retainEUR = retainUSD / fx;
+    var mult = retainEUR / principalEUR;
+
+    // render
+    $('oColl').textContent = Math.round(collSOL).toLocaleString('en-US') + ' SOL';
+    $('oCollv').textContent = '≈ ' + usd(collUSD) + ' collateral value';
+    $('oTreas').textContent = eur(treasuryEUR);
+    $('oHfnum').textContent = hf.toFixed(1) + '×';
+    var hfPct = Math.max(4, Math.min(100, hf/10*100)); // 10× -> full bar
+    $('oHfbar').style.width = hfPct + '%';
+    $('oLiq').textContent = usd(liqPrice);
+    $('oLiqpct').textContent = (liqPct>0?'+':'') + Math.round(liqPct) + '%';
+    $('oCarry').textContent = (carryUSD>=0?'':'−') + eur(Math.abs(carryUSD)/fx);
+    $('oCarryh').textContent = carryUSD>=0 ? 'yield − interest (repays the loan)' : 'negative — interest exceeds yield';
+    $('oMonths').textContent = months===Infinity ? 'does not self-repay' : ('~' + months + ' month' + (months===1?'':'s'));
+    $('oRetain').textContent = eur(retainEUR);
+    $('oMult').textContent = '≈ ' + mult.toFixed(1) + '× principal (price upside, not guaranteed)';
+  }
+
+  ids.forEach(function(id){ $(id).addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>
