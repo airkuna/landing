@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samootplativa investicija u airKUNA-u — pogonjena Hobbom · airKUNA</title>
+<meta name="description" content="Kako ulagatelj može financirati airKUNA-u a da mu se ulog sam otplati: SOL u vlastitom skrbništvu kao kolateral, mali konzervativan zajam u riznicu, a Hobbin motor prinosa (audited, Solana) svakodnevno žanje prinos i otplaćuje dug. Sve je provjereno on-chain. Nije investicijski savjet." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy)}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:24px;font-size:14.5px;font-weight:500;color:var(--ink)}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:720px){.navlinks{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:730px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+.prose{padding:58px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:56px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:17px;color:var(--navy);font-weight:700;margin:26px 0 0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82;word-break:break-all}
+.lede{font-size:18px!important;color:var(--mute)!important}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+
+/* verified strip */
+.verified{display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:26px}
+.vchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#DCE7F8}
+.vchip .dot{width:7px;height:7px;border-radius:50%;background:#3fae63;box-shadow:0 0 0 3px rgba(63,174,99,.25)}
+.vchip a{color:var(--gold-light);text-decoration:underline;text-underline-offset:2px}
+
+/* stack cards */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:26px}
+.stack .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.stack .layer{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.stack .name{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:var(--navy);margin-top:6px}
+.stack .who{font-size:12.5px;color:var(--mute);margin-top:2px}
+.stack .desc{font-size:14px;color:var(--ink);margin-top:9px}
+
+/* mermaid figure */
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:34px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
+.figure .mermaid p{margin:0;font-size:inherit;line-height:1.4}
+.mermaid .nodeLabel p{color:inherit}
+@media(max-width:640px){.figure .mermaid{justify-content:flex-start}.figure .mermaid svg{min-width:660px}}
+
+/* evidence / proof card */
+.proof{margin-top:30px;background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.10),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:28px 26px;box-shadow:var(--shadow)}
+.proof h3{color:#fff;font-family:Fraunces,serif;font-weight:600;font-size:20px;display:flex;align-items:center;gap:10px}
+.proof .sub{color:#B9C8E2;font-size:13.5px;margin-top:4px}
+.proofgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+.pcell{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px}
+.pcell .k{font-size:11.5px;color:#A9BBD8;font-weight:600}
+.pcell .v{font-family:Fraunces,serif;font-weight:600;font-size:20px;color:#fff;margin-top:4px;font-variant-numeric:tabular-nums}
+.pcell .v.gold{color:var(--gold-light)}
+.pcell .hint{font-size:11px;color:#8FA3C4;margin-top:3px}
+.proof .addr{margin-top:18px;font-size:12px;color:#A9BBD8;line-height:1.9;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+.proof .addr code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:1px 6px;color:#DCE7F8;word-break:break-all}
+.proof .addr a{color:var(--gold-light);text-decoration:underline;text-underline-offset:2px}
+
+/* tables */
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;color:#0A3B82;word-break:break-all}
+.tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:50px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7);font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#ideja">Ideja</a>
+      <a href="#dokaz">On-chain dokaz</a>
+      <a href="#kako">Kako radi</a>
+      <a href="#brojke">Brojke</a>
+      <a href="#rizik">Rizici</a>
+      <a href="../zamasnjak/">Zamašnjak</a>
+    </nav>
+    <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Kontakt</a>
+  </div>
+</header>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Provjereno on-chain · Samootplativa investicija</span>
+    <h1>Investicija u airKUNA-u koja se sama otplati</h1>
+    <p>Ulagatelj zadržava svoj <b>SOL u vlastitom skrbništvu</b> kao kolateral, podiže mali konzervativan zajam koji financira razvoj airKUNA-e, a <b>Hobba</b> — auditirani Solana protokol — svakodnevno žanje prinos na kolateralu i tim prinosom <b>automatski otplaćuje dug</b>. Ovo nije teorija: mehanizam smo provjerili na Solana lancu, transakciju po transakciju.</p>
+    <div class="verified">
+      <span class="vchip"><span class="dot"></span>Hobba program auditiran (Ackee, 15.06.2026.)</span>
+      <span class="vchip"><span class="dot"></span>Self-repaying dokazan on-chain</span>
+      <span class="vchip"><span class="dot"></span>Živi dokaz: <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">1 SOL → 1,14 USDC</a></span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <!-- IDEJA -->
+    <p class="lede" style="margin-top:0" id="ideja">U jednoj rečenici: umjesto da ulagatelj proda imovinu da bi financirao airKUNA-u, on je <b>zadržava</b> — a razvoj se financira iz <b>prinosa</b> koji ta imovina zarađuje dok stoji kao kolateral. Zajam koji ide u riznicu airKUNA-e mali je u odnosu na kolateral, pa ga nosivi prinos (carry) s vremenom otplati. Rezultat: <b>ulog koji se sam otplaćuje</b>, uz zadržanu izloženost SOL-u i alokaciju u airKUNA-i.</p>
+
+    <div class="callout good">
+      <b>Zašto je ovo stvarno, a ne marketing.</b> Hobbin motor ("Sonnar") uzima idle kolateral, plasira ga u prinosne vaultove (Perena, Kamino, Jupiter Lend) i <b>svakodnevno žanje prinos te njime otplaćuje dug</b>. U jednom ~16-satnom uzorku na lancu izbrojali smo <b>17× žetve prinosa (HarvestVault)</b> i <b>30× automatske otplate (OperatorRepay)</b>. To je "self-repaying" u doslovnom, on-chain smislu — ne obećanje na slajdu.
+    </div>
+
+    <div class="callout warn">
+      <b>Što ovo nije.</b> Nije bez rizika i nije zajamčeno. To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima i mladom protokolu. Hobba je <b>u produkciji, ali u zatvorenom testiranju</b>, s malim ukupnim depozitima (~$270k) i visokom koncentracijom. Ako SOL padne duboko, prinos padne ispod kamate, ili protokol zakaže — teza se ruši. Sve to kvantificiramo niže, bez uljepšavanja.
+    </div>
+
+    <!-- ON-CHAIN DOKAZ -->
+    <h2 id="dokaz">On-chain dokaz — provjerljiv od svakoga</h2>
+    <p>Za razliku od uobičajenih "trust me" prezentacija, cijeli mehanizam je javan na Solani. Evo ključnih artefakata koje svatko može otvoriti u blok-exploreru:</p>
+
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Artefakt</th><th>Vrijednost (skraćeno)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>Hobba program (smart contract)</b></td><td><code>Hobbakk1…aE2i8qG</code> <a href="https://solscan.io/account/Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG" target="_blank" rel="noopener">↗ Solscan</a></td><td><span class="badge g">potvrđeno</span></td></tr>
+        <tr><td><b>Sigurnosni audit</b></td><td>Ackee Blockchain Security, 15.06.2026. <a href="https://hobba.io/ackee-hobba-audit-report.pdf" target="_blank" rel="noopener">↗ izvještaj</a></td><td><span class="badge g">objavljen</span></td></tr>
+        <tr><td><b>Self-repaying mehanizam</b></td><td>17× <code>HarvestVault</code> + 30× <code>OperatorRepay</code> (~16 h uzorak)</td><td><span class="badge g">aktivno</span></td></tr>
+        <tr><td><b>Prinosne integracije</b></td><td>Jupiter Lend <code>jupr81…e3Bdzi</code>, Kamino, Perena</td><td><span class="badge g">on-chain</span></td></tr>
+        <tr><td><b>Živi dokaz (naš wallet)</b></td><td>1 SOL kolateral → 1,14 USDC zajam <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">↗ wallet</a></td><td><span class="badge g">izvršeno</span></td></tr>
+        <tr><td><b>Ukupni depoziti (Dune, 08.07.2026.)</b></td><td>≈ $270.499 · 72 korisnika · 2.675 tx <a href="https://dune.com/igor_hobba/hobba-mainnet" target="_blank" rel="noopener">↗ dashboard</a></td><td><span class="badge y">rano</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout"><b>Tko stoji iza Hobbe.</b> Hobba je hrvatski projekt (Zagreb): osnivač i CEO <b>Igor Jerković</b>, suosnivač i Commercial Lead <b>Alex Dragoslavić</b> (prije 5 godina u Solflareu). Ovo navodimo kao javno dostupnu činjenicu o timu — airKUNA je <b>korisnik</b> protokola, a ne njegov autor. Ulagatelji trebaju provesti vlastitu dubinsku analizu svakog protokola u kanalu.</div>
+
+    <!-- KAKO RADI -->
+    <h2 id="kako">Kako radi — pet koraka</h2>
+    <p>Jedina dionica koja dotiče airKUNA-u jest polog u riznicu; sve ostalo je pozicija ulagatelja u <b>vlastitom skrbništvu</b>, na auditiranom protokolu treće strane.</p>
+
+    <div class="figure">
+      <div class="mermaid">
+flowchart TB
+  I(["Ulagatelj drži SOL<br/>vlastito skrbništvo (Solflare)"]):::person --> K1
+  K1["1 · Kolateral<br/>SOL uložen u Hobbu · konzervativan LTV"]:::good --> K2
+  K2["2 · Zajam<br/>mali USDC podignut protiv kolaterala"]:::warn --> T
+  T[["Riznica airKUNA-e<br/>pravno · razvoj · operacije"]]:::entity
+  K1 -->|"kolateral radi u vaultovima<br/>(Perena · Kamino · Jupiter Lend)"| K3
+  K3{{"3 · HarvestVault<br/>prinos se svakodnevno žanje"}}:::good --> K4
+  K4{{"4 · OperatorRepay<br/>prinos automatski otplaćuje dug"}}:::good --> K5
+  K5["5 · Izlaz<br/>zajam otplaćen · ulagatelj zadržava SOL + alokaciju u airKUNA-i"]:::good
+  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+      </div>
+      <div class="cap"><b>Petlja koja se sama zatvara.</b> Zeleno = vrijednost/mehanizam koji radi za ulagatelja; zlatno = dionica zajma u riznicu; navy = primatelj (airKUNA). Koraci 3 i 4 (žetva → otplata) su oni koje smo prebrojali na lancu.</div>
+    </div>
+
+    <!-- ŽIVI DOKAZ -->
+    <h2>Živi dokaz — naša vlastita transakcija</h2>
+    <p>Da ne ostane na teoriji, iz vlastitog novčanika izveli smo najmanju moguću stvarnu poziciju — prvi, simbolični ulog u airKUNA zamašnjak — i pustili Hobbu da radi:</p>
+
+    <div class="proof">
+      <h3>Pozicija #1 · founder wallet</h3>
+      <div class="sub">Izvršeno 08.07.2026. na Solana mainnetu. Provjerljivo na Solscanu (wallet niže).</div>
+      <div class="proofgrid">
+        <div class="pcell"><div class="k">Kolateral</div><div class="v">1 SOL</div><div class="hint">u vlastitom skrbništvu</div></div>
+        <div class="pcell"><div class="k">Podignut zajam</div><div class="v gold">1,14 USDC</div><div class="hint">LTV ≈ 1,5%</div></div>
+        <div class="pcell"><div class="k">Kolateral radi u</div><div class="v" style="font-size:16px">Perena USD vault</div><div class="hint">preko Hobbe</div></div>
+        <div class="pcell"><div class="k">Procijenjena zarada</div><div class="v">$1,73/god.</div><div class="hint">&gt; kamata na zajam → self-repaying</div></div>
+      </div>
+      <div class="addr">
+        Wallet (javan): <code>6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA</code> · <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">otvori na Solscanu</a><br/>
+        Hobba program: <code>Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG</code>
+      </div>
+    </div>
+    <div class="callout warn" style="margin-top:16px"><b>Poštena napomena o brojci "Loan APY".</b> Sučelje Hobbe za male pozicije prikazuje jako negativan "Loan APY" (npr. −147% do −397%). To <b>ne</b> znači skrivenu naknadu — negativno znači da zarada premašuje kamatu (zajam se otplaćuje sam). Ali kod <b>sitnih</b> zajmova taj je postotak nestabilan omjer (zarada ÷ kredit) i zavaravajući je kao headline; u apsolutnom iznosu radi se o centima. Ovu smo primjedbu prenijeli i Hobba timu.</div>
+
+    <!-- BROJKE -->
+    <h2 id="brojke">Brojke — stanje protokola (iskreno)</h2>
+    <p>Podaci s Hobbinog Dune dashboarda, 08.07.2026. Namjerno prikazujemo i ono što ide u prilog i ono što je rizik:</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Metrika</th><th>Vrijednost</th><th>Čitanje</th></tr></thead>
+      <tbody>
+        <tr><td>Ukupni depoziti (TVL)</td><td class="num">≈ $270.499</td><td><span class="badge y">malo / rano</span> zatvoreno testiranje</td></tr>
+        <tr><td>Sastav kolaterala</td><td class="num">SOL 82% · cbBTC 18%</td><td>dominira SOL, kako i teza pretpostavlja</td></tr>
+        <tr><td>Broj korisnika</td><td class="num">72</td><td><span class="badge y">rana faza</span></td></tr>
+        <tr><td>Transakcija</td><td class="num">2.675</td><td>protokol je aktivan, ne uspavan</td></tr>
+        <tr><td>Koncentracija</td><td class="num">top 3 walleta ≈ 72% TVL-a</td><td><span class="badge r">visoka</span> mali broj velikih depozitara</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- RIZIK -->
+    <h2 id="rizik">Rizici — jasno izrečeno</h2>
+    <p>Arhitektura umanjuje neke rizike, a druge prihvaća. Ne uklanja ih. Slijedi svaki bitan rizik, kako se ublažava i preostala izloženost.</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Rizik</th><th>Ublažavanje</th><th>Preostala izloženost</th></tr></thead>
+      <tbody>
+        <tr><td><b>Pad SOL-a → likvidacija</b></td><td>Konzervativan LTV drži cijenu likvidacije duboko ispod spota; Sonnar može smanjiti polugu prije praga.</td><td><span class="badge y">umjereno</span> brz, dubok pad može prestići automatiku; orakli kasne.</td></tr>
+        <tr><td><b>Mlad protokol / zatvoreno testiranje</b></td><td>Objavljen audit (Ackee), on-chain provjerljiv kod, mali iznosi za sada.</td><td><span class="badge r">visok učinak</span> nova baza koda; bug ili prekid mogu zaključati ili oštetiti sredstva.</td></tr>
+        <tr><td><b>Niska likvidnost / koncentracija</b></td><td>Rana faza; veličinu pozicije držati malom u odnosu na TVL.</td><td><span class="badge r">visoka</span> izlaz velike pozicije može biti spor ili skup.</td></tr>
+        <tr><td><b>Prinos padne ispod kamate</b></td><td>Dug je sitan u odnosu na kolateral, pa kamata može višestruko porasti prije negativnog carryja.</td><td><span class="badge g">nisko</span> zagrize tek ako kamata premaši prinos na cijelom kolateralu.</td></tr>
+        <tr><td><b>Stablecoin (USDC)</b></td><td>Puna rezerva, potvrđeni izdavatelj u MiCA okviru.</td><td><span class="badge y">umjereno</span> neuspjeh izdavatelja/rezervi moguć, malo vjerojatan za blue-chip.</td></tr>
+        <tr><td><b>Pametni ugovor / integracije</b></td><td>Audit, uhodani integrirani protokoli (Kamino, Jupiter Lend, Perena), multisig nad riznicom.</td><td><span class="badge r">visok učinak</span> eksploatacije se događaju; repni rizik koji može poništiti poziciju.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout warn"><b>Sistemski rizik — iskreno uokviren.</b> Model počiva na neprekinutom radu nekoliko neovisnih protokola (Hobba, integrirani lenderi, izdavatelj stablecoina). Koreliran neuspjeh oštetio bi ili uništio poziciju. To <b>ne</b> otklanjamo kao zanemarivo — tretiramo ga kao glavni, svjestan rizik i sukladno tome određujemo veličinu pozicija.</div>
+
+    <!-- ŠTO DOBIVA -->
+    <h2>Što ulagatelj dobiva</h2>
+    <ul>
+      <li><b>Zadržanu izloženost SOL-u</b> — glavnica ostaje ulagateljeva, u vlastitom skrbništvu, s punim potencijalom rasta (i pada) SOL-a.</li>
+      <li><b>Alokaciju u airKUNA-i</b> — zajam u riznicu financira razvoj; veličinu i instrument bilo kakvog udjela/alokacije utvrđuje zaseban, formalan ugovor, a ne ova stranica.</li>
+      <li><b>Ulog koji se sam otplaćuje</b> — dug se servisira iz prinosa kolaterala, a ne prodajom glavnice na dnu tržišta.</li>
+      <li><b>Punu provjerljivost</b> — svaka tvrdnja je na lancu; ništa se ne mora uzeti "na riječ".</li>
+    </ul>
+
+    <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, nudba, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Hobba i ostali navedeni protokoli su neovisne treće strane; njihove tvrdnje (prinosi, audit, dostupnost) treba neovisno provjeriti. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Razgovarajte s timom</a>
+      <a class="btn-outline" href="../zamasnjak/">Pogledajte širi model zamašnjaka</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Natrag na airKUNA</a>
+    </div>
+    <p class="fnote">
+      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci su snimljeni 08.07.2026. i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
+</script>
+
+</body>
+</html>
