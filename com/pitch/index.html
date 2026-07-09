@@ -161,6 +161,12 @@ h2.st{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,4.4vw,50px
 .uof .fill.gold{background:linear-gradient(90deg,var(--gold-light),var(--gold))}
 .uof .amt{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);font-size:14px;white-space:nowrap}
 .uof .sub{color:var(--mute);font-size:12.5px}
+/* Ask slide is .dark → navy/mute text would be invisible on navy; force light */
+.slide.dark .uof .name{color:#fff}
+.slide.dark .uof .amt{color:var(--gold-light)}
+.slide.dark .uof .sub{color:#8FA6C9}
+.slide.dark .uof .track{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.16)}
+.slide.dark .uof .fill{background:linear-gradient(90deg,#3d6bb5,#0A3B82)}
 
 /* milestone timeline */
 .mile{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
