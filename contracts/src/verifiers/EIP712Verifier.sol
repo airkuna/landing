@@ -17,6 +17,9 @@ contract EIP712Verifier is IVerifier {
     bytes32 private constant _ATTESTATION_TYPEHASH =
         keccak256("Attestation(address anchor,bytes32 nullifier,uint16 loa,uint64 expiry)");
 
+    /// @dev secp256k1 group order / 2 — EIP-2 low-s bound (rejects malleated signatures).
+    uint256 private constant _SECP256K1N_HALF = 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0;
+
     bytes32 public immutable domainSeparator;
 
     address public admin; // airKUNA DAO Safe (manages the signer set)
@@ -35,6 +38,9 @@ contract EIP712Verifier is IVerifier {
     error SignersNotSorted(); // enforce strictly increasing to dedupe cheaply
     error UnauthorizedSigner();
     error BadThreshold();
+    error ThresholdUnsatisfiable();
+    error ZeroAddress();
+    error BadSignature();
 
     modifier onlyAdmin() {
         if (msg.sender != admin) revert NotAdmin();
@@ -96,7 +102,10 @@ contract EIP712Verifier is IVerifier {
             s := mload(add(sig, 0x40))
             v := byte(0, mload(add(sig, 0x60)))
         }
-        return ecrecover(digest, v, r, s);
+        if (uint256(s) > _SECP256K1N_HALF) revert BadSignature(); // EIP-2 low-s only
+        address signer = ecrecover(digest, v, r, s);
+        if (signer == address(0)) revert BadSignature();
+        return signer;
     }
 
     // --- admin: manage the signer set (airKUNA DAO Safe) ---
@@ -111,6 +120,7 @@ contract EIP712Verifier is IVerifier {
 
     function removeSigner(address signer) external onlyAdmin {
         if (isSigner[signer]) {
+            if (signerCount - 1 < threshold) revert ThresholdUnsatisfiable();
             isSigner[signer] = false;
             unchecked { signerCount--; }
             emit SignerRemoved(signer);
@@ -124,6 +134,7 @@ contract EIP712Verifier is IVerifier {
     }
 
     function transferAdmin(address admin_) external onlyAdmin {
+        if (admin_ == address(0)) revert ZeroAddress();
         admin = admin_;
         emit AdminTransferred(admin_);
     }

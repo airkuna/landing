@@ -147,6 +147,35 @@ contract EIP712VerifierTest is Base {
         verifier.verify(address(0xDEAD), att, proof);
     }
 
+    // --- signature hardening (EIP-2 low-s, ecrecover zero) ---
+
+    function test_highS_reverts() public {
+        uint64 expiry = _exp();
+        bytes memory att = _attestation(NULL, LOA, expiry);
+        bytes32 digest = _digest(verifier, ANCHOR, NULL, LOA, expiry);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(pk1, digest);
+        // malleate: s' = n - s, v' flipped — same signer without EIP-2, rejected with it
+        uint256 secp256k1n = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
+        bytes32 sHigh = bytes32(secp256k1n - uint256(s));
+        uint8 vFlipped = v == 27 ? 28 : 27;
+        bytes[] memory sigs = new bytes[](1);
+        sigs[0] = abi.encodePacked(r, sHigh, vFlipped);
+        vm.expectRevert(EIP712Verifier.BadSignature.selector);
+        verifier.verify(ANCHOR, att, abi.encode(sigs));
+    }
+
+    function test_zeroRecovered_reverts() public {
+        uint64 expiry = _exp();
+        bytes memory att = _attestation(NULL, LOA, expiry);
+        bytes32 digest = _digest(verifier, ANCHOR, NULL, LOA, expiry);
+        (, bytes32 r, bytes32 s) = vm.sign(pk1, digest);
+        // invalid v (not 27/28) makes ecrecover return address(0)
+        bytes[] memory sigs = new bytes[](1);
+        sigs[0] = abi.encodePacked(r, s, uint8(2));
+        vm.expectRevert(EIP712Verifier.BadSignature.selector);
+        verifier.verify(ANCHOR, att, abi.encode(sigs));
+    }
+
     // --- admin surface ---
 
     function test_badSigLength_reverts() public {
@@ -185,6 +214,26 @@ contract EIP712VerifierTest is Base {
         vm.prank(admin);
         verifier.removeSigner(vm.addr(pk3)); // no-op
         assertEq(verifier.signerCount(), 2);
+    }
+
+    function test_removeSigner_thresholdGuard() public {
+        vm.prank(admin);
+        verifier.setThreshold(3); // M = N = 3
+        vm.prank(admin);
+        vm.expectRevert(EIP712Verifier.ThresholdUnsatisfiable.selector);
+        verifier.removeSigner(vm.addr(pk3)); // would leave N = 2 < M = 3
+
+        vm.prank(admin);
+        verifier.setThreshold(2);
+        vm.prank(admin);
+        verifier.removeSigner(vm.addr(pk3)); // now N = 2 >= M = 2
+        assertEq(verifier.signerCount(), 2);
+    }
+
+    function test_transferAdmin_zero_reverts() public {
+        vm.prank(admin);
+        vm.expectRevert(EIP712Verifier.ZeroAddress.selector);
+        verifier.transferAdmin(address(0));
     }
 
     function test_setThreshold_bounds() public {

@@ -32,6 +32,7 @@ contract IdentityRegistry {
     uint16 public minLoA; // minimum accepted assurance (e.g. 2 = substantial)
 
     event Claimed(bytes32 indexed nullifier, address indexed anchor, uint16 loa);
+    event Revoked(bytes32 indexed nullifier, address indexed anchor);
     event AnchorMigrated(bytes32 indexed nullifier, address indexed oldAnchor, address indexed newAnchor);
     event Reverified(bytes32 indexed nullifier, uint64 at);
     event VerifierChanged(address indexed verifier);
@@ -133,6 +134,17 @@ contract IdentityRegistry {
     function setMinLoA(uint16 minLoA_) external onlyGovernance {
         minLoA = minLoA_;
         emit MinLoAChanged(minLoA_);
+    }
+
+    /// @notice Revoke an identity (fraud, death, court order): clears both mappings and burns
+    ///         the SBT. The person can re-claim later with a fresh attestation (same nullifier).
+    function revoke(bytes32 nullifier) external onlyGovernance {
+        address anchor = identities[nullifier].anchor;
+        if (anchor == address(0)) revert NotClaimed();
+        delete identities[nullifier];
+        delete anchorToNullifier[anchor];
+        sbt.burn(nullifier);
+        emit Revoked(nullifier, anchor);
     }
 
     function transferGovernance(address newGovernance) external onlyGovernance {

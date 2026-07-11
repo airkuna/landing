@@ -203,6 +203,52 @@ contract IdentityRegistryTest is Base {
         registry.reverify(att, proof);
     }
 
+    // --- revoke ---
+
+    function test_revoke_clearsIdentityAndBurnsSBT() public {
+        _claim(wA, NULL_A, 3);
+
+        vm.expectEmit(true, true, false, true);
+        emit IdentityRegistry.Revoked(NULL_A, wA);
+        registry.revoke(NULL_A);
+
+        // both mappings cleared
+        assertFalse(registry.isPerson(wA));
+        assertEq(registry.anchorToNullifier(wA), bytes32(0));
+        (address anchor, uint16 loa, uint64 verifiedAt, uint64 reverifiedAt) = registry.identities(NULL_A);
+        assertEq(anchor, address(0));
+        assertEq(loa, 0);
+        assertEq(verifiedAt, 0);
+        assertEq(reverifiedAt, 0);
+        // SBT burned
+        assertEq(sbt.ownerOfNullifier(NULL_A), address(0));
+        assertEq(sbt.balanceOf(wA), 0);
+    }
+
+    function test_revoke_notClaimed_reverts() public {
+        vm.expectRevert(IdentityRegistry.NotClaimed.selector);
+        registry.revoke(NULL_A);
+    }
+
+    function test_revoke_onlyGovernance() public {
+        _claim(wA, NULL_A, 3);
+        vm.prank(wA);
+        vm.expectRevert(IdentityRegistry.NotGovernance.selector);
+        registry.revoke(NULL_A);
+    }
+
+    function test_reclaimAfterRevoke() public {
+        _claim(wA, NULL_A, 3);
+        registry.revoke(NULL_A);
+        // same person can re-claim (fresh attestation), even onto a new wallet
+        _claim(wB, NULL_A, 3);
+        assertTrue(registry.isPerson(wB));
+        assertEq(sbt.ownerOfNullifier(NULL_A), wB);
+        // and the freed old anchor is reusable by someone else
+        _claim(wA, NULL_B, 3);
+        assertEq(sbt.ownerOfNullifier(NULL_B), wA);
+    }
+
     // --- governance ---
 
     function test_setVerifier_onlyGovernance() public {

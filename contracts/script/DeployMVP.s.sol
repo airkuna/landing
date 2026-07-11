@@ -5,6 +5,7 @@ import {Script, console2} from "forge-std/Script.sol";
 import {EIP712Verifier} from "../src/verifiers/EIP712Verifier.sol";
 import {PersonhoodSBT} from "../src/PersonhoodSBT.sol";
 import {IdentityRegistry} from "../src/IdentityRegistry.sol";
+import {KunaToken} from "../src/KunaToken.sol";
 import {IVerifier} from "../src/interfaces/IVerifier.sol";
 import {IPersonhoodSBT} from "../src/interfaces/IPersonhoodSBT.sol";
 
@@ -15,13 +16,15 @@ import {IPersonhoodSBT} from "../src/interfaces/IPersonhoodSBT.sol";
 ///   3. IdentityRegistry(gov, verifier, sbt, minLoA)
 ///   4. sbt.setRegistry(registry)                  — one-time wiring
 ///   5. verifier.addSigner(oracleSigner)           — authorize the A2 verifier's EIP-712 key
+///   6. KunaToken(gov, issuer, registry)           — EMT with the personhood issuance policy ON
 ///
 /// @dev Env config (all optional except PRIVATE_KEY; sensible test defaults derive from the deployer):
 ///   PRIVATE_KEY    — deployer key (broadcasts). REQUIRED.
-///   GOVERNANCE     — IdentityRegistry governance Safe/EOA.   default: deployer
+///   GOVERNANCE     — IdentityRegistry/KunaToken governance Safe/EOA. default: deployer
 ///   ADMIN          — EIP712Verifier admin (manages signers). default: deployer
 ///   ORACLE_SIGNER  — the A2 verifier's EIP-712 signing address. default: deployer
 ///   MIN_LOA        — minimum accepted assurance.              default: 2 (substantial)
+///   KUNA_ISSUER    — KunaToken issuer (SEPA mint/redeem bridge). default: deployer
 ///
 /// Usage (Chiado):
 ///   forge script script/DeployMVP.s.sol:DeployMVP \
@@ -35,6 +38,7 @@ contract DeployMVP is Script {
         address admin = vm.envOr("ADMIN", deployer);
         address oracleSigner = vm.envOr("ORACLE_SIGNER", deployer);
         uint16 minLoA = uint16(vm.envOr("MIN_LOA", uint256(2)));
+        address kunaIssuer = vm.envOr("KUNA_ISSUER", deployer);
 
         console2.log("Deployer:     ", deployer);
         console2.log("ChainId:      ", block.chainid);
@@ -42,6 +46,7 @@ contract DeployMVP is Script {
         console2.log("Verifier admin:", admin);
         console2.log("Oracle signer:", oracleSigner);
         console2.log("minLoA:       ", minLoA);
+        console2.log("KUNA issuer:  ", kunaIssuer);
 
         vm.startBroadcast(pk);
 
@@ -64,12 +69,16 @@ contract DeployMVP is Script {
             verifier.addSigner(oracleSigner);
         }
 
+        // 6. airKUNA e-money token, personhood issuance policy ON (identityRegistry = registry)
+        KunaToken kuna = new KunaToken(governance, kunaIssuer, address(registry));
+
         vm.stopBroadcast();
 
         console2.log("--- deployed ---");
         console2.log("EIP712Verifier: ", address(verifier));
         console2.log("PersonhoodSBT:  ", address(sbt));
         console2.log("IdentityRegistry:", address(registry));
+        console2.log("KunaToken:      ", address(kuna));
         console2.log("domainSeparator:");
         console2.logBytes32(verifier.domainSeparator());
 
