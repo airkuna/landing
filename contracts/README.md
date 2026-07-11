@@ -15,7 +15,11 @@ Prati whitepaper `../docs/16-whitepaper-proof-of-croatian-personhood.md` i ADR-o
 | `src/PersonhoodSBT.sol` | EIP-5484 soulbound token (non-transferable), samo registar kuje |
 | `src/IdentityRegistry.sol` | Srce: nullifier→Identity, `claim`/`migrateAnchor`/`reverify`/`revoke`, governance = Safe |
 | `src/verifiers/EIP712Verifier.sol` | Verifier C (referenca): M-of-N EIP-712 potpisnika (prijelazno / temelj za mesh D) |
+| `src/verifiers/VerifierNodeRegistry.sol` | Verifier D: registar Android nodeova — lifecycle `pending → active → offline → ejected`, stake/slash, DAO governance |
+| `src/verifiers/MeshVerifier.sol` | Verifier D: M-of-N EIP-712 atestacije čiji potpisnici MORAJU biti ACTIVE nodeovi u registru (live check) + replay zaštita |
 | `src/KunaToken.sol` | airKUNA e-money token (EMT po MiCA modelu): "1 KUNA = 1 EUR", ERC-20 + EIP-2612 permit + ERC-677 |
+| `script/DeployMVP.s.sol` | Deploy MVP stacka (A2 orakl, Chiado) — defaultno ožičenje, mesh ga NE dira |
+| `script/DeployMesh.s.sol` | Deploy mesh add-ona na POSTOJEĆI registar; `setVerifier` iza env flaga `SET_VERIFIER` |
 
 ## Model (kratko)
 
@@ -29,6 +33,51 @@ Prati whitepaper `../docs/16-whitepaper-proof-of-croatian-personhood.md` i ADR-o
   (prijevara, smrt, sudski nalog). Osoba se kasnije može ponovno `claim`-ati svježom atestacijom
   (isti nullifier).
 - **Governance = Safe multisig** (airKUNA DAO): mijenja odobreni verifier i parametre.
+
+## Verifier D (Android mesh) — Faza 2
+
+Referenca onchain sloja za mesh iz `docs/18` (dio 2) i whitepapera (§5). ADR 0002 drži: registar je
+verifier-agnostičan, mesh je samo još jedan `IVerifier` koji governance uključi sa `setVerifier` —
+MVP ožičenje (EIP712Verifier) ostaje default.
+
+**Onchain (ova dva ugovora):**
+
+- `VerifierNodeRegistry` — po potpisnom ključu nodea (StrongBox/TEE adresa): operater ("poznat
+  ljudski operater po nodeu"), doc-specificirani lifecycle `pending → active → offline → ejected`
+  (DAO admituje `activate` i kicka `eject`), xDAI stake (min. iznos postavlja governance) i
+  `attestationRef` — hash dokaza Android Key Attestationa. Eject je terminalan i reže cijeli
+  stake u treasury.
+- `MeshVerifier` — M-of-N EIP-712 atestacije; svaki potpis mora recoverati u node koji je **ACTIVE
+  u registru U TRENUTKU verifikacije** (live check, bez keširanog skupa). Prag (M) postavlja DAO uz
+  `ThresholdUnsatisfiable` invarijantu prema živom `activeNodeCount`.
+
+**Off-chain (namjerno IZVAN ugovora):** Android node sam (Certilia JWKS/iss/aud validacija,
+nullifier iza pepper granice — ADR 0003), verifikacija Play Integrity / Key Attestation dokaza
+(DAO je provjerava PRIJE glasanja o `activate`; onchain je samo hash), Cloudflare Tunnel transport,
+geolokacija i karta, te eventualni Acurast substrat.
+
+**Replay zaštita (promjena ugovora za off-chain potpisnike!):** mesh atestacija dodaje polje
+`uint64 nonce` na kraj A2 structa:
+
+```
+Attestation(address anchor,bytes32 nullifier,uint16 loa,uint64 expiry,uint64 nonce)
+attestation = abi.encode(nullifier, loa, expiry, nonce)
+proof       = abi.encode(bytes[] sigs)   // nepromijenjeno: 65-byte ECDSA, low-s, sortirano rastuće
+```
+
+`nonce` MORA biti trenutačni `IdentityRegistry.identities[nullifier].reverifiedAt` — svaka uspješna
+promjena (claim / migrateAnchor / reverify) pomakne ga na `block.timestamp`, pa je potrošena
+atestacija mrtva. Zašto ovako, a ne spremljeni skup potrošenih digesta: `IVerifier.verify` je
+`view` (ne može pisati storage), a doc 18 nodeovi ionako imaju read-only Gnosis RPC — čitanje
+trenutnog `reverifiedAt` prije potpisa je promjena bez nove infrastrukture. Domena ostaje
+"airKUNA PersonhoodVerifier"/"1"; različit typehash + `verifyingContract` isključuju cross-verifier
+replay prema EIP712Verifieru.
+
+**Otvorene odluke** (označene `@dev Otvorena odluka:` u NatSpecu): iznos `minStake`; formula
+slashinga (ovdje: puni stake); proof-of-location / anti-GPS-spoof integracija; Acurast kao substrat;
+treba li reaktivacija `offline → active` svježu atestaciju; duljina `unstakeDelay`; atestacija
+nakon `revoke` (brisanje vraća `reverifiedAt` na 0 pa neistekli claim-nonce 0 opet vrijedi —
+mitigacija je kratki `expiry`, ~600 s).
 
 ## airKUNA token (KunaToken)
 

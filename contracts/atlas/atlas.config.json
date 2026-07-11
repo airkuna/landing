@@ -10,6 +10,8 @@
         { "name": "IdentityRegistry", "source": "src/IdentityRegistry.sol" },
         { "name": "PersonhoodSBT", "source": "src/PersonhoodSBT.sol" },
         { "name": "EIP712Verifier", "source": "src/verifiers/EIP712Verifier.sol" },
+        { "name": "VerifierNodeRegistry", "source": "src/verifiers/VerifierNodeRegistry.sol" },
+        { "name": "MeshVerifier", "source": "src/verifiers/MeshVerifier.sol" },
         {
           "name": "KunaToken",
           "source": "src/KunaToken.sol",
@@ -45,5 +47,10 @@
       "deployments": []
     }
   ],
-  "machines": ["machines/pinka-crowdfund.json", "machines/identity-registry.json"]
+  "machines": [
+    "machines/pinka-crowdfund.json",
+    "machines/identity-registry.json",
+    "machines/kuna-token.json",
+    "machines/verifier-node-registry.json"
+  ]
 }

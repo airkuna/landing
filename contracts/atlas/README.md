@@ -11,8 +11,10 @@ sve na interaktivnom 2D canvasu.
 atlas/
 ├── atlas.config.json      # deklarativni registar projekata/ugovora/deploymenta + popis machina
 ├── machines/
-│   ├── pinka-crowdfund.json     # ručno napisan state machine PinkaCrowdfund kampanje
-│   └── identity-registry.json   # ručno napisan state machine IdentityRegistry (bez novca)
+│   ├── pinka-crowdfund.json          # ručno napisan state machine PinkaCrowdfund kampanje
+│   ├── identity-registry.json        # ručno napisan state machine IdentityRegistry (bez novca)
+│   ├── kuna-token.json               # KunaToken money machine (mint/redeem/pauza s iznimkom) + governance lane
+│   └── verifier-node-registry.json   # lifecycle Android verifier nodea (pending→active→offline→ejected) sa stake/slash
 ├── generate.mjs           # generator (Node, bez npm ovisnosti)
 ├── smoke.mjs              # validacija generiranih artefakata
 ├── viewer.html            # interaktivni 2D canvas preglednik

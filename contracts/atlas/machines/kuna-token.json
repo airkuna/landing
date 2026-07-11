@@ -1,0 +1,160 @@
+{
+  "id": "kuna-token",
+  "title": "KunaToken — EMT money machine (mint / circulate / redeem) + governance lane",
+  "project": "airkuna",
+  "contract": "KunaToken",
+  "stateSource": "stored",
+  "stateExpr": "pendingGovernance == address(0) ? OPERATING : GOV_HANDOVER (money flows are self-loops on either state; PAUSED is an orthogonal overlay)",
+  "scope": "one machine instance for the whole token; the governance lane is the only stored lifecycle, all supply/circulation flows are self-loops",
+  "tokens": {
+    "KUNA": { "contract": "KunaToken", "project": "airkuna", "note": "the EMT itself — 1 KUNA = 1 EUR" },
+    "EUR (fiat, SEPA)": { "external": true, "note": "off-chain leg at the issuer (MiCA e-money model, Monerium mould) — not part of this config" }
+  },
+  "actors": ["holder", "recipient", "issuer (SEPA bridge)", "governance (airKUNA DAO Safe)", "pendingGovernance"],
+  "states": [
+    {
+      "id": "OPERATING",
+      "label": "Operating",
+      "kind": "initial",
+      "guard": "pendingGovernance == address(0)"
+    },
+    {
+      "id": "GOV_HANDOVER",
+      "label": "Governance handover pending",
+      "kind": "active",
+      "guard": "pendingGovernance != address(0) — token fully operational, only the governance seat is in transit (two-step transfer)"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "OPERATING",
+      "to": "OPERATING",
+      "fn": "mint",
+      "label": "SEPA deposit → issue",
+      "caller": "issuer",
+      "guards": [
+        "onlyIssuer",
+        "!paused",
+        "to != address(0)",
+        "identityRegistry == 0 || identityRegistry.isPerson(to) (personhood issuance policy, NotPerson otherwise)"
+      ],
+      "money": [
+        { "token": "EUR (fiat, SEPA)", "from": "holder bank account", "to": "issuer IBAN", "note": "off-chain leg: SEPA deposit received first" },
+        { "token": "KUNA", "from": "mint", "to": "recipient", "note": "1:1 against the received EUR" }
+      ],
+      "sideEffects": [
+        { "contract": "IdentityRegistry", "fn": "isPerson", "note": "issuance gate — mint recipient must be a verified person when the policy is on" }
+      ]
+    },
+    {
+      "from": "OPERATING",
+      "to": "OPERATING",
+      "fn": "burnFrom",
+      "label": "redemption at par",
+      "caller": "issuer",
+      "guards": [
+        "onlyIssuer (Monerium controller model — holder grants NO allowance)",
+        "balanceOf[from] >= amount",
+        "NO pause check — redemption works even when paused (MiCA right to redeem at par)"
+      ],
+      "money": [
+        { "token": "KUNA", "from": "redeemed holder", "to": "burn", "note": "supply shrinks by exactly the fiat paid out" },
+        { "token": "EUR (fiat, SEPA)", "from": "issuer IBAN", "to": "holder bank account", "note": "off-chain leg: SEPA payout at par" }
+      ],
+      "note": "Deliberately NOT blocked by the PAUSED overlay — freezing circulation must not freeze the exit."
+    },
+    {
+      "from": "OPERATING",
+      "to": "OPERATING",
+      "fn": "transfer",
+      "caller": "holder",
+      "guards": ["!paused", "to != address(0)", "balanceOf[msg.sender] >= amount"],
+      "money": [
+        { "token": "KUNA", "from": "holder", "to": "recipient" }
+      ]
+    },
+    {
+      "from": "OPERATING",
+      "to": "OPERATING",
+      "fn": "transferAndCall",
+      "label": "ERC-677 pay-and-notify",
+      "caller": "holder",
+      "guards": [
+        "!paused",
+        "to != address(0)",
+        "balanceOf[msg.sender] >= amount",
+        "if to is a contract: to.onTokenTransfer(sender, amount, data) must not revert (reverting receiver reverts the whole transfer)"
+      ],
+      "money": [
+        { "token": "KUNA", "from": "holder", "to": "receiver contract / recipient", "note": "one-tx pay-and-notify (PinkaCrowdfund Path A, Monerium-EURe style)" }
+      ],
+      "note": "Receiver callback IERC677Receiver.onTokenTransfer is an external contract outside this atlas."
+    },
+    {
+      "from": "OPERATING",
+      "to": "OPERATING",
+      "fn": "transferFrom",
+      "caller": "spender (with allowance or type(uint256).max)",
+      "guards": ["!paused", "allowance[from][msg.sender] >= amount (or infinite)", "balanceOf[from] >= amount"],
+      "money": [
+        { "token": "KUNA", "from": "holder", "to": "recipient" }
+      ]
+    },
+    {
+      "from": "OPERATING",
+      "to": "OPERATING",
+      "fn": "permit",
+      "label": "EIP-2612 gasless approval",
+      "caller": "anyone (relayer) with the holder's signature",
+      "guards": ["deadline not passed", "EIP-712 sig by owner (low-s only)", "nonce consumed"],
+      "money": [],
+      "note": "Approval only — no value moves; enables gasless flows."
+    },
+    {
+      "from": "OPERATING",
+      "to": "GOV_HANDOVER",
+      "fn": "transferGovernance",
+      "label": "propose new governance",
+      "caller": "governance (airKUNA DAO Safe)",
+      "guards": ["onlyGovernance", "newGovernance != address(0)"],
+      "money": [],
+      "note": "Two-step transfer: nothing changes until the proposed address accepts — a typo cannot brick the token (the EIP712Verifier one-shot transferAdmin lesson)."
+    },
+    {
+      "from": "GOV_HANDOVER",
+      "to": "GOV_HANDOVER",
+      "fn": "transferGovernance",
+      "label": "re-propose (overwrite pending)",
+      "caller": "governance",
+      "guards": ["onlyGovernance", "newGovernance != address(0)"],
+      "money": []
+    },
+    {
+      "from": "GOV_HANDOVER",
+      "to": "OPERATING",
+      "fn": "acceptGovernance",
+      "caller": "pendingGovernance",
+      "guards": ["msg.sender == pendingGovernance"],
+      "money": []
+    }
+  ],
+  "overlays": [
+    {
+      "id": "PAUSED",
+      "label": "Paused (overlay)",
+      "enterFn": "pause",
+      "exitFn": "unpause",
+      "caller": "governance",
+      "appliesTo": ["OPERATING", "GOV_HANDOVER"],
+      "blocks": ["mint", "transfer", "transferAndCall", "transferFrom"],
+      "note": "Freezes issuance and circulation but NOT burnFrom (MiCA redemption right — the exit stays open) and NOT approvals (approve/permit) or the governance lane."
+    }
+  ],
+  "notes": [
+    "MONEY MACHINE: all supply and circulation flows are self-loops — KUNA enters via mint (SEPA deposit, personhood-gated when identityRegistry is set) and leaves via burnFrom (redemption at par, issuer-only controller model).",
+    "The stored lifecycle is the governance two-step lane (pendingGovernance zero/non-zero); the token is fully operational in BOTH states.",
+    "PAUSED-with-exception is the machine's most important edge: burnFrom is the only value-moving function that ignores the pause.",
+    "Config transitions without state semantics (setIssuer, setIdentityRegistry, approve) are intentionally excluded; approve/permit carry no value.",
+    "EUR legs are off-chain at the issuer (MiCA EMT, Monerium mould) — modeled like the SEPA legs of pinka-crowdfund for consistency."
+  ]
+}

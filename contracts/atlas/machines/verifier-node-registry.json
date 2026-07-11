@@ -1,0 +1,156 @@
+{
+  "id": "verifier-node-registry",
+  "title": "VerifierNodeRegistry — Android verifier node lifecycle (verifier D, Faza 2)",
+  "project": "airkuna",
+  "contract": "VerifierNodeRegistry",
+  "stateSource": "stored",
+  "stateExpr": "nodes[signingKey].status (None | Pending | Active | Offline | Ejected)",
+  "scope": "one machine instance per node signing key (StrongBox/TEE secp256k1 address); the contract multiplexes all of them",
+  "tokens": {
+    "xDAI": { "external": true, "note": "native Gnosis coin staked by node operators (anti-spoof economy, docs/18) — amounts are an open decision" }
+  },
+  "actors": ["node operator (known human, docs/18)", "governance (airKUNA DAO Safe)", "treasury (slash sink)", "MeshVerifier (reads isActive per signature)"],
+  "states": [
+    {
+      "id": "UNREGISTERED",
+      "label": "Unregistered",
+      "kind": "initial",
+      "guard": "nodes[signingKey].status == None"
+    },
+    {
+      "id": "PENDING",
+      "label": "Pending (DAO vote)",
+      "kind": "active",
+      "guard": "status == Pending — registered + staked, hardware attestation awaiting off-chain DAO verification"
+    },
+    {
+      "id": "ACTIVE",
+      "label": "Active (co-signer)",
+      "kind": "active",
+      "guard": "status == Active — isActive() true; only now do the node's EIP-712 signatures count in MeshVerifier"
+    },
+    {
+      "id": "OFFLINE",
+      "label": "Offline",
+      "kind": "active",
+      "guard": "status == Offline — signatures rejected; stake withdrawable after unstakeDelay"
+    },
+    {
+      "id": "EJECTED",
+      "label": "Ejected (terminal)",
+      "kind": "terminal",
+      "guard": "status == Ejected — stake slashed to treasury; the signing key is burned forever (cannot re-register)"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "UNREGISTERED",
+      "to": "PENDING",
+      "fn": "register",
+      "label": "apply + stake",
+      "caller": "node operator",
+      "guards": [
+        "signingKey != 0, not seen before (Ejected keys can never return)",
+        "attestationRef != 0 (hash of Android Key Attestation evidence — verified OFF-chain by the DAO)",
+        "msg.value >= minStake"
+      ],
+      "money": [
+        { "token": "xDAI", "from": "node operator", "to": "VerifierNodeRegistry", "note": "stake >= minStake locked in the registry" }
+      ]
+    },
+    {
+      "from": "PENDING",
+      "to": "PENDING",
+      "fn": "addStake",
+      "label": "top up stake (self-loop)",
+      "caller": "node operator",
+      "guards": ["msg.sender == node.operator", "status != None && != Ejected", "msg.value > 0"],
+      "money": [
+        { "token": "xDAI", "from": "node operator", "to": "VerifierNodeRegistry" }
+      ],
+      "note": "Representative edge — addStake is allowed in Pending, Active and Offline alike (e.g. to re-qualify after governance raised minStake)."
+    },
+    {
+      "from": "PENDING",
+      "to": "ACTIVE",
+      "fn": "activate",
+      "label": "DAO admission",
+      "caller": "governance (after off-chain verification of the HW attestation + DAO vote, docs/18)",
+      "guards": ["onlyGovernance", "status == Pending || Offline", "node.stake >= current minStake"],
+      "money": []
+    },
+    {
+      "from": "ACTIVE",
+      "to": "OFFLINE",
+      "fn": "deactivate",
+      "caller": "governance OR the node's own operator (voluntary downtime)",
+      "guards": ["status == Active"],
+      "money": [],
+      "note": "MeshVerifier's live check makes the node's signatures invalid in the same block."
+    },
+    {
+      "from": "OFFLINE",
+      "to": "ACTIVE",
+      "fn": "activate",
+      "label": "reactivation",
+      "caller": "governance",
+      "guards": ["onlyGovernance", "node.stake >= current minStake"],
+      "money": [],
+      "note": "Otvorena odluka: whether reactivation should require fresh hardware attestation — docs are silent, allowed without it here."
+    },
+    {
+      "from": "OFFLINE",
+      "to": "OFFLINE",
+      "fn": "withdrawStake",
+      "label": "exit with stake (self-loop)",
+      "caller": "node operator",
+      "guards": [
+        "msg.sender == node.operator",
+        "status == Offline",
+        "block.timestamp >= statusChangedAt + unstakeDelay (a misbehaving node cannot exit faster than the DAO can eject)"
+      ],
+      "money": [
+        { "token": "xDAI", "from": "VerifierNodeRegistry", "to": "node operator", "note": "full stake returned; record stays Offline with stake 0" }
+      ]
+    },
+    {
+      "from": "PENDING",
+      "to": "EJECTED",
+      "fn": "eject",
+      "caller": "governance",
+      "guards": ["onlyGovernance", "status != None && != Ejected"],
+      "money": [
+        { "token": "xDAI", "from": "VerifierNodeRegistry", "to": "treasury (slash)", "note": "entire stake — slashing formula is an open decision" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "EJECTED",
+      "fn": "eject",
+      "label": "DAO kick + slash",
+      "caller": "governance (misbehavior, GPS spoofing, key compromise)",
+      "guards": ["onlyGovernance"],
+      "money": [
+        { "token": "xDAI", "from": "VerifierNodeRegistry", "to": "treasury (slash)" }
+      ]
+    },
+    {
+      "from": "OFFLINE",
+      "to": "EJECTED",
+      "fn": "eject",
+      "caller": "governance",
+      "guards": ["onlyGovernance"],
+      "money": [
+        { "token": "xDAI", "from": "VerifierNodeRegistry", "to": "treasury (slash)", "note": "still slashable while the unstake delay runs" }
+      ]
+    }
+  ],
+  "overlays": [],
+  "notes": [
+    "Doc-specified lifecycle (docs/18, whitepaper §5): pending → active → offline → ejected; DAO (Safe multisig) admits and kicks; known human operator per node.",
+    "ONCHAIN: signing key, operator, status, stake, attestationRef (hash of the Android Key Attestation evidence). OFF-chain: Play Integrity / Key Attestation verification, Certilia OIDC validation, pepper custody (ADR 0003), Cloudflare Tunnel, geolocation map.",
+    "MeshVerifier.verify() checks isActive(signer) LIVE per signature — there is no cached signer set to desynchronize; ejection is instantaneous censorship of a node's signatures.",
+    "activeNodeCount is the ceiling for MeshVerifier.setThreshold (ThresholdUnsatisfiable) — but the registry does not know the mesh threshold, so DAO ejections can push the count below M; verify() then fails closed until the DAO adjusts.",
+    "Otvorene odluke (see contract NatSpec): minStake amount, slashing formula (full stake here), proof-of-location integration, Acurast substrate, re-attestation on reactivation, unstakeDelay length."
+  ]
+}

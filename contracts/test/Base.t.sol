@@ -3,13 +3,18 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 import {EIP712Verifier} from "../src/verifiers/EIP712Verifier.sol";
+import {MeshVerifier} from "../src/verifiers/MeshVerifier.sol";
 
 /// @dev Shared test helpers: builds EIP-712 attestations + signatures the way the
-///      off-chain verifier A2 does, so registry/verifier tests share one signing path.
+///      off-chain verifier A2 does (and the mesh D nodes do), so registry/verifier
+///      tests share one signing path.
 abstract contract Base is Test {
     // MUST match EIP712Verifier._ATTESTATION_TYPEHASH.
     bytes32 internal constant ATTESTATION_TYPEHASH =
         keccak256("Attestation(address anchor,bytes32 nullifier,uint16 loa,uint64 expiry)");
+    // MUST match MeshVerifier._ATTESTATION_TYPEHASH (the A2 struct + trailing uint64 nonce).
+    bytes32 internal constant MESH_ATTESTATION_TYPEHASH =
+        keccak256("Attestation(address anchor,bytes32 nullifier,uint16 loa,uint64 expiry,uint64 nonce)");
 
     /// @dev abi-encoded attestation payload (matches EIP712Verifier.verify decode).
     function _attestation(bytes32 nullifier, uint16 loa, uint64 expiry) internal pure returns (bytes memory) {
@@ -23,6 +28,25 @@ abstract contract Base is Test {
         returns (bytes32)
     {
         bytes32 structHash = keccak256(abi.encode(ATTESTATION_TYPEHASH, anchor, nullifier, loa, expiry));
+        return keccak256(abi.encodePacked("\x19\x01", v.domainSeparator(), structHash));
+    }
+
+    /// @dev abi-encoded MESH attestation payload (matches MeshVerifier.verify decode).
+    function _meshAttestation(bytes32 nullifier, uint16 loa, uint64 expiry, uint64 nonce)
+        internal
+        pure
+        returns (bytes memory)
+    {
+        return abi.encode(nullifier, loa, expiry, nonce);
+    }
+
+    /// @dev The EIP-712 digest a mesh node signs (nonce = registry's current reverifiedAt).
+    function _meshDigest(MeshVerifier v, address anchor, bytes32 nullifier, uint16 loa, uint64 expiry, uint64 nonce)
+        internal
+        view
+        returns (bytes32)
+    {
+        bytes32 structHash = keccak256(abi.encode(MESH_ATTESTATION_TYPEHASH, anchor, nullifier, loa, expiry, nonce));
         return keccak256(abi.encodePacked("\x19\x01", v.domainSeparator(), structHash));
     }
 
