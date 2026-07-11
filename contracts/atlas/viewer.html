@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>sol-atlas</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1c2330; --muted: #667085; --line: #d7dce3;
+    --accent: #2563eb; --green: #16a34a; --red: #dc2626; --amber: #b45309; --violet: #7c3aed;
+    --node: #ffffff; --node-head: #eef2f7; --sel: #2563eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151c; --panel: #1a1f29; --ink: #e6e9ef; --muted: #8a93a5; --line: #303845;
+      --accent: #60a5fa; --green: #4ade80; --red: #f87171; --amber: #fbbf24; --violet: #a78bfa;
+      --node: #1e242f; --node-head: #262e3c; --sel: #60a5fa;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 13px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); display: flex; flex-direction: column; overflow: hidden; }
+  header { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header h1 { font-size: 15px; margin: 0 8px 0 0; }
+  header h1 small { color: var(--muted); font-weight: normal; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; color: var(--ink); padding: 5px 12px; cursor: pointer; font: inherit; }
+  .seg button.on { background: var(--accent); color: #fff; }
+  select, input[type=text] { background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font: inherit; }
+  button.act { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: 5px 12px; cursor: pointer; font: inherit; }
+  button.act:disabled { opacity: .5; cursor: default; }
+  .hint { color: var(--muted); }
+  main { flex: 1; display: flex; min-height: 0; }
+  #wrap { flex: 1; position: relative; min-width: 0; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+  canvas.dragging { cursor: grabbing; }
+  #legend { position: absolute; left: 10px; bottom: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; opacity: .95; }
+  #legend div { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+  #legend i { display: inline-block; width: 18px; height: 0; border-top: 2.5px solid; }
+  #legend i.dash { border-top-style: dashed; }
+  aside { width: 340px; background: var(--panel); border-left: 1px solid var(--line); overflow-y: auto; padding: 12px 14px; }
+  aside h2 { font-size: 13px; margin: 12px 0 6px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  aside h3 { font-size: 15px; margin: 2px 0 8px; }
+  aside table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  aside td, aside th { border-bottom: 1px solid var(--line); padding: 3px 6px 3px 0; text-align: left; vertical-align: top; }
+  aside th { color: var(--muted); font-weight: 600; }
+  .mono { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; word-break: break-all; }
+  .live-ok { color: var(--green); }
+  .live-err { color: var(--red); }
+  .badge { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 0 8px; font-size: 11px; color: var(--muted); margin-left: 6px; }
+  .money { color: var(--amber); }
+  .kv { margin: 4px 0; }
+  .kv b { display: inline-block; min-width: 70px; }
+  ul { margin: 4px 0; padding-left: 18px; }
+  .addr-row { display: flex; gap: 6px; align-items: center; margin: 4px 0; }
+  .addr-row label { width: 118px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .addr-row input { flex: 1; font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
+  #liveStatus { font-size: 12px; color: var(--muted); margin-top: 6px; white-space: pre-line; }
+  .note-block { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; margin: 6px 0; font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>sol-atlas <small>contracts as schemas + money state machines</small></h1>
+  <div class="seg" id="viewSeg">
+    <button data-view="schema" class="on">Schema</button>
+    <button data-view="machine">State machines</button>
+  </div>
+  <select id="machineSel" style="display:none"></select>
+  <span class="hint" id="statusHint"></span>
+</header>
+<main>
+  <div id="wrap">
+    <canvas id="cv"></canvas>
+    <div id="legend"></div>
+  </div>
+  <aside id="panel"></aside>
+</main>
+<script>
+window.__ATLAS__ = null /*ATLAS:INLINE*/
+</script>
+<script>
+'use strict';
+(function () {
+  // ── palette pulled from CSS so canvas matches the theme ──
+  let P = {};
+  function readPalette() {
+    const cs = getComputedStyle(document.documentElement);
+    for (const k of ['bg','panel','ink','muted','line','accent','green','red','amber','violet','node','node-head','sel'])
+      P[k.replace('-','')] = cs.getPropertyValue('--' + k).trim();
+  }
+  readPalette();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readPalette(); draw(); });
+
+  const REF_COLOR = () => ({ 'holds-address': P.accent, calls: P.muted, mints: P.green, burns: P.red });
+  const KIND_COLOR = () => ({ initial: P.green, active: P.accent, terminal: P.violet });
+
+  // ── data loading: inline (standalone / injected) or fetch ──
+  const boot = (data) => { ATLAS = data; init(); };
+  let ATLAS = null;
+  if (window.__ATLAS__) boot(window.__ATLAS__);
+  else fetch('out/atlas-data.json').then(r => r.json()).then(boot).catch(() => {
+    document.getElementById('panel').innerHTML =
+      '<h3>No data</h3><p>Could not fetch <span class="mono">out/atlas-data.json</span> ' +
+      '(likely opened via file://). Run <span class="mono">node atlas/generate.mjs</span> and open ' +
+      '<span class="mono">out/atlas-standalone.html</span> instead, or serve this directory over HTTP.</p>';
+  });
+
+  // ── app state ──
+  const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  const cam = { x: 40, y: 40, k: 1 };
+  let view = 'schema';
+  let machineIdx = 0;
+  let nodes = new Map();        // key -> {x,y,w,h,...}
+  let edgeHits = [];            // clickable edge label boxes (world coords)
+  let selection = null;         // {type, ...}
+  const live = { rpc: '', addrs: {}, values: {}, running: false, status: '' };
+
+  // ── init ──
+  function init() {
+    const sel = document.getElementById('machineSel');
+    sel.innerHTML = ATLAS.machines.map((m, i) => `<option value="${i}">${esc(m.title || m.id)}</option>`).join('');
+    sel.onchange = () => { machineIdx = +sel.value; selection = null; layout(); draw(); renderPanel(); };
+    document.getElementById('viewSeg').onclick = (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      view = b.dataset.view;
+      for (const x of document.querySelectorAll('#viewSeg button')) x.classList.toggle('on', x === b);
+      sel.style.display = view === 'machine' ? '' : 'none';
+      selection = null; layout(); draw(); renderPanel();
+    };
+    for (const c of ATLAS.contracts) {
+      const dep = (c.deployments || [])[0];
+      live.addrs[c.name] = dep ? dep.address : '';
+    }
+    document.getElementById('statusHint').textContent =
+      `${ATLAS.contracts.length} contracts · ${ATLAS.refs.length} refs · ${ATLAS.machines.length} machines · generated ${ATLAS.generatedAt.slice(0, 10)}`;
+    layout(); resize(); renderPanel();
+  }
+
+  // ── layout ──
+  const ROW_H = 17, HEAD_H = 26, PAD = 8, TABLE_W = 250;
+
+  function tableRows(c) {
+    return [...c.storage.map(s => ({ ...s })), ...c.immutableRefCols.map(s => ({ ...s }))];
+  }
+
+  function layout() {
+    nodes = new Map();
+    if (view === 'schema') {
+      let colX = 0;
+      for (const p of ATLAS.projects) {
+        const members = ATLAS.contracts.filter(c => c.project === p.id);
+        let y = 0, maxW = 0, i = 0;
+        for (const c of members) {
+          const rows = tableRows(c);
+          const h = HEAD_H + rows.length * ROW_H + PAD;
+          nodes.set('c:' + c.name, { key: 'c:' + c.name, type: 'contract', c, x: colX + (i % 2) * (TABLE_W + 60), y, w: TABLE_W, h, rows });
+          y += h + 46; i++;
+          maxW = Math.max(maxW, TABLE_W * 2 + 60);
+        }
+        colX += maxW + 140;
+      }
+    } else {
+      const m = ATLAS.machines[machineIdx];
+      if (!m) return;
+      const cols = { initial: 0, active: 1, terminal: 2 };
+      const counts = { 0: 0, 1: 0, 2: 0 };
+      for (const s of m.states) {
+        const col = cols[s.kind] ?? 1;
+        const x = col * 340, y = counts[col] * 130; counts[col]++;
+        nodes.set('s:' + s.id, { key: 's:' + s.id, type: 'state', s, m, x, y: y + col * 20, w: 170, h: 58 });
+      }
+    }
+  }
+
+  // ── canvas plumbing ──
+  function resize() {
+    const r = cv.parentElement.getBoundingClientRect();
+    cv.width = r.width * devicePixelRatio; cv.height = r.height * devicePixelRatio;
+    draw();
+  }
+  window.addEventListener('resize', resize);
+
+  const toWorld = (px, py) => ({ x: (px - cam.x) / cam.k, y: (py - cam.y) / cam.k });
+
+  cv.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const rect = cv.getBoundingClientRect(), mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const f = Math.exp(-e.deltaY * 0.0015);
+    const k2 = Math.min(4, Math.max(0.12, cam.k * f));
+    cam.x = mx - (mx - cam.x) * (k2 / cam.k);
+    cam.y = my - (my - cam.y) * (k2 / cam.k);
+    cam.k = k2; draw();
+  }, { passive: false });
+
+  let drag = null;
+  cv.addEventListener('mousedown', (e) => {
+    const rect = cv.getBoundingClientRect();
+    const w = toWorld(e.clientX - rect.left, e.clientY - rect.top);
+    const n = hitNode(w);
+    drag = n ? { node: n, dx: w.x - n.x, dy: w.y - n.y, moved: false }
+             : { pan: true, sx: e.clientX, sy: e.clientY, ox: cam.x, oy: cam.y, moved: false };
+    cv.classList.add('dragging');
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!drag) return;
+    drag.moved = true;
+    if (drag.pan) { cam.x = drag.ox + e.clientX - drag.sx; cam.y = drag.oy + e.clientY - drag.sy; }
+    else {
+      const rect = cv.getBoundingClientRect();
+      const w = toWorld(e.clientX - rect.left, e.clientY - rect.top);
+      drag.node.x = w.x - drag.dx; drag.node.y = w.y - drag.dy;
+    }
+    draw();
+  });
+  window.addEventListener('mouseup', (e) => {
+    cv.classList.remove('dragging');
+    if (drag && !drag.moved) {
+      const rect = cv.getBoundingClientRect();
+      const w = toWorld(e.clientX - rect.left, e.clientY - rect.top);
+      const n = hitNode(w);
+      if (n) selection = n.type === 'contract' ? { type: 'contract', name: n.c.name } : { type: 'state', id: n.s.id };
+      else {
+        const eh = edgeHits.find(b => w.x >= b.x && w.x <= b.x + b.w && w.y >= b.y && w.y <= b.y + b.h);
+        selection = eh ? eh.sel : null;
+      }
+      draw(); renderPanel();
+    }
+    drag = null;
+  });
+
+  function hitNode(w) {
+    let found = null;
+    for (const n of nodes.values()) if (w.x >= n.x && w.x <= n.x + n.w && w.y >= n.y && w.y <= n.y + n.h) found = n;
+    return found;
+  }
+
+  // ── drawing ──
+  function draw() {
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.translate(cam.x, cam.y); ctx.scale(cam.k, cam.k);
+    edgeHits = [];
+    if (!ATLAS) return;
+    if (view === 'schema') drawSchema(); else drawMachine();
+    drawLegend();
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function arrowHead(x, y, angle, color) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(angle);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-9, -4.5); ctx.lineTo(-9, 4.5); ctx.closePath();
+    ctx.fillStyle = color; ctx.fill(); ctx.restore();
+  }
+
+  function drawSchema() {
+    // edges first
+    for (const r of ATLAS.refs) {
+      const from = nodes.get('c:' + r.from.contract), to = nodes.get('c:' + r.to.contract);
+      if (!from || !to) continue;
+      const color = REF_COLOR()[r.kind] || P.muted;
+      let sy = from.y + HEAD_H / 2;
+      if (r.from.field) {
+        const idx = from.rows.findIndex(row => row.label === r.from.field);
+        if (idx >= 0) sy = from.y + HEAD_H + idx * ROW_H + ROW_H / 2;
+      } else sy = from.y + from.h - 8;
+      const sx = from.x + (to.x > from.x + from.w ? from.w : 0);
+      const tx = to.x + (sx > to.x + to.w ? to.w : 0), ty = to.y + HEAD_H / 2;
+      ctx.save();
+      ctx.strokeStyle = color; ctx.lineWidth = 1.6;
+      if (r.crossProject) ctx.setLineDash([6, 5]);
+      ctx.beginPath();
+      const mx = (sx + tx) / 2;
+      ctx.moveTo(sx, sy); ctx.bezierCurveTo(mx, sy, mx, ty, tx, ty);
+      ctx.stroke(); ctx.setLineDash([]);
+      arrowHead(tx, ty, Math.atan2(0, tx - mx || 1) + (tx < mx ? Math.PI : 0), color);
+      const lx = (sx + tx) / 2, ly = (sy + ty) / 2 - 8;
+      ctx.font = '10px ui-monospace, Menlo, monospace'; ctx.fillStyle = color;
+      const label = r.kind + (r.from.field ? ' · ' + r.from.field : '');
+      const tw = ctx.measureText(label).width;
+      ctx.fillText(label, lx - tw / 2, ly);
+      edgeHits.push({ x: lx - tw / 2 - 4, y: ly - 10, w: tw + 8, h: 14, sel: { type: 'ref', ref: r } });
+      ctx.restore();
+    }
+    // tables
+    for (const n of nodes.values()) {
+      const c = n.c;
+      const isSel = selection && selection.type === 'contract' && selection.name === c.name;
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 2;
+      roundRect(n.x, n.y, n.w, n.h, 8); ctx.fillStyle = P.node; ctx.fill();
+      ctx.shadowColor = 'transparent';
+      ctx.strokeStyle = isSel ? P.sel : P.line; ctx.lineWidth = isSel ? 2 : 1; ctx.stroke();
+      // header
+      roundRect(n.x, n.y, n.w, HEAD_H, 8); ctx.save(); ctx.clip();
+      ctx.fillStyle = P.nodehead; ctx.fillRect(n.x, n.y, n.w, HEAD_H); ctx.restore();
+      ctx.fillStyle = P.ink; ctx.font = 'bold 12.5px -apple-system, sans-serif';
+      ctx.fillText(c.name, n.x + 9, n.y + 17);
+      ctx.fillStyle = P.muted; ctx.font = '10px -apple-system, sans-serif';
+      const pw = ctx.measureText(c.project).width;
+      ctx.fillText(c.project, n.x + n.w - pw - 9, n.y + 17);
+      // rows
+      ctx.font = '11px ui-monospace, Menlo, monospace';
+      n.rows.forEach((row, i) => {
+        const ry = n.y + HEAD_H + i * ROW_H + 12;
+        ctx.fillStyle = P.ink;
+        ctx.fillText(clip(row.label, 20), n.x + 9, ry);
+        const liveVal = live.values[c.name] && live.values[c.name][row.label];
+        if (liveVal !== undefined) {
+          ctx.fillStyle = liveVal.err ? P.red : P.green;
+          const v = clip(liveVal.err ? 'err' : String(liveVal.v), 14);
+          ctx.fillText(v, n.x + n.w - ctx.measureText(v).width - 9, ry);
+        } else {
+          ctx.fillStyle = row.immutable ? P.amber : P.muted;
+          const t = clip(row.immutable ? 'immutable' : shortType(row.type), 16);
+          ctx.fillText(t, n.x + n.w - ctx.measureText(t).width - 9, ry);
+        }
+      });
+      ctx.restore();
+    }
+  }
+
+  function drawMachine() {
+    const m = ATLAS.machines[machineIdx];
+    if (!m) return;
+    // group parallel edges to fan them out
+    const groups = {};
+    (m.transitions || []).forEach((t, i) => {
+      const k = t.from + '>' + t.to;
+      (groups[k] = groups[k] || []).push({ t, i });
+    });
+    for (const k in groups) {
+      groups[k].forEach((entry, gi) => drawTransition(m, entry.t, entry.i, gi, groups[k].length));
+    }
+    // states
+    for (const n of nodes.values()) {
+      const s = n.s;
+      const isSel = selection && selection.type === 'state' && selection.id === s.id;
+      const kc = KIND_COLOR()[s.kind] || P.muted;
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 2;
+      roundRect(n.x, n.y, n.w, n.h, 10); ctx.fillStyle = P.node; ctx.fill();
+      ctx.shadowColor = 'transparent';
+      ctx.strokeStyle = isSel ? P.sel : kc; ctx.lineWidth = isSel ? 3 : 2;
+      if (s.kind === 'terminal') { ctx.stroke(); roundRect(n.x + 3.5, n.y + 3.5, n.w - 7, n.h - 7, 7); ctx.lineWidth = 1; }
+      ctx.stroke();
+      ctx.fillStyle = P.ink; ctx.font = 'bold 13px -apple-system, sans-serif';
+      ctx.fillText(s.id, n.x + 12, n.y + 24);
+      ctx.fillStyle = kc; ctx.font = '10.5px -apple-system, sans-serif';
+      ctx.fillText(s.kind + (s.label && s.label !== s.id ? ' · ' + s.label : ''), n.x + 12, n.y + 42);
+      ctx.restore();
+    }
+    // overlays note
+    if ((m.overlays || []).length) {
+      ctx.fillStyle = P.muted; ctx.font = 'italic 11px -apple-system, sans-serif';
+      m.overlays.forEach((o, i) => {
+        ctx.fillText(`overlay ${o.id}: ${o.enterFn}()/${o.exitFn}() blocks [${(o.blocks || []).join(', ')}]`, 0, -30 - i * 16);
+      });
+    }
+  }
+
+  function drawTransition(m, t, idx, gi, gn) {
+    const from = nodes.get('s:' + t.from), to = nodes.get('s:' + t.to);
+    if (!from || !to) return;
+    const hasMoney = (t.money || []).length > 0;
+    const isTime = t.fn === 'time';
+    const color = hasMoney ? P.amber : isTime ? P.muted : P.ink;
+    const isSel = selection && selection.type === 'transition' && selection.idx === idx;
+    ctx.save();
+    ctx.strokeStyle = isSel ? P.sel : color;
+    ctx.lineWidth = isSel ? 2.6 : hasMoney ? 2.2 : 1.4;
+    if (isTime) ctx.setLineDash([7, 5]);
+
+    let lx, ly, angle;
+    if (from === to) {
+      // self-loop on the right edge, stacked by group index
+      const cx = from.x + from.w, cy = from.y + 14 + gi * 16, r = 15 + gi * 7;
+      ctx.beginPath(); ctx.arc(cx + 6, cy + r * 0.4, r, Math.PI * 1.25, Math.PI * 0.75);
+      ctx.stroke();
+      lx = cx + r + 12; ly = cy + r * 0.4; angle = Math.PI * 0.85;
+      arrowHead(cx + 6 - r * 0.7, cy + r * 0.4 + r * 0.7, Math.PI * 0.8, isSel ? P.sel : color);
+    } else {
+      const sx = from.x + from.w / 2, sy = from.y + from.h / 2;
+      const tx = to.x + to.w / 2, ty = to.y + to.h / 2;
+      // offset parallel edges perpendicular to the line
+      const dx = tx - sx, dy = ty - sy, len = Math.hypot(dx, dy) || 1;
+      const off = (gi - (gn - 1) / 2) * 26;
+      const px = -dy / len * off, py = dx / len * off;
+      const c1x = sx + dx * 0.3 + px, c1y = sy + dy * 0.3 + py;
+      const c2x = sx + dx * 0.7 + px, c2y = sy + dy * 0.7 + py;
+      // clip endpoints to node borders (approx)
+      const s2 = borderPoint(from, c1x, c1y), t2 = borderPoint(to, c2x, c2y);
+      ctx.beginPath(); ctx.moveTo(s2.x, s2.y);
+      ctx.bezierCurveTo(c1x, c1y, c2x, c2y, t2.x, t2.y);
+      ctx.stroke();
+      angle = Math.atan2(t2.y - c2y, t2.x - c2x);
+      arrowHead(t2.x, t2.y, angle, isSel ? P.sel : color);
+      lx = (c1x + c2x) / 2; ly = (c1y + c2y) / 2;
+    }
+    ctx.setLineDash([]);
+    // label
+    const label = isTime ? '⏱ time' : t.fn + '()';
+    const sub = hasMoney ? (t.money || []).map(mo => mo.token).filter((v, i, a) => a.indexOf(v) === i).join(' + ') : (t.path || '');
+    ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
+    const tw = Math.max(ctx.measureText(label).width, sub ? ctx.measureText(sub).width : 0);
+    roundRect(lx - tw / 2 - 5, ly - 10, tw + 10, sub ? 28 : 16, 4);
+    ctx.fillStyle = P.panel; ctx.fill();
+    ctx.strokeStyle = isSel ? P.sel : color; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = isSel ? P.sel : color;
+    ctx.fillText(label, lx - ctx.measureText(label).width / 2, ly + 2);
+    if (sub) {
+      ctx.font = '10px ui-monospace, Menlo, monospace';
+      ctx.fillStyle = hasMoney ? P.amber : P.muted;
+      ctx.fillText(sub, lx - ctx.measureText(sub).width / 2, ly + 14);
+    }
+    edgeHits.push({ x: lx - tw / 2 - 5, y: ly - 10, w: tw + 10, h: sub ? 28 : 16, sel: { type: 'transition', idx } });
+    ctx.restore();
+  }
+
+  function borderPoint(n, towardX, towardY) {
+    const cx = n.x + n.w / 2, cy = n.y + n.h / 2;
+    const dx = towardX - cx, dy = towardY - cy;
+    const sx = dx !== 0 ? (n.w / 2) / Math.abs(dx) : Infinity;
+    const sy = dy !== 0 ? (n.h / 2) / Math.abs(dy) : Infinity;
+    const s = Math.min(sx, sy);
+    return { x: cx + dx * s, y: cy + dy * s };
+  }
+
+  function drawLegend() {
+    const el = document.getElementById('legend');
+    if (view === 'schema') {
+      const rc = REF_COLOR();
+      el.innerHTML = Object.entries(rc).map(([k, c]) => `<div><i style="border-color:${c}"></i>${k}</div>`).join('') +
+        `<div><i class="dash" style="border-color:${P.muted}"></i>cross-project</div>`;
+    } else {
+      const m = ATLAS.machines[machineIdx];
+      const anyMoney = (m.transitions || []).some(t => (t.money || []).length);
+      const kc = KIND_COLOR();
+      el.innerHTML =
+        Object.entries(kc).map(([k, c]) => `<div><i style="border-color:${c}"></i>${k} state</div>`).join('') +
+        `<div><i class="dash" style="border-color:${P.muted}"></i>time transition</div>` +
+        (anyMoney ? `<div><i style="border-color:${P.amber}"></i>money-moving transition</div>`
+                  : `<div class="hint">no money flows in this machine</div>`);
+    }
+  }
+
+  // ── side panel ──
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const clip = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+  const shortType = (t) => t.replace(/^struct /, '').replace(/^contract /, '').replace(/mapping\((.*)\)/, 'map($1)');
+
+  function renderPanel() {
+    const el = document.getElementById('panel');
+    if (!ATLAS) return;
+    if (view === 'machine') { renderMachinePanel(el); return; }
+
+    let html = '';
+    if (selection && selection.type === 'contract') {
+      const c = ATLAS.contracts.find(x => x.name === selection.name);
+      html += contractDetail(c);
+    } else if (selection && selection.type === 'ref') {
+      const r = selection.ref;
+      html += `<h3>Ref <span class="badge">${esc(r.kind)}</span></h3>
+        <div class="kv"><b>from</b> <span class="mono">${esc(r.from.contract)}${r.from.field ? '.' + esc(r.from.field) : ''}</span></div>
+        <div class="kv"><b>to</b> <span class="mono">${esc(r.to.contract)}</span></div>
+        <div class="kv"><b>source</b> ${esc(r.source)}</div>
+        ${r.crossProject ? '<div class="kv"><b></b> cross-project (dashed)</div>' : ''}
+        ${r.note ? `<div class="note-block">${esc(r.note)}</div>` : ''}`;
+    } else {
+      html += `<h3>Schema view</h3><p class="hint">Contracts rendered as database tables — rows are storage
+        variables, edges are cross-contract address references. Click a table or an edge label for detail.
+        Drag tables to rearrange, wheel to zoom.</p>`;
+    }
+    html += liveControls();
+    el.innerHTML = html;
+    wireLive();
+  }
+
+  function contractDetail(c) {
+    const lv = live.values[c.name] || {};
+    let html = `<h3>${esc(c.name)} <span class="badge">${esc(c.project)}</span></h3>
+      <div class="kv mono hint">${esc(c.source)}</div>
+      <h2>Storage</h2><table><tr><th>var</th><th>type</th><th>slot</th><th>live</th></tr>`;
+    for (const s of c.storage) {
+      const v = lv[s.label];
+      html += `<tr><td class="mono">${esc(s.label)}</td><td class="mono">${esc(s.type)}</td><td>${esc(s.slot)}${s.offset ? '+' + s.offset : ''}</td>
+        <td class="mono ${v ? (v.err ? 'live-err' : 'live-ok') : ''}">${v ? esc(v.err || v.v) : ''}</td></tr>`;
+    }
+    html += '</table>';
+    if (c.nonStorageGetters.length) {
+      html += '<h2>Immutables / constants / views</h2><table><tr><th>getter</th><th>returns</th><th>live</th></tr>';
+      for (const g of c.nonStorageGetters) {
+        const v = lv[g.name];
+        html += `<tr><td class="mono">${esc(g.name)}()</td><td class="mono">${esc(g.returns)}</td>
+          <td class="mono ${v ? (v.err ? 'live-err' : 'live-ok') : ''}">${v ? esc(v.err || v.v) : ''}</td></tr>`;
+      }
+      html += '</table>';
+    }
+    const fns = c.abi.filter(e => e.type === 'function');
+    html += `<h2>ABI — ${fns.length} functions</h2><div class="mono hint" style="max-height:180px;overflow:auto">` +
+      fns.map(f => `${esc(f.name)}(${f.inputs.map(i => esc(i.type)).join(',')})${f.stateMutability === 'view' || f.stateMutability === 'pure' ? ' <span class="badge">view</span>' : ''}`).join('<br>') +
+      '</div>';
+    return html;
+  }
+
+  function renderMachinePanel(el) {
+    const m = ATLAS.machines[machineIdx];
+    let html = '';
+    if (selection && selection.type === 'transition') {
+      const t = m.transitions[selection.idx];
+      html += `<h3>${t.fn === 'time' ? '⏱ time' : esc(t.fn) + '()'} <span class="badge">${esc(t.from)} → ${esc(t.to)}</span></h3>`;
+      if (t.path) html += `<div class="kv"><b>path</b> ${esc(t.path)}</div>`;
+      if (t.caller) html += `<div class="kv"><b>caller</b> ${esc(t.caller)}</div>`;
+      if ((t.guards || []).length) html += '<h2>Guards</h2><ul>' + t.guards.map(g => `<li class="mono">${esc(g)}</li>`).join('') + '</ul>';
+      if ((t.money || []).length) {
+        html += '<h2 class="money">Money flow</h2><table><tr><th>token</th><th>from</th><th>to</th></tr>' +
+          t.money.map(mo => `<tr><td class="money mono">${esc(mo.token)}</td><td>${esc(mo.from)}</td><td>${esc(mo.to)}</td></tr>` +
+            (mo.note ? `<tr><td colspan=3 class="hint">${esc(mo.note)}</td></tr>` : '')).join('') + '</table>';
+      } else {
+        html += '<p class="hint">No money moves on this transition.</p>';
+      }
+      if ((t.sideEffects || []).length)
+        html += '<h2>Side effects</h2><ul>' + t.sideEffects.map(se => `<li class="mono">${esc(se.contract)}.${esc(se.fn)}()${se.note ? ' — ' + esc(se.note) : ''}</li>`).join('') + '</ul>';
+      if (t.note) html += `<div class="note-block">${esc(t.note)}</div>`;
+    } else if (selection && selection.type === 'state') {
+      const s = m.states.find(x => x.id === selection.id);
+      html += `<h3>${esc(s.id)} <span class="badge">${esc(s.kind)}</span></h3>`;
+      if (s.label && s.label !== s.id) html += `<div class="kv"><b>label</b> ${esc(s.label)}</div>`;
+      if (s.guard) html += `<h2>State condition</h2><div class="note-block mono">${esc(s.guard)}</div>`;
+      const outs = m.transitions.filter(t => t.from === s.id);
+      const ins = m.transitions.filter(t => t.to === s.id && t.from !== s.id);
+      html += `<h2>Outgoing (${outs.length})</h2><ul>` + outs.map(t => `<li class="mono">${esc(t.fn)} → ${esc(t.to)}${(t.money || []).length ? ' <span class="money">€</span>' : ''}</li>`).join('') + '</ul>';
+      html += `<h2>Incoming (${ins.length})</h2><ul>` + ins.map(t => `<li class="mono">${esc(t.from)} → ${esc(t.fn)}</li>`).join('') + '</ul>';
+    } else {
+      html += `<h3>${esc(m.title || m.id)}</h3>
+        <div class="kv"><b>contract</b> <span class="mono">${esc(m.contract)}</span> <span class="badge">${esc(m.project)}</span></div>
+        <div class="kv"><b>state</b> ${esc(m.stateSource)}${m.stateGetter ? ` via <span class="mono">${esc(m.stateGetter)}()</span>` : ''}</div>
+        ${m.stateExpr ? `<div class="note-block mono">${esc(m.stateExpr)}</div>` : ''}
+        <div class="kv"><b>scope</b> ${esc(m.scope || '')}</div>
+        <div class="kv"><b>counts</b> ${m.states.length} states · ${m.transitions.length} transitions ·
+          ${m.transitions.filter(t => (t.money || []).length).length} with money</div>`;
+      if ((m.overlays || []).length)
+        html += '<h2>Overlays</h2>' + m.overlays.map(o => `<div class="note-block"><b>${esc(o.id)}</b> — ${esc(o.note || '')}</div>`).join('');
+      if ((m.notes || []).length)
+        html += '<h2>Notes</h2>' + m.notes.map(n => `<div class="note-block">${esc(n)}</div>`).join('');
+      html += '<p class="hint">Click a state or a transition label on the canvas for details.</p>';
+    }
+    el.innerHTML = html;
+  }
+
+  // ── live mode (schema view): plain JSON-RPC eth_call on parameterless view getters ──
+  function liveControls() {
+    let html = `<h2>Live mode</h2>
+      <p class="hint">Reads every parameterless <span class="mono">view</span> getter via
+      <span class="mono">eth_call</span> and shows current values on the tables. Mappings, arrays and
+      getters with parameters cannot be read this way.</p>
+      <div class="addr-row"><label>RPC URL</label><input id="rpcUrl" type="text" placeholder="https://rpc.gnosischain.com" value="${esc(live.rpc)}"></div>`;
+    for (const c of ATLAS.contracts) {
+      html += `<div class="addr-row"><label title="${esc(c.name)}">${esc(c.name)}</label>
+        <input data-addr="${esc(c.name)}" type="text" placeholder="0x… (deployed address)" value="${esc(live.addrs[c.name] || '')}"></div>`;
+    }
+    html += `<button class="act" id="readBtn" ${live.running ? 'disabled' : ''}>Read</button>
+      <div id="liveStatus">${esc(live.status)}</div>`;
+    return html;
+  }
+
+  function wireLive() {
+    const btn = document.getElementById('readBtn');
+    if (!btn) return;
+    const rpcEl = document.getElementById('rpcUrl');
+    rpcEl.onchange = () => (live.rpc = rpcEl.value.trim());
+    for (const inp of document.querySelectorAll('[data-addr]'))
+      inp.onchange = () => (live.addrs[inp.dataset.addr] = inp.value.trim());
+    btn.onclick = readAll;
+  }
+
+  async function rpcCall(method, params) {
+    const res = await fetch(live.rpc, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }),
+    });
+    const j = await res.json();
+    if (j.error) throw new Error(j.error.message || 'rpc error');
+    return j.result;
+  }
+
+  async function readAll() {
+    live.rpc = document.getElementById('rpcUrl').value.trim();
+    if (!live.rpc) { live.status = 'Enter an RPC URL first.'; renderPanel(); return; }
+    const targets = ATLAS.contracts.filter(c => /^0x[0-9a-fA-F]{40}$/.test(live.addrs[c.name] || ''));
+    if (!targets.length) { live.status = 'Enter at least one valid 0x… contract address.'; renderPanel(); return; }
+    live.running = true; live.status = 'Reading…'; renderPanel();
+    let ok = 0, err = 0;
+    for (const c of targets) {
+      live.values[c.name] = live.values[c.name] || {};
+      for (const g of c.getters) {
+        try {
+          const raw = await rpcCall('eth_call', [{ to: live.addrs[c.name], data: '0x' + g.selector }, 'latest']);
+          live.values[c.name][g.name] = { v: decodeResult(g.outputs, raw) };
+          ok++;
+        } catch (e) {
+          live.values[c.name][g.name] = { err: clip(String(e.message || e), 60) };
+          err++;
+        }
+        draw();
+      }
+    }
+    live.running = false;
+    live.status = `Done: ${ok} reads ok, ${err} failed (per-call errors shown inline).`;
+    renderPanel(); draw();
+  }
+
+  function decodeResult(outputs, hex) {
+    if (!hex || hex === '0x') return '(empty)';
+    const h = hex.slice(2);
+    if (outputs.length !== 1) return '0x' + clip(h, 40);
+    const t = outputs[0].type;
+    const word = (i) => h.slice(i * 64, i * 64 + 64);
+    if (t === 'address') return '0x' + word(0).slice(24);
+    if (t === 'bool') return BigInt('0x' + word(0)) === 1n ? 'true' : 'false';
+    if (/^u?int\d*$/.test(t)) {
+      let v = BigInt('0x' + word(0));
+      if (t.startsWith('int') && v >> 255n === 1n) v -= 1n << 256n;
+      return fmtBig(v);
+    }
+    if (/^bytes\d+$/.test(t)) return '0x' + word(0).slice(0, parseInt(t.slice(5)) * 2);
+    if (t === 'string' || t === 'bytes') {
+      const off = Number(BigInt('0x' + word(0))) * 2;
+      const len = Number(BigInt('0x' + h.slice(off, off + 64)));
+      const body = h.slice(off + 64, off + 64 + len * 2);
+      if (t === 'bytes') return '0x' + body;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = parseInt(body.slice(i * 2, i * 2 + 2), 16);
+      return new TextDecoder().decode(bytes);
+    }
+    return '0x' + clip(h, 40);
+  }
+
+  function fmtBig(v) {
+    const neg = v < 0n; if (neg) v = -v;
+    // heuristically show 1e18-scaled values in a readable form
+    if (v >= 10n ** 15n && v % 10n ** 12n === 0n) return (neg ? '-' : '') + (Number(v / 10n ** 12n) / 1e6).toLocaleString() + 'e18-scaled';
+    let s = v.toString();
+    if (s.length > 24) s = s.slice(0, 10) + '…' + s.slice(-6) + ` (${s.length}d)`;
+    return (neg ? '-' : '') + s;
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{
+  "id": "identity-registry",
+  "title": "IdentityRegistry — personhood lifecycle (per nullifier)",
+  "project": "airkuna",
+  "contract": "IdentityRegistry",
+  "stateSource": "stored",
+  "stateExpr": "identities[nullifier].anchor != address(0) ? ACTIVE : UNCLAIMED",
+  "scope": "one machine instance per person (nullifier = HMAC(OIB, pepper)); the contract multiplexes all of them",
+  "tokens": {},
+  "actors": ["anchor wallet (Safe)", "governance (airKUNA DAO Safe)", "EIP712Verifier (M-of-N attestors)"],
+  "states": [
+    {
+      "id": "UNCLAIMED",
+      "label": "Unclaimed",
+      "kind": "initial",
+      "guard": "identities[nullifier].anchor == address(0)"
+    },
+    {
+      "id": "ACTIVE",
+      "label": "Active (claimed)",
+      "kind": "active",
+      "guard": "identities[nullifier].anchor != address(0); anchorToNullifier[anchor] == nullifier; SBT tokenId uint256(nullifier) owned by anchor"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "UNCLAIMED",
+      "to": "ACTIVE",
+      "fn": "claim",
+      "caller": "anyone presenting a valid eID attestation for `anchor`",
+      "guards": [
+        "anchor != address(0)",
+        "verifier.verify(anchor, attestation, proof) succeeds (EIP-712, M-of-N signers)",
+        "loa >= minLoA",
+        "identities[nullifier].anchor == 0 (person not yet claimed)",
+        "anchorToNullifier[anchor] == 0 (wallet not already an anchor)"
+      ],
+      "sideEffects": [
+        { "contract": "PersonhoodSBT", "fn": "mint", "note": "mints soulbound tokenId = uint256(nullifier) to anchor" }
+      ],
+      "money": []
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "migrateAnchor",
+      "label": "recovery: anchor swap",
+      "caller": "anyone presenting a fresh attestation of the SAME eID for `newAnchor`",
+      "guards": [
+        "newAnchor != address(0)",
+        "anchorToNullifier[newAnchor] == 0",
+        "verifier.verify(newAnchor, ...) yields the person's existing nullifier",
+        "loa >= minLoA",
+        "identities[nullifier].anchor != 0 (claimed)"
+      ],
+      "sideEffects": [
+        { "contract": "PersonhoodSBT", "fn": "moveTo", "note": "SBT follows the person to the new anchor (the eID is the recovery key)" }
+      ],
+      "money": []
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "reverify",
+      "label": "liveness refresh (self-loop)",
+      "caller": "current anchor (msg.sender)",
+      "guards": [
+        "anchorToNullifier[msg.sender] != 0",
+        "recovered nullifier == expected nullifier (NullifierMismatch otherwise)",
+        "loa >= minLoA"
+      ],
+      "sideEffects": [],
+      "money": [],
+      "note": "Updates loa and reverifiedAt only; anchor unchanged, no SBT interaction."
+    },
+    {
+      "from": "ACTIVE",
+      "to": "UNCLAIMED",
+      "fn": "revoke",
+      "label": "governance revocation",
+      "caller": "governance (airKUNA DAO Safe) — fraud, death, court order",
+      "guards": [
+        "onlyGovernance",
+        "identities[nullifier].anchor != 0 (NotClaimed otherwise)"
+      ],
+      "sideEffects": [
+        { "contract": "PersonhoodSBT", "fn": "burn", "note": "SBT burned; both mappings deleted — the person can re-claim later with a fresh attestation (same nullifier)" }
+      ],
+      "money": []
+    }
+  ],
+  "overlays": [],
+  "notes": [
+    "NO MONEY FLOWS in this machine — it is a pure identity state machine (money: [] everywhere); the visualizer must render it without a money legend.",
+    "UNCLAIMED is both the initial state and the post-revoke state: revoke() deletes the identity entirely, so a revoked person is indistinguishable from a never-claimed one and can re-claim with a fresh attestation (same nullifier).",
+    "Governance transitions (setVerifier, setMinLoA, transferGovernance) and verifier signer-set management (addSigner/removeSigner/setThreshold on EIP712Verifier) are configuration, not per-person state — intentionally excluded."
+  ]
+}

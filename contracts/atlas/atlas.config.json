@@ -1,0 +1,49 @@
+{
+  "name": "sol-atlas",
+  "description": "Declarative registry of Solidity projects visualized by sol-atlas. Paths are resolved relative to this file (absolute paths also allowed).",
+  "projects": [
+    {
+      "id": "airkuna",
+      "name": "airKUNA identity stack",
+      "root": "..",
+      "contracts": [
+        { "name": "IdentityRegistry", "source": "src/IdentityRegistry.sol" },
+        { "name": "PersonhoodSBT", "source": "src/PersonhoodSBT.sol" },
+        { "name": "EIP712Verifier", "source": "src/verifiers/EIP712Verifier.sol" },
+        {
+          "name": "KunaToken",
+          "source": "src/KunaToken.sol",
+          "optional": true,
+          "note": "May be added by a concurrent workstream; skipped gracefully while absent."
+        }
+      ],
+      "deployments": []
+    },
+    {
+      "id": "pinka",
+      "name": "Pinka Finance crowdfund MVP",
+      "root": "../../../../pinka-finance/pinka-finance-mvp",
+      "contracts": [
+        { "name": "PinkaToken", "source": "src/PinkaToken.sol" },
+        { "name": "PinkaFactory", "source": "src/PinkaFactory.sol" },
+        { "name": "PinkaCrowdfund", "source": "src/PinkaCrowdfund.sol" }
+      ],
+      "refs": [
+        {
+          "from": "PinkaFactory.campaigns",
+          "to": "PinkaToken",
+          "kind": "holds-address",
+          "note": "Campaign struct field `token`"
+        },
+        {
+          "from": "PinkaFactory.campaigns",
+          "to": "PinkaCrowdfund",
+          "kind": "holds-address",
+          "note": "Campaign struct field `crowdfund`"
+        }
+      ],
+      "deployments": []
+    }
+  ],
+  "machines": ["machines/pinka-crowdfund.json", "machines/identity-registry.json"]
+}

@@ -1,0 +1,322 @@
+{
+  "id": "pinka-crowdfund",
+  "title": "PinkaCrowdfund — campaign lifecycle & money flow",
+  "project": "pinka",
+  "contract": "PinkaCrowdfund",
+  "stateSource": "derived",
+  "stateGetter": "status",
+  "scope": "one machine instance per deployed campaign contract",
+  "tokens": {
+    "EURe": { "external": true, "note": "Monerium EURe (ERC20 + ERC677), the `currency` immutable — not part of this config" },
+    "ITALK": { "contract": "PinkaToken", "project": "pinka", "note": "equity token minted/burned by the campaign" }
+  },
+  "actors": ["investor", "recipient/beneficiary", "owner (founder)", "operator (SEPA backend)", "fundReceiver", "Safe multisig"],
+  "states": [
+    {
+      "id": "PENDING",
+      "label": "Pending",
+      "kind": "initial",
+      "guard": "!cancelled && !fundsWithdrawn && block.timestamp < startTime"
+    },
+    {
+      "id": "ACTIVE",
+      "label": "Active",
+      "kind": "active",
+      "guard": "!cancelled && !fundsWithdrawn && startTime <= block.timestamp <= deadline && tokensSold < maxTokens"
+    },
+    {
+      "id": "SOLD_OUT",
+      "label": "Sold out",
+      "kind": "active",
+      "guard": "!cancelled && !fundsWithdrawn && block.timestamp <= deadline && tokensSold >= maxTokens"
+    },
+    {
+      "id": "SUCCESSFUL",
+      "label": "Successful",
+      "kind": "active",
+      "guard": "!cancelled && !fundsWithdrawn && block.timestamp > deadline && softCapReached()"
+    },
+    {
+      "id": "FAILED",
+      "label": "Failed",
+      "kind": "terminal",
+      "guard": "!cancelled && !fundsWithdrawn && block.timestamp > deadline && !softCapReached() — refundsAvailable() == true"
+    },
+    {
+      "id": "CANCELLED",
+      "label": "Cancelled",
+      "kind": "terminal",
+      "guard": "cancelled == true (overrides everything) — refundsAvailable() == true"
+    },
+    {
+      "id": "FUNDED",
+      "label": "Funded",
+      "kind": "terminal",
+      "guard": "fundsWithdrawn == true && !cancelled — refundsAvailable() == false"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "PENDING",
+      "to": "ACTIVE",
+      "fn": "time",
+      "guards": ["block.timestamp >= startTime"],
+      "money": []
+    },
+    {
+      "from": "PENDING",
+      "to": "CANCELLED",
+      "fn": "cancelCampaign",
+      "caller": "owner",
+      "guards": ["!fundsWithdrawn", "!cancelled"],
+      "money": []
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "invest",
+      "path": "DIRECT_APPROVE",
+      "caller": "investor",
+      "guards": [
+        "whenNotPaused",
+        "campaignActive (!cancelled, startTime<=now<=deadline)",
+        "_tokenAmount >= minInvestment",
+        "tokensBought[msg.sender] + _tokenAmount <= maxInvestmentPerAddress",
+        "tokensSold + _tokenAmount <= maxTokens",
+        "cost > 0",
+        "prior EURe.approve(crowdfund, cost)"
+      ],
+      "money": [
+        { "token": "EURe", "from": "investor", "to": "PinkaCrowdfund", "note": "safeTransferFrom(cost = amount*tokenPrice/1e18)" },
+        { "token": "ITALK", "from": "mint", "to": "investor", "note": "PinkaToken.mint against minting allowance" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "onTokenTransfer",
+      "path": "ERC677_TRANSFER",
+      "caller": "EURe contract (via transferAndCall)",
+      "guards": [
+        "msg.sender == address(currency)",
+        "nonReentrant, whenNotPaused",
+        "!cancelled, startTime<=now<=deadline",
+        "tokenAmount >= minInvestment",
+        "tokenAmount >= minTokens (optional slippage guard from _data)",
+        "tokensBought[recipient] + tokenAmount <= maxInvestmentPerAddress",
+        "tokensSold + tokenAmount <= maxTokens"
+      ],
+      "money": [
+        { "token": "EURe", "from": "investor", "to": "PinkaCrowdfund", "note": "already transferred by EURe.transferAndCall (single tx)" },
+        { "token": "ITALK", "from": "mint", "to": "recipient (defaults to sender, override via _data)", "note": "amount = EURe*1e18/tokenPrice" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "investOnBehalf",
+      "path": "SEPA_IBAN",
+      "caller": "operator",
+      "guards": [
+        "onlyOperator",
+        "nonReentrant, whenNotPaused, campaignActive",
+        "sepaRegistered[_investor] (prior registerForSepa)",
+        "_tokenAmount >= minInvestment",
+        "tokensBought[_investor] + _tokenAmount <= maxInvestmentPerAddress",
+        "tokensSold + _tokenAmount <= maxTokens",
+        "_eurePaid >= expectedCost"
+      ],
+      "money": [
+        { "token": "EUR (fiat, SEPA)", "from": "investor bank account", "to": "Monerium IBAN", "note": "off-chain leg; Monerium auto-mints EURe to the campaign wallet" },
+        { "token": "EURe", "from": "Monerium (mint)", "to": "PinkaCrowdfund", "note": "arrives before this call; only accounted here (totalEureAccounted += _eurePaid)" },
+        { "token": "ITALK", "from": "mint", "to": "investor", "note": "minted to the SEPA-registered wallet" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "investFor",
+      "path": "SAFE_DEPOSIT",
+      "caller": "payer (typically a Safe multisig; payer != beneficiary allowed)",
+      "guards": [
+        "nonReentrant, whenNotPaused, campaignActive",
+        "_beneficiary != 0",
+        "_tokenAmount >= minInvestment",
+        "tokensBought[_beneficiary] + _tokenAmount <= maxInvestmentPerAddress",
+        "tokensSold + _tokenAmount <= maxTokens",
+        "prior EURe.approve from the payer"
+      ],
+      "money": [
+        { "token": "EURe", "from": "payer (Safe)", "to": "PinkaCrowdfund", "note": "safeTransferFrom(msg.sender)" },
+        { "token": "ITALK", "from": "mint", "to": "beneficiary", "note": "gift/DAO/Safe purchase — payer gets no tokens" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "ACTIVE",
+      "fn": "processDeposit",
+      "path": "SAFE_DEPOSIT",
+      "caller": "operator",
+      "guards": [
+        "onlyOperator, nonReentrant, whenNotPaused, campaignActive",
+        "_tokenAmount >= minInvestment",
+        "per-address and hard-cap limits",
+        "_eurePaid >= expectedCost",
+        "currency.balanceOf(this) >= totalEureAccounted + _eurePaid (unaccounted EURe must exist)"
+      ],
+      "money": [
+        { "token": "EURe", "from": "investor", "to": "PinkaCrowdfund", "note": "sent earlier via plain transfer() (no callback); matched here by the operator" },
+        { "token": "ITALK", "from": "mint", "to": "investor", "note": "" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "SOLD_OUT",
+      "fn": "invest",
+      "note": "Representative edge — ANY of the four invest paths (invest / onTokenTransfer / investOnBehalf / investFor / processDeposit) crosses into SOLD_OUT when it fills the hard cap.",
+      "guards": ["tokensSold + amount == maxTokens after the call"],
+      "money": [
+        { "token": "EURe", "from": "investor", "to": "PinkaCrowdfund", "note": "final tranche up to the hard cap" },
+        { "token": "ITALK", "from": "mint", "to": "investor", "note": "" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "SUCCESSFUL",
+      "fn": "time",
+      "guards": ["block.timestamp > deadline", "softCapReached() (tokensSold >= softCapTokens)"],
+      "money": []
+    },
+    {
+      "from": "ACTIVE",
+      "to": "FAILED",
+      "fn": "time",
+      "guards": ["block.timestamp > deadline", "!softCapReached()"],
+      "money": []
+    },
+    {
+      "from": "ACTIVE",
+      "to": "FUNDED",
+      "fn": "withdrawFunds",
+      "caller": "owner",
+      "note": "Early withdrawal: allowed as soon as the soft cap is reached, even before the deadline (no time check in withdrawFunds).",
+      "guards": ["onlyOwner, nonReentrant", "!cancelled", "softCapReached()", "!fundsWithdrawn", "balance > 0"],
+      "money": [
+        { "token": "EURe", "from": "PinkaCrowdfund", "to": "fundReceiver", "note": "entire currency.balanceOf(this)" }
+      ]
+    },
+    {
+      "from": "ACTIVE",
+      "to": "CANCELLED",
+      "fn": "cancelCampaign",
+      "caller": "owner",
+      "guards": ["!fundsWithdrawn", "!cancelled"],
+      "money": []
+    },
+    {
+      "from": "SOLD_OUT",
+      "to": "SUCCESSFUL",
+      "fn": "time",
+      "guards": ["block.timestamp > deadline (softCapTokens <= maxTokens, so sold-out implies soft cap reached)"],
+      "money": []
+    },
+    {
+      "from": "SOLD_OUT",
+      "to": "FUNDED",
+      "fn": "withdrawFunds",
+      "caller": "owner",
+      "guards": ["onlyOwner", "!cancelled", "softCapReached()", "!fundsWithdrawn"],
+      "money": [
+        { "token": "EURe", "from": "PinkaCrowdfund", "to": "fundReceiver", "note": "entire balance" }
+      ]
+    },
+    {
+      "from": "SOLD_OUT",
+      "to": "CANCELLED",
+      "fn": "cancelCampaign",
+      "caller": "owner",
+      "guards": ["!fundsWithdrawn", "!cancelled"],
+      "money": []
+    },
+    {
+      "from": "SUCCESSFUL",
+      "to": "FUNDED",
+      "fn": "withdrawFunds",
+      "caller": "owner",
+      "guards": ["onlyOwner", "!cancelled", "softCapReached()", "!fundsWithdrawn", "balance > 0"],
+      "money": [
+        { "token": "EURe", "from": "PinkaCrowdfund", "to": "fundReceiver", "note": "entire balance" }
+      ]
+    },
+    {
+      "from": "SUCCESSFUL",
+      "to": "CANCELLED",
+      "fn": "cancelCampaign",
+      "caller": "owner",
+      "note": "Owner can still cancel after a successful deadline (only fundsWithdrawn blocks it) — this re-enables refunds.",
+      "guards": ["!fundsWithdrawn", "!cancelled"],
+      "money": []
+    },
+    {
+      "from": "FAILED",
+      "to": "FAILED",
+      "fn": "claimRefund",
+      "caller": "investor",
+      "guards": ["refundsAvailable(): now > deadline && !softCapReached() && !fundsWithdrawn", "tokensBought[msg.sender] > 0"],
+      "money": [
+        { "token": "ITALK", "from": "investor", "to": "burn", "note": "PinkaToken.burn(investor, tokensBought) — crowdfund holds BURNER_ROLE" },
+        { "token": "EURe", "from": "PinkaCrowdfund", "to": "investor", "note": "full currencyPaid[investor] returned" }
+      ]
+    },
+    {
+      "from": "FAILED",
+      "to": "CANCELLED",
+      "fn": "cancelCampaign",
+      "caller": "owner",
+      "note": "Formal status override; refunds were already available in FAILED.",
+      "guards": ["!fundsWithdrawn", "!cancelled"],
+      "money": []
+    },
+    {
+      "from": "CANCELLED",
+      "to": "CANCELLED",
+      "fn": "claimRefund",
+      "caller": "investor",
+      "guards": ["refundsAvailable(): cancelled == true", "tokensBought[msg.sender] > 0"],
+      "money": [
+        { "token": "ITALK", "from": "investor", "to": "burn", "note": "tokens burned back" },
+        { "token": "EURe", "from": "PinkaCrowdfund", "to": "investor", "note": "full refund of currencyPaid" }
+      ]
+    },
+    {
+      "from": "FUNDED",
+      "to": "FUNDED",
+      "fn": "invest",
+      "caller": "investor",
+      "note": "Quirk: campaignActive does NOT check fundsWithdrawn, so all invest paths keep working after withdrawal until the deadline; refunds are impossible in FUNDED (refundsAvailable() == false).",
+      "guards": ["block.timestamp <= deadline still", "usual invest guards"],
+      "money": [
+        { "token": "EURe", "from": "investor", "to": "PinkaCrowdfund", "note": "accumulates for a second withdrawFunds? No — fundsWithdrawn is already true, EURe is stuck unless refunded off-protocol" },
+        { "token": "ITALK", "from": "mint", "to": "investor", "note": "" }
+      ]
+    }
+  ],
+  "overlays": [
+    {
+      "id": "PAUSED",
+      "label": "Paused (overlay)",
+      "enterFn": "pause",
+      "exitFn": "unpause",
+      "caller": "owner",
+      "appliesTo": ["PENDING", "ACTIVE", "SOLD_OUT", "SUCCESSFUL", "FAILED", "FUNDED"],
+      "blocks": ["invest", "onTokenTransfer", "investOnBehalf", "investFor", "processDeposit"],
+      "note": "Pausable overlay: blocks only functions with whenNotPaused (all five invest paths). withdrawFunds, claimRefund and cancelCampaign are NOT pause-gated. Does not change status()."
+    }
+  ],
+  "notes": [
+    "State is DERIVED: status() computes the state string from (cancelled, fundsWithdrawn, block.timestamp vs startTime/deadline, tokensSold vs maxTokens/softCapTokens) — mirrors test/PinkaStateMachine.t.sol _assertStatus and script/WalkStateMachine.s.sol _snapshot().",
+    "registerForSepa is state-neutral (callable in any state) and is therefore not modeled as a transition; it is a precondition of the SEPA_IBAN path.",
+    "SOLD_OUT investors cannot refund (soft cap necessarily reached, deadline not passed).",
+    "Precedence in status(): CANCELLED > FUNDED > PENDING > (SOLD_OUT|ACTIVE) > (SUCCESSFUL|FAILED)."
+  ]
+}
