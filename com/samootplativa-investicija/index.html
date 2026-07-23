@@ -74,15 +74,51 @@ header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop
 .stack .who{font-size:12.5px;color:var(--mute);margin-top:2px}
 .stack .desc{font-size:14px;color:var(--ink);margin-top:9px}
 
-/* mermaid figure */
-.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:34px;overflow-x:auto}
+/* figure card */
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:34px}
 .figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
-.mermaid{display:flex;justify-content:center}
-.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
-.figure .mermaid p{margin:0;font-size:inherit;line-height:1.4}
-.mermaid .nodeLabel p{color:inherit}
-.figure .mermaid svg{max-width:100%;height:auto}
 @media(max-width:640px){.figure{padding:20px 12px}}
+
+/* animated money-flow sim */
+.simctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.simbtn{font:inherit;font-weight:600;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--navy);transition:.2s}
+.simbtn:hover{border-color:var(--gold)}
+.simbtn.primary{background:linear-gradient(135deg,var(--gold-light),var(--gold));border-color:transparent;color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7)}
+.simbtn.primary:hover{transform:translateY(-1px)}
+.simbtn:disabled{opacity:.4;cursor:default;transform:none}
+.simcount{font-size:12.5px;color:var(--mute);font-variant-numeric:tabular-nums;font-weight:600}
+.simscroll{overflow-x:auto;margin-top:18px}
+.simstage{position:relative;width:800px;height:425px;margin:0 auto}
+.simstage svg{position:absolute;inset:0;width:100%;height:100%}
+.simedge{stroke:#C6CEDD;stroke-width:1.5;fill:none;transition:stroke .3s}
+.simedge.done{stroke:var(--gold);stroke-width:2}
+.simedge.active{stroke:var(--navy);stroke-width:2.5;stroke-dasharray:8 6;animation:simdash .8s linear infinite}
+@keyframes simdash{to{stroke-dashoffset:-14}}
+.simlbl{font-size:11px;font-weight:600;fill:var(--mute)}
+.simnode{position:absolute;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;box-shadow:var(--shadow-sm);transition:border-color .3s,box-shadow .3s}
+.simnode .lab{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.simnode .nm{font-family:Fraunces,serif;font-weight:600;font-size:16.5px;color:var(--navy);margin-top:3px}
+.simnode .sub{font-size:11px;color:var(--mute);margin-top:2px}
+.simnode .bal{font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600;color:var(--navy);margin-top:8px;min-height:16px}
+.simnode.active{border-color:var(--navy);box-shadow:0 0 0 3px rgba(0,47,108,.12),var(--shadow-sm)}
+.simnode.done{border-color:var(--gold)}
+.simnode .debt{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.simnode .debt .dk{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);font-weight:600}
+.simnode .debt .dk b{color:var(--gold);font-variant-numeric:tabular-nums}
+.simnode .dbar{height:7px;background:var(--soft);border:1px solid var(--line);border-radius:999px;margin-top:5px;overflow:hidden}
+.simnode .dbar div{height:100%;width:0;background:linear-gradient(90deg,var(--gold-light),var(--gold));transition:width .5s}
+.simlog{margin-top:16px;background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:13px 17px;font-size:14px;color:var(--ink);min-height:52px}
+.simlog b{color:var(--navy)}
+.simzero{margin-top:12px;text-align:center;font-size:13px;color:var(--mute)}
+.simzero b{color:var(--green);font-variant-numeric:tabular-nums}
+
+/* kako-i-ti steps */
+.howsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:24px}
+.hstep{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 19px;box-shadow:var(--shadow-sm)}
+.hstep .n{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-family:Fraunces,serif;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:15px}
+.hstep h4{font-family:Fraunces,serif;font-weight:600;font-size:16.5px;color:var(--navy);margin-top:11px}
+.hstep p{font-size:13.5px;color:var(--mute);margin-top:6px!important}
+.hstep .em{color:var(--gold);font-weight:600}
 
 /* evidence / proof card */
 .proof{margin-top:30px;background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.10),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:28px 26px;box-shadow:var(--shadow)}
@@ -137,6 +173,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a href="#kako">Kako radi</a>
       <a href="#brojke">Brojke</a>
       <a href="#rizik">Rizici</a>
+      <a href="#kako-i-ti">Kako i ti</a>
       <a href="../zamasnjak/">Zamašnjak</a>
     </nav>
     <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Kontakt</a>
@@ -147,7 +184,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
   <div class="doc">
     <span class="eyebrow">Provjereno on-chain · Samootplativa investicija</span>
     <h1>Investicija u airKUNA-u koja se sama otplati</h1>
-    <p>Ulagatelj zadržava svoj <b>SOL u vlastitom skrbništvu</b> kao kolateral, podiže mali konzervativan zajam koji financira razvoj airKUNA-e, a <b>Hobba</b> — auditirani Solana protokol — svakodnevno žanje prinos na kolateralu i tim prinosom <b>automatski otplaćuje dug</b>. Ovo nije teorija: mehanizam smo provjerili na Solana lancu, transakciju po transakciju.</p>
+    <p>Ulagatelj zadržava svoj <b>SOL u vlastitom skrbništvu</b> kao kolateral, podiže mali konzervativan zajam koji financira razvoj airKUNA-e, a <b>Hobba</b> — auditirani Solana protokol — svakodnevno žanje prinos na kolateralu i tim prinosom <b>automatski otplaćuje dug</b>. Ovo nije teorija: mehanizam smo provjerili na Solana lancu, transakciju po transakciju — a ulazni prag je simboličan: naša prva stvarna pozicija financira airKUNA-u <b>zajmom od ≈ 1 EUR</b>.</p>
     <div class="verified">
       <span class="vchip"><span class="dot"></span>Hobba program auditiran (Ackee, 15.06.2026.)</span>
       <span class="vchip"><span class="dot"></span>Self-repaying dokazan on-chain</span>
@@ -168,7 +205,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     </div>
 
     <div class="callout warn">
-      <b>Što ovo nije.</b> Nije bez rizika i nije zajamčeno. To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima i mladom protokolu. Hobba je <b>u produkciji, ali u zatvorenom testiranju</b>, s malim ukupnim depozitima (~$270k) i visokom koncentracijom. Ako SOL padne duboko, prinos padne ispod kamate, ili protokol zakaže — teza se ruši. Sve to kvantificiramo niže, bez uljepšavanja.
+      <b>Što ovo nije.</b> Nije bez rizika i nije zajamčeno. To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima i mladom protokolu. Hobba je <b>u produkciji, ali u zatvorenom testiranju</b>, s malim ukupnim depozitima (~$340k) i visokom koncentracijom. Ako SOL padne duboko, prinos padne ispod kamate, ili protokol zakaže — teza se ruši. Sve to kvantificiramo niže, bez uljepšavanja.
     </div>
 
     <!-- ON-CHAIN DOKAZ -->
@@ -184,7 +221,8 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
         <tr><td><b>Self-repaying mehanizam</b></td><td>17× <code>HarvestVault</code> + 30× <code>OperatorRepay</code> (~16 h uzorak)</td><td><span class="badge g">aktivno</span></td></tr>
         <tr><td><b>Prinosne integracije</b></td><td>Jupiter Lend <code>jupr81…e3Bdzi</code>, Kamino, Perena</td><td><span class="badge g">on-chain</span></td></tr>
         <tr><td><b>Živi dokaz (naš wallet)</b></td><td>1 SOL kolateral → 1,14 USDC zajam <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">↗ wallet</a></td><td><span class="badge g">izvršeno</span></td></tr>
-        <tr><td><b>Ukupni depoziti (Dune, 08.07.2026.)</b></td><td>≈ $270.499 · 72 korisnika · 2.675 tx <a href="https://dune.com/igor_hobba/hobba-mainnet" target="_blank" rel="noopener">↗ dashboard</a></td><td><span class="badge y">rano</span></td></tr>
+        <tr><td><b>Motor servisira i našu poziciju</b></td><td><code>OperatorRepay</code> obuhvatio naš position račun, 12.07.2026. <a href="https://solscan.io/tx/3XLt7WbZiqVin9vtDYB1HKWFvyUYN4Ym899e5tX1g66JQGpB5kqHj3Xd9DDm3Su5BaGDjeGz8vbYVuptNK64ZE4q" target="_blank" rel="noopener">↗ tx</a></td><td><span class="badge g">potvrđeno</span></td></tr>
+        <tr><td><b>Ukupni depoziti (Dune, 23.07.2026.)</b></td><td>≈ $341.593 · 87 korisnika · 3.281 tx <a href="https://dune.com/igor_hobba/hobba-mainnet" target="_blank" rel="noopener">↗ dashboard</a></td><td><span class="badge y">rano, ali raste</span></td></tr>
       </tbody>
     </table>
     </div>
@@ -195,23 +233,63 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <h2 id="kako">Kako radi — pet koraka</h2>
     <p>Jedina dionica koja dotiče airKUNA-u jest polog u riznicu; sve ostalo je pozicija ulagatelja u <b>vlastitom skrbništvu</b>, na auditiranom protokolu treće strane.</p>
 
-    <div class="figure">
-      <div class="mermaid">
-flowchart TB
-  I(["Ulagatelj drži SOL<br/>vlastito skrbništvo (Solflare)"]):::person --> K1
-  K1["1 · Kolateral<br/>SOL uložen u Hobbu · konzervativan LTV"]:::good --> K2
-  K2["2 · Zajam<br/>mali USDC podignut protiv kolaterala"]:::warn --> T
-  T[["Riznica airKUNA-e<br/>pravno · razvoj · operacije"]]:::entity
-  K1 -->|"kolateral radi u vaultovima<br/>(Perena · Kamino · Jupiter Lend)"| K3
-  K3{{"3 · HarvestVault<br/>prinos se svakodnevno žanje"}}:::good --> K4
-  K4{{"4 · OperatorRepay<br/>prinos automatski otplaćuje dug"}}:::good --> K5
-  K5["5 · Izlaz<br/>zajam otplaćen · ulagatelj zadržava SOL + alokaciju u airKUNA-i"]:::good
-  classDef person fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
-  classDef entity fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
-  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
-  classDef warn fill:#E3AF35,stroke:#9a6f1f,color:#3a2900,font-weight:600;
+    <div class="figure" id="simfig">
+      <div class="simctl">
+        <button class="simbtn" id="simPrev">← Natrag</button>
+        <button class="simbtn primary" id="simNext">Pokreni ▶</button>
+        <button class="simbtn" id="simAuto">Auto</button>
+        <button class="simbtn" id="simReset">Reset</button>
+        <span class="simcount" id="simCount">korak 0 / 8</span>
       </div>
-      <div class="cap"><b>Petlja koja se sama zatvara.</b> Zeleno = vrijednost/mehanizam koji radi za ulagatelja; zlatno = dionica zajma u riznicu; navy = primatelj (airKUNA). Koraci 3 i 4 (žetva → otplata) su oni koje smo prebrojali na lancu.</div>
+      <div class="simscroll">
+        <div class="simstage">
+          <svg viewBox="0 0 800 425" aria-hidden="true">
+            <defs>
+              <marker id="ah-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C6CEDD"/></marker>
+              <marker id="ah-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#002F6C"/></marker>
+              <marker id="ah-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C8912A"/></marker>
+            </defs>
+            <path id="se-e1" class="simedge" d="M196 100 L294 100" marker-end="url(#ah-grey)"/>
+            <path id="se-e2" class="simedge" d="M402 226 L402 264" marker-end="url(#ah-grey)"/>
+            <path id="se-e3" class="simedge" d="M511 100 L599 100" marker-end="url(#ah-grey)"/>
+            <path id="se-e4" class="simedge" d="M599 150 L517 150" marker-end="url(#ah-grey)"/>
+            <path id="se-e5" class="simedge" d="M294 150 L202 150" marker-end="url(#ah-grey)"/>
+            <text class="simlbl" x="245" y="88" text-anchor="middle">1 · deposit 1 SOL</text>
+            <text class="simlbl" x="248" y="170" text-anchor="middle">5 · izlaz: SOL natrag</text>
+            <text class="simlbl" x="555" y="88" text-anchor="middle">3 · plasman</text>
+            <text class="simlbl" x="558" y="170" text-anchor="middle">4 · harvest → repay</text>
+            <text class="simlbl" x="415" y="250" text-anchor="start">2 · zajam 1,14 USDC</text>
+          </svg>
+          <div class="simnode" id="sn-u" style="left:0;top:52px;width:190px">
+            <div class="lab">Ulagatelj</div>
+            <div class="nm">Vlastiti novčanik</div>
+            <div class="sub">Solflare · vlastito skrbništvo</div>
+            <div class="bal" id="sb-u">1 SOL</div>
+          </div>
+          <div class="simnode" id="sn-h" style="left:300px;top:36px;width:205px">
+            <div class="lab">Ruter + risk engine</div>
+            <div class="nm">Hobba</div>
+            <div class="sub">auditiran · Solana mainnet</div>
+            <div class="bal" id="sb-h">—</div>
+            <div class="debt"><div class="dk"><span>Dug</span><b id="sd-val">0,00 USDC</b></div><div class="dbar"><div id="sd-fill"></div></div></div>
+          </div>
+          <div class="simnode" id="sn-v" style="left:605px;top:52px;width:195px">
+            <div class="lab">Prinosni sloj</div>
+            <div class="nm">Vaultovi</div>
+            <div class="sub">Perena · Kamino · Jupiter Lend</div>
+            <div class="bal" id="sb-v">—</div>
+          </div>
+          <div class="simnode" id="sn-r" style="left:300px;top:268px;width:205px">
+            <div class="lab">Primatelj</div>
+            <div class="nm">Riznica airKUNA-e</div>
+            <div class="sub">pravno · razvoj · operacije</div>
+            <div class="bal" id="sb-r">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="simlog" id="simLog"><b>Kako novac teče — animirano.</b> Pritisni „Pokreni" (ili pusti da krene samo) i prati petlju: deposit → zajam → plasman → žetva/otplata → izlaz.</div>
+      <div class="simzero">Trošak ulagatelja kroz cijelu petlju: <b id="simCost">0 €</b> glavnice — dug plaća prinos.</div>
+      <div class="cap"><b>Petlja koja se sama zatvara.</b> Navy = korak koji se upravo događa, zlatno = već odrađeno. Koraci žetve i otplate (harvest → repay) su oni koje smo prebrojali na lancu — 17× + 30× u 16-satnom uzorku.</div>
     </div>
 
     <!-- ŽIVI DOKAZ -->
@@ -239,16 +317,17 @@ flowchart TB
 
     <!-- BROJKE -->
     <h2 id="brojke">Brojke — stanje protokola (iskreno)</h2>
-    <p>Podaci s Hobbinog Dune dashboarda, 08.07.2026. Namjerno prikazujemo i ono što ide u prilog i ono što je rizik:</p>
+    <p>Podaci s Hobbinog Dune dashboarda, 23.07.2026. Namjerno prikazujemo i ono što ide u prilog i ono što je rizik:</p>
     <div class="tblwrap">
     <table class="tbl">
       <thead><tr><th>Metrika</th><th>Vrijednost</th><th>Čitanje</th></tr></thead>
       <tbody>
-        <tr><td>Ukupni depoziti (TVL)</td><td class="num">≈ $270.499</td><td><span class="badge y">malo / rano</span> zatvoreno testiranje</td></tr>
-        <tr><td>Sastav kolaterala</td><td class="num">SOL 82% · cbBTC 18%</td><td>dominira SOL, kako i teza pretpostavlja</td></tr>
-        <tr><td>Broj korisnika</td><td class="num">72</td><td><span class="badge y">rana faza</span></td></tr>
-        <tr><td>Transakcija</td><td class="num">2.675</td><td>protokol je aktivan, ne uspavan</td></tr>
-        <tr><td>Koncentracija</td><td class="num">top 3 walleta ≈ 72% TVL-a</td><td><span class="badge r">visoka</span> mali broj velikih depozitara</td></tr>
+        <tr><td>Ukupni depoziti (TVL)</td><td class="num">≈ $341.593</td><td><span class="badge g">+26% u 15 dana</span> i dalje malo — zatvoreno testiranje</td></tr>
+        <tr><td>Novi depoziti</td><td class="num">402 SOL u jednoj tx (22.07.)</td><td>rast dolazi iz novih pologa, ne samo cijene</td></tr>
+        <tr><td>Sastav kolaterala</td><td class="num">SOL 85% · cbBTC 15%</td><td>dominira SOL, kako i teza pretpostavlja</td></tr>
+        <tr><td>Broj korisnika</td><td class="num">87</td><td><span class="badge y">rana faza</span> +15 od 08.07.</td></tr>
+        <tr><td>Transakcija</td><td class="num">3.281</td><td>protokol je aktivan svaki dan — bez ijednog dana pauze od 26.06.</td></tr>
+        <tr><td>Koncentracija</td><td class="num">top 3 walleta ≈ 72% TVL-a (08.07.)</td><td><span class="badge r">visoka</span> mali broj velikih depozitara</td></tr>
       </tbody>
     </table>
     </div>
@@ -281,10 +360,31 @@ flowchart TB
       <li><b>Punu provjerljivost</b> — svaka tvrdnja je na lancu; ništa se ne mora uzeti "na riječ".</li>
     </ul>
 
+    <!-- KAKO I TI -->
+    <h2 id="kako-i-ti">Kako i ti — od 1 EUR</h2>
+    <p>Ovako izgleda put od znatiželje do vlastite samootplative pozicije. Prvo pošteno: Hobba je u <b>zatvorenom testiranju</b> — ne možeš ući sam preko weba. Pristup ide preko whitelista, a mi te spojimo s Hobba timom. To ulaz čini sporijim, ali i znači da se kreće malim, kontroliranim koracima.</p>
+
+    <div class="howsteps">
+      <div class="hstep"><div class="n">1</div><h4>Javi se</h4><p>E-mailom ili Telegramom. Dogovorimo okvir i spojimo te s Hobba timom za <span class="em">whitelist</span> (zatvoreno testiranje).</p></div>
+      <div class="hstep"><div class="n">2</div><h4>Pripremi novčanik</h4><p><span class="em">Solflare</span> (ili drugi Solana novčanik) i SOL koji ionako namjeravaš držati. Imovina cijelo vrijeme ostaje tvoja.</p></div>
+      <div class="hstep"><div class="n">3</div><h4>Deponiraj i posudi</h4><p>SOL ide kao kolateral u Hobbu; podigneš mali USDC zajam — <span class="em">od ≈ 1 EUR naviše</span>, uz konzervativan LTV.</p></div>
+      <div class="hstep"><div class="n">4</div><h4>Zajam financira airKUNA-u</h4><p>Sredstva idu u riznicu uz <span class="em">zaseban, formalan ugovor</span> koji definira tvoj udio/alokaciju.</p></div>
+      <div class="hstep"><div class="n">5</div><h4>Prinos otplaćuje dug</h4><p>Motor žanje i otplaćuje sam. Kad dug padne na 0, <span class="em">SOL je slobodan</span>, a udio u airKUNA-i ostaje tvoj.</p></div>
+    </div>
+
+    <div class="callout" style="margin-top:18px"><b>Prije nego što se javiš.</b> Kreni s malim iznosom (zato i pokazujemo poziciju od 1 EUR), pročitaj rizike gore i računaj da svako stvarno sudjelovanje ide kroz formalni ugovor s procjenom prikladnosti. Ovo nije investicijski savjet.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20pozicija%20od%201%20EUR">Javi se — kreni od 1 EUR</a>
+      <a class="btn-outline" href="https://t.me/airkuna_com">Telegram — t.me/airkuna_com</a>
+      <a class="btn-outline" href="https://zivo.airkuna.com" target="_blank" rel="noopener">Pogledaj živu poziciju ↗</a>
+    </div>
+
     <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, nudba, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Hobba i ostali navedeni protokoli su neovisne treće strane; njihove tvrdnje (prinosi, audit, dostupnost) treba neovisno provjeriti. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
 
     <div class="ctarow">
       <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Razgovarajte s timom</a>
+      <a class="btn-outline" href="https://t.me/airkuna_com">Javna rasprava — t.me/airkuna_com</a>
       <a class="btn-outline" href="../zamasnjak/">Pogledajte širi model zamašnjaka</a>
     </div>
 
@@ -298,17 +398,83 @@ flowchart TB
       <a class="backbtn" href="../">← Natrag na airKUNA</a>
     </div>
     <p class="fnote">
-      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci su snimljeni 08.07.2026. i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
-      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci su snimljeni 08.07.2026. (pozicija) odnosno 23.07.2026. (protokol) i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
     </p>
   </div>
 </footer>
 
-<script type="module">
-import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
-  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
-    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
+<script>
+"use strict";
+(function(){
+  var LOAN=1.14;
+  /* svaki korak: e=aktivni brid, n=aktivni čvorovi, log, debt (null=bez promjene), saldi u/h/v/r */
+  var STEPS=[
+    {n:["u"],log:"<b>Početak.</b> Ulagatelj drži 1 SOL u vlastitom novčaniku (Solflare). Dug: 0.",u:"1 SOL",h:"—",v:"—",r:"—",debt:0},
+    {e:"e1",n:["u","h"],log:"<b>1 · Deposit.</b> 1 SOL ulazi u Hobbu kao kolateral — i dalje je ulagateljev, samo je počeo raditi.",u:"→ 1 SOL kao kolateral",h:"kolateral: 1 SOL",debt:0},
+    {e:"e2",n:["h","r"],log:"<b>2 · Zajam.</b> Protiv kolaterala podiže se 1,14 USDC (≈ 1 EUR) i ide u riznicu airKUNA-e. LTV ≈ 1,5 % — sićušan.",r:"1,14 USDC + ugovor o udjelu",debt:1.14},
+    {e:"e3",n:["h","v"],log:"<b>3 · Plasman.</b> Hobba automatski šalje kolateral u prinosne vaultove (Perena · Kamino · Jupiter Lend).",v:"1 SOL radi (~8 % APY)",debt:1.14},
+    {e:"e4",n:["v","h"],log:"<b>4 · HarvestVault + OperatorRepay.</b> Motor žanje prinos i njime automatski otplaćuje dug. Na lancu: 17× žetva + 30× otplata u 16 h.",debt:0.76},
+    {e:"e4",n:["v","h"],log:"… tjedni prolaze — žetva → otplata, svaki dan, bez ijednog poteza ulagatelja …",debt:0.38},
+    {e:"e4",n:["v","h"],log:"<b>≈ 8 mjeseci od pologa:</b> dug otplaćen do nule. Ulagatelj nije uplatio ništa — sve je platio prinos.",debt:0,h:"kolateral: 1 SOL · dug 0"},
+    {e:"e5",n:["h","u"],log:"<b>5 · Izlaz.</b> Kolateral je slobodan — 1 SOL se vraća ulagatelju.",u:"1 SOL natrag ✓",h:"kolateral oslobođen",debt:0},
+    {n:["u","r"],fin:true,log:"<b>Petlja zatvorena.</b> Ulagatelj: svoj SOL + udio u airKUNA-i. Riznica: financirana. Trošak ulagatelja: 0 € glavnice.",u:"1 SOL + udio u airKUNA-i",debt:0}
+  ];
+  var EDGES=["e1","e2","e3","e4","e5"], NODES=["u","h","v","r"];
+  var cur=0, timer=null, started=false;
+  var $=function(id){return document.getElementById(id);};
+  function fmt(n){return n.toFixed(2).replace(".",",");}
+  function apply(){
+    var doneEdges={}, bal={u:null,h:null,v:null,r:null}, debt=0;
+    for(var i=0;i<=cur;i++){
+      var s=STEPS[i];
+      if(s.e && i<cur) doneEdges[s.e]=1;
+      NODES.forEach(function(k){ if(s[k]!==undefined) bal[k]=s[k]; });
+      if(s.debt!==undefined) debt=s.debt;
+    }
+    var st=STEPS[cur];
+    EDGES.forEach(function(id){
+      var el=$("se-"+id);
+      el.classList.toggle("active",st.e===id);
+      el.classList.toggle("done",!st.fin && !!doneEdges[id] && st.e!==id || !!st.fin);
+      el.setAttribute("marker-end", st.e===id?"url(#ah-navy)":(doneEdges[id]||st.fin?"url(#ah-gold)":"url(#ah-grey)"));
+    });
+    NODES.forEach(function(k){
+      var el=$("sn-"+k);
+      el.classList.toggle("active",(st.n||[]).indexOf(k)>=0 && !st.fin);
+      el.classList.toggle("done",!!st.fin && (st.n||[]).indexOf(k)>=0);
+      if(bal[k]!==null) $("sb-"+k).textContent=bal[k];
+    });
+    $("sd-val").textContent=fmt(debt)+" USDC";
+    $("sd-fill").style.width=Math.round((1-debt/LOAN)*100)+"%";
+    $("simLog").innerHTML=st.log;
+    $("simCount").textContent="korak "+cur+" / "+(STEPS.length-1);
+    $("simPrev").disabled=cur===0;
+    $("simNext").disabled=cur===STEPS.length-1;
+    $("simNext").textContent=cur===0?"Pokreni ▶":"Sljedeći korak →";
+  }
+  function stopAuto(){ if(timer){clearInterval(timer);timer=null;$("simAuto").textContent="Auto";} }
+  function next(){ if(cur<STEPS.length-1){cur++;apply();} else stopAuto(); }
+  $("simNext").addEventListener("click",function(){stopAuto();next();});
+  $("simPrev").addEventListener("click",function(){stopAuto();if(cur>0){cur--;apply();}});
+  $("simReset").addEventListener("click",function(){stopAuto();cur=0;apply();});
+  $("simAuto").addEventListener("click",function(){
+    if(timer){stopAuto();return;}
+    if(cur===STEPS.length-1)cur=0;
+    apply();$("simAuto").textContent="Pauza";timer=setInterval(next,2300);
+  });
+  /* kad korisnik doskrola do dijagrama, animacija kreće sama (jednom) */
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(en){
+      if(en[0].isIntersecting && !started && cur===0 && !timer){
+        started=true;$("simAuto").textContent="Pauza";timer=setInterval(next,2300);
+      }
+      if(en[0].isIntersecting) started=true;
+    },{threshold:.45});
+    io.observe($("simfig"));
+  }
+  apply();
+})();
 </script>
 
 </body>
