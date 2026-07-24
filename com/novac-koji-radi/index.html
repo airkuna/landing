@@ -79,17 +79,26 @@ h2{font-family:Fraunces,serif;font-weight:700;font-size:clamp(28px,5.4vw,50px);l
 .moneycard .yield .k{font-size:13.5px;color:var(--mute)}
 .moneycard .yield .v{font-family:Fraunces,serif;font-weight:700;font-size:28px;color:var(--red)}
 
-/* ---------- flow diagram (bank extraction) ---------- */
-.flow{position:relative;margin-top:40px;max-width:760px}
-.flowsvg{width:100%;height:auto;display:block;overflow:visible}
-.fnode rect{rx:14}
-.coin{fill:var(--gold-light);stroke:var(--gold);stroke-width:1.5;opacity:0}
-.flow.in .coin{opacity:1}
-.flow.in .coin.c1{offset-path:path('M120 70 L360 70');animation:travel 2.4s linear infinite}
-.flow.in .coin.c2{offset-path:path('M360 70 L600 70');animation:travel 2.4s linear .3s infinite}
-.flow.in .coin.c3{offset-path:path('M600 100 C600 180 360 180 200 150');animation:travelback 3s linear .6s infinite}
-@keyframes travel{0%{offset-distance:0%;opacity:0}10%{opacity:1}90%{opacity:1}100%{offset-distance:100%;opacity:0}}
-@keyframes travelback{0%{offset-distance:0%;opacity:0}10%{opacity:1}90%{opacity:1}100%{offset-distance:100%;opacity:0}}
+/* ---------- flow diagram (bank extraction) — flexbox, deterministic ---------- */
+.ic{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ic svg{display:block;width:100%;height:100%;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.btn .ic{width:18px;height:18px}
+.flow2{display:flex;align-items:stretch;gap:8px;margin-top:38px;max-width:720px}
+.fnode{flex:1;min-width:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:20px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:9px}
+.fnode .ic{width:32px;height:32px;color:var(--gold-light)}
+.fnode b{font-family:Fraunces,serif;font-weight:600;font-size:15.5px;color:#fff;line-height:1.15}
+.fnode small{font-size:11px;color:#8FA3C4}
+.farrow{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#7E93B6;width:66px}
+.farrow .fal{font-size:10.5px;text-align:center;line-height:1.15}
+.farrow .ic{width:24px;height:24px}
+.freturn{display:flex;align-items:center;gap:12px;margin-top:12px;max-width:720px;background:rgba(227,175,53,.10);border:1px solid rgba(227,175,53,.34);border-radius:14px;padding:13px 18px;color:var(--gold-light);font-size:14.5px;line-height:1.35}
+.freturn .ic{width:24px;height:24px}
+.freturn b{color:#fff}
+@media(max-width:640px){
+  .flow2{flex-direction:column;align-items:stretch;max-width:none}
+  .farrow{flex-direction:row;width:auto;padding:2px 0;gap:8px}
+  .farrow .ic{transform:rotate(90deg)}
+}
 
 /* ---------- stat tiles ---------- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:44px}
@@ -123,12 +132,18 @@ h2{font-family:Fraunces,serif;font-weight:700;font-size:clamp(28px,5.4vw,50px);l
 .vscol .tag{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
 .vscol.bad .tag{color:var(--red)}.vscol.good .tag{color:var(--green-light)}
 .vscol ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:11px}
-.vscol li{font-size:15px;line-height:1.4;padding-left:26px;position:relative;color:var(--mute)}
+.vscol li{font-size:15px;line-height:1.4;color:var(--mute);display:flex;gap:11px;align-items:flex-start}
 .vscol.good li{color:#C6E8D4}
-.vscol li:before{position:absolute;left:0;top:-1px;font-weight:700}
-.vscol.bad li:before{content:"✕";color:var(--red)}
-.vscol.good li:before{content:"✓";color:var(--green-light)}
-.vsmid{display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:26px;color:var(--mute)}
+.vscol li .ic{width:19px;height:19px;flex:none;margin-top:1px}
+.vscol.bad li .ic{color:var(--red)}
+.vscol.good li .ic{color:var(--green-light)}
+.vscol h3 .ic{width:24px;height:24px}
+.vscol.bad h3 .ic{color:var(--mute)}
+.vscol.good h3 .ic{color:var(--green-light)}
+.vsmid{display:flex;align-items:center;justify-content:center;color:var(--mute)}
+.vsmid .ic{width:30px;height:30px}
+@media(max-width:640px){.vsmid .ic{transform:rotate(90deg)}}
+.chip .ic{width:15px;height:15px;color:var(--green-light);vertical-align:-2px;margin-right:3px}
 
 /* ---------- steps ---------- */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:44px;counter-reset:s}
@@ -231,22 +246,31 @@ footer .fnote b{color:#DCE7F8}
     <h2 class="reveal d1" style="margin-top:14px">Ali banka ga <span class="big-emph">ne</span> pušta da spava.</h2>
     <p class="lead reveal d2">Tvoj depozit banka ne drži u sefu. Ona ga <b style="color:#fff">plasira</b> — dio parkira kod središnje banke (ECB) i na njega naplaćuje kamatu. Prinos ide <b style="color:#fff">banci</b>, ne tebi.</p>
 
-    <div class="flow reveal d2" id="flow1">
-      <svg class="flowsvg" viewBox="0 0 720 200" role="img" aria-label="Novac teče od tebe u banku i središnju banku; prinos se vraća banci">
-        <!-- edges -->
-        <path d="M120 70 L360 70" stroke="#46608f" stroke-width="2" fill="none" stroke-dasharray="6 6"/>
-        <path d="M360 70 L600 70" stroke="#46608f" stroke-width="2" fill="none" stroke-dasharray="6 6"/>
-        <path d="M600 100 C600 180 360 180 200 150" stroke="var(--gold)" stroke-width="2" fill="none"/>
-        <text x="230" y="58" fill="#8FA3C4" font-size="12" font-family="Inter">tvoj depozit →</text>
-        <text x="470" y="58" fill="#8FA3C4" font-size="12" font-family="Inter">parkira →</text>
-        <text x="330" y="176" fill="var(--gold-light)" font-size="12" font-family="Inter">← prinos se vraća BANCI</text>
-        <!-- nodes -->
-        <g class="fnode"><rect x="30" y="44" width="90" height="52" rx="14" fill="#0A3B82" stroke="#46608f"/><text x="75" y="75" fill="#fff" font-size="14" font-family="Fraunces,serif" text-anchor="middle">Ti</text></g>
-        <g class="fnode"><rect x="300" y="44" width="120" height="52" rx="14" fill="#0A3B82" stroke="#46608f"/><text x="360" y="75" fill="#fff" font-size="14" font-family="Fraunces,serif" text-anchor="middle">Banka</text></g>
-        <g class="fnode"><rect x="580" y="44" width="120" height="52" rx="14" fill="#0A3B82" stroke="#46608f"/><text x="640" y="70" fill="#fff" font-size="12.5" font-family="Fraunces,serif" text-anchor="middle">Središnja</text><text x="640" y="86" fill="#fff" font-size="12.5" font-family="Fraunces,serif" text-anchor="middle">banka</text></g>
-        <!-- coins -->
-        <circle class="coin c1" r="7"/><circle class="coin c2" r="7"/><circle class="coin c3" r="7"/>
-      </svg>
+    <div class="flow2 reveal d2" role="img" aria-label="Novac teče od tebe u banku pa u središnju banku; prinos se vraća banci, ne tebi">
+      <div class="fnode">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg></span>
+        <b>Ti</b>
+      </div>
+      <div class="farrow">
+        <span class="fal">tvoj depozit</span>
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </div>
+      <div class="fnode">
+        <span class="ic"><svg viewBox="0 0 24 24"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span>
+        <b>Banka</b>
+      </div>
+      <div class="farrow">
+        <span class="fal">parkira</span>
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </div>
+      <div class="fnode">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span>
+        <b>Središnja banka</b><small>ECB</small>
+      </div>
+    </div>
+    <div class="freturn reveal d2">
+      <span class="ic"><svg viewBox="0 0 24 24"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg></span>
+      <span>Prinos se vraća <b>banci</b> — ne tebi.</span>
     </div>
     <div class="gap reveal d2">
       <div class="gapnum"><span class="g-big">4,0%</span><span class="g-lbl">ECB je plaćao <b style="color:#fff">banci</b><br>na parkirani višak (2023.–2024.)</span></div>
@@ -283,23 +307,23 @@ footer .fnote b{color:#DCE7F8}
     <div class="vs">
       <div class="vscol bad reveal d1">
         <span class="tag">Banka</span>
-        <h3>💤 Tvoj novac na računu</h3>
+        <h3><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a6.36 6.36 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span> Tvoj novac na računu</h3>
         <ul>
-          <li>Prinos tebi: ~0%</li>
-          <li>Prinos zarađuje banka</li>
-          <li>Ne vidiš kamo ide ni koliko nosi</li>
-          <li>Ti si izvor, ne korisnik</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span>Prinos tebi: ~0%</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span>Prinos zarađuje banka</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span>Ne vidiš kamo ide ni koliko nosi</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span>Ti si izvor, ne korisnik</li>
         </ul>
       </div>
-      <div class="vsmid reveal d2">→</div>
+      <div class="vsmid reveal d2"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
       <div class="vscol good reveal d2">
         <span class="tag">Protokol</span>
-        <h3>⚡ Tvoj novac u protokolu</h3>
+        <h3><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span> Tvoj novac u protokolu</h3>
         <ul>
-          <li>Prinos ide <b style="color:#fff">tebi</b></li>
-          <li>Plasira se u provjerene DeFi vaultove</li>
-          <li>Sve je javno i mjerljivo na lancu</li>
-          <li>Kreneš od <b style="color:#fff">1 €</b> — ne trebaš biti bogat</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Prinos ide <b style="color:#fff">tebi</b></li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Plasira se u provjerene DeFi vaultove</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Sve je javno i mjerljivo na lancu</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Kreneš od <b style="color:#fff">1 €</b> — ne trebaš biti bogat</li>
         </ul>
       </div>
     </div>
@@ -318,10 +342,10 @@ footer .fnote b{color:#DCE7F8}
       <div class="step reveal d3"><div class="n">3</div><h4>Prinos dolazi tebi</h4><p>Zarada ide tebi i može se <span class="em">sama otplaćivati</span> — tzv. samootplativa pozicija. Bez ručnog rada.</p></div>
     </div>
     <div class="proofstrip reveal d3">
-      <span class="chip">✓ <b>Auditiran</b> (Ackee, 2026.)</span>
-      <span class="chip">✓ Aktivan <b>svaki dan</b> na Solani</span>
-      <span class="chip">✓ Prinos <b>dokazan on-chain</b></span>
-      <span class="chip">✓ Kreneš od <b>1 €</b></span>
+      <span class="chip"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><b>Auditiran</b> (Ackee, 2026.)</span>
+      <span class="chip"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Aktivan <b>svaki dan</b> na Solani</span>
+      <span class="chip"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Prinos <b>dokazan on-chain</b></span>
+      <span class="chip"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Kreneš od <b>1 €</b></span>
     </div>
   </div>
 </section>
@@ -333,9 +357,9 @@ footer .fnote b{color:#DCE7F8}
     <h2 class="reveal d1" style="margin-top:14px">Sve je <span class="big-emph">javno</span>.<br>Provjeri sam, pa kreni.</h2>
     <p class="lead reveal d2">Mi smo prvi ušli — pozicija od 1 € s vlastitim novcem, vidljiva na lancu u realnom vremenu. Nema skrivenog. Kreni malim iznosom, uči, pa odluči.</p>
     <div class="ctawrap reveal d2">
-      <a class="btn btn-gold" href="mailto:ms@airkuna.com?subject=Novac%20koji%20radi%20%E2%80%94%20kre%C4%87em%20od%201%20EUR">Kreni od 1 € →</a>
+      <a class="btn btn-gold" href="mailto:ms@airkuna.com?subject=Novac%20koji%20radi%20%E2%80%94%20kre%C4%87em%20od%201%20EUR">Kreni od 1 € <span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
       <a class="btn btn-outline" href="../samootplativa-investicija/">Vidi kako to točno radi</a>
-      <a class="btn btn-outline" href="https://zivo.airkuna.com" target="_blank" rel="noopener">Prati živu poziciju ↗</a>
+      <a class="btn btn-outline" href="https://zivo.airkuna.com" target="_blank" rel="noopener">Prati živu poziciju <span class="ic"><svg viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></a>
     </div>
     <p class="src reveal d3" style="margin-top:34px">Ovo je edukativno objašnjenje, <b>ne</b> investicijski savjet, ponuda ni financijska promocija. Kriptoimovina je volatilna i može izgubiti vrijednost; prinos varira i nije zajamčen. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e; provjeri njegove tvrdnje (audit, prinos, dostupnost) samostalno. Pristup je trenutno u zatvorenom testiranju.</p>
   </div>
