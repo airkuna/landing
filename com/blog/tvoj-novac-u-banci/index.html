@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tvojih 10.000 € u banci: ti dobiješ nulu, banke ruše rekorde · airKUNA blog</title>
+<meta name="description" content="Preko 30 milijardi eura štednje građana leži na tekućim računima uz gotovo 0% kamate, dok su banke 2024. zaradile rekordnih 1,53 milijarde. Kamo ide taj prinos — i kako tvoj euro može raditi za tebe. Provjereno na izvorima HNB, ECB, DZS. Nije investicijski savjet." />
+<link rel="icon" href="coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1120px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.68;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit}
+.doc{max-width:760px;margin:0 auto;padding:0 22px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(0,22,49,.72);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:var(--maxw);margin:0 auto;padding:0 22px}
+.brand{display:flex;align-items:center;gap:10px;font-family:Fraunces,serif;font-weight:600;font-size:19px;color:#fff}
+.brand img{width:26px}
+.nav .cta{font-weight:700;font-size:14px;padding:9px 18px;border-radius:999px;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900}
+
+.hero{background:radial-gradient(800px 500px at 80% 6%,rgba(227,175,53,.12),transparent 60%),linear-gradient(165deg,var(--navy-900),var(--navy) 62%,var(--navy-800));color:#fff;padding:60px 0 52px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-light)}
+.hero h1{font-family:Fraunces,serif;font-weight:900;font-size:clamp(30px,6vw,50px);line-height:1.06;letter-spacing:-.02em;margin-top:16px}
+.hero .lede{font-size:clamp(16.5px,2.3vw,20px);color:#C6D3E8;margin-top:20px;line-height:1.5}
+.meta{margin-top:24px;font-size:13px;color:#8FA3C4;display:flex;gap:16px;flex-wrap:wrap}
+.meta span{display:flex;align-items:center;gap:7px}
+.meta span:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold-light)}
+
+article{padding:52px 0 30px}
+article h2{font-family:Fraunces,serif;font-weight:700;font-size:clamp(23px,3.4vw,32px);color:var(--navy);line-height:1.14;margin:46px 0 4px;letter-spacing:-.01em}
+article h2 .p{color:var(--red);font-size:.62em;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:8px}
+article h2 .s{color:var(--green);font-size:.62em;font-weight:800;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:8px}
+article p{margin-top:16px;font-size:17px;color:#28374A}
+article p b{color:var(--navy)}
+article a{color:var(--navy);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--gold)}
+article a:hover{color:var(--gold)}
+sup a{font-size:12px;text-decoration:none;color:var(--gold);font-weight:700}
+
+.lead-first::first-letter{font-family:Fraunces,serif;font-weight:900;font-size:3.1em;float:left;line-height:.82;margin:6px 10px 0 0;color:var(--navy)}
+
+.pull{margin:34px 0;padding:24px 26px;border-left:4px solid var(--gold);background:var(--soft);border-radius:0 14px 14px 0}
+.pull p{margin:0;font-family:Fraunces,serif;font-weight:600;font-size:clamp(19px,2.6vw,24px);color:var(--navy);line-height:1.3}
+
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:30px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow-sm)}
+.stat .n{font-family:Fraunces,serif;font-weight:900;font-size:clamp(26px,4vw,34px);color:var(--navy);line-height:1}
+.stat.red .n{color:var(--red)}
+.stat .l{font-size:13px;color:var(--mute);margin-top:8px;line-height:1.4}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:26px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+
+.steps{display:grid;gap:14px;margin-top:24px}
+.step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.step .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-family:Fraunces,serif;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step h4{font-family:Fraunces,serif;font-weight:700;font-size:17px;color:var(--navy)}
+.step p{margin-top:4px;font-size:14.5px;color:var(--mute)}
+
+.ctabox{margin:44px 0 10px;background:radial-gradient(700px 400px at 82% 0,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:20px;padding:34px 30px;box-shadow:var(--shadow)}
+.ctabox h3{font-family:Fraunces,serif;font-weight:700;font-size:clamp(22px,3.4vw,28px);color:#fff}
+.ctabox p{color:#C6D3E8;margin-top:12px;font-size:16px}
+.ctarow{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.btn{font-weight:700;font-size:15.5px;padding:14px 24px;border-radius:999px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-outline{border:1.5px solid rgba(255,255,255,.4);color:#fff}
+.btn-outline:hover{border-color:var(--gold)}
+
+.sources{margin-top:44px;border-top:1px solid var(--line);padding-top:24px}
+.sources h4{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.sources ol{margin:14px 0 0 18px;font-size:13px;color:var(--mute);line-height:1.7}
+.sources a{color:var(--navy)}
+.disclaimer{margin-top:26px;font-size:12.5px;color:var(--mute);line-height:1.7}
+
+footer{background:var(--navy-900);color:#9FB0CC;padding:40px 0 40px;margin-top:40px}
+footer .fgrid{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+footer .brand{font-size:18px}
+footer .backbtn{font-size:14px;color:#B9C8E2;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 16px}
+footer .fnote{margin-top:22px;font-size:12px;line-height:1.7;color:#7286A6;border-top:1px solid rgba(255,255,255,.1);padding-top:20px}
+footer .fnote a{color:#B9C8E2}
+footer .fnote b{color:#DCE7F8}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="../../"><img src="coin.svg" alt="" /> airKUNA</a>
+    <a class="cta" href="#kreni">Kreni od 1 €</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="doc">
+    <div class="eyebrow">Blog · Osobne financije</div>
+    <h1>Tvojih 10.000 € u banci:<br>ti dobiješ nulu, banke ruše rekorde</h1>
+    <p class="lede">Preko 30 milijardi eura štednje građana leži na tekućim računima uz gotovo 0% kamate. U isto vrijeme banke u Hrvatskoj ruše rekorde profita. Kamo ide taj prinos — i što ti možeš napraviti s vlastitim novcem?</p>
+    <div class="meta"><span>24. srpnja 2026.</span><span>5 min čitanja</span><span>Izvori: HNB · ECB · DZS</span></div>
+  </div>
+</section>
+
+<article>
+  <div class="doc">
+    <p class="lead-first">Otvori aplikaciju svoje banke i pogledaj stanje. Za većinu ljudi u Hrvatskoj tamo stoji nekoliko tisuća eura na tekućem ili žiro računu — novac za svaki slučaj, za sigurnost. Osjećaj je dobar: novac je „na sigurnom". Ali dok tamo stoji, taj novac za tebe ne radi <b>baš ništa</b> — a za nekoga drugoga radi vrlo dobro.</p>
+
+    <h2><span class="p">Problem</span>Tvoj novac spava. Doslovno.</h2>
+    <p>Prosječan stanovnik Hrvatske drži oko <b>10.700 €</b> u banci. Najveći dio štednje građana — gotovo <b>32 milijarde eura</b> — leži na tekućim i žiro (a vista) računima. Kamata na te račune je praktički nula: red veličine <b>0,2%</b>, a na čiste transakcijske račune još i manje.<sup><a href="#s1">1</a></sup></p>
+    <p>Drugim riječima: tvojih 10.000 € nakon godinu dana na tekućem računu donese ti — nekoliko eura. Uz inflaciju, realno <b>gubi</b> na vrijednosti svakog mjeseca.</p>
+
+    <h2><span class="p">Problem</span>Ali negdje taj novac ipak radi — za banku</h2>
+    <p>Banka tvoj depozit ne drži u sefu. Glavninu plasira u kredite, a <b>višak likvidnosti</b> može jednostavno parkirati kod središnje banke. I tu je kvaka: dok je Europska središnja banka (ECB) na taj parkirani višak bankama plaćala i do <b>4,00%</b> godišnje (od rujna 2023. do lipnja 2024.),<sup><a href="#s2">2</a></sup> banke su tebi na isti taj novac na računu plaćale <b>oko 0,2%</b>.<sup><a href="#s3">3</a></sup></p>
+    <p>Razliku od gotovo četiri postotna boda zadržava banka. Koliko je to konkretno? Samo u 2024. godini Hrvatska narodna banka je bankama isplatila preko <b>530 milijuna eura</b> kamata na prekonoćne depozite — novac zarađen parkiranjem viška, bez ijednog odobrenog kredita.<sup><a href="#s4">4</a></sup></p>
+
+    <div class="pull"><p>„Ti dobiješ ~0%. Banka dobije prinos. Zakonito i normalno — ali tvoj je novac taj koji radi, a nagradu uzima netko drugi."</p></div>
+
+    <h2><span class="p">Problem</span>Razmjer: ovo nije sitniš</h2>
+    <p>Pomnoži tvojih par tisuća eura sa svima u Hrvatskoj i dobiješ brojke koje mijenjaju perspektivu:</p>
+    <div class="statrow">
+      <div class="stat"><div class="n">~32 mlrd €</div><div class="l">štednje građana na a vista računima — uz ~0% kamate</div></div>
+      <div class="stat red"><div class="n">1,53 mlrd €</div><div class="l">rekordne dobiti banaka u Hrvatskoj (2024.)<sup><a href="#s5">5</a></sup></div></div>
+      <div class="stat red"><div class="n">16,4%</div><div class="l">prinos na kapital banaka (ROE) — dok tvoj račun stoji na nuli</div></div>
+    </div>
+    <p>Da stavimo tih 1,53 milijarde u kontekst: to je otprilike <b>75% cijelog deficita hrvatske opće države</b> za 2024. (oko 2,0 mlrd €).<sup><a href="#s6">6</a></sup> Banke su, dakle, same zaradile ekvivalent tri četvrtine godišnjeg manjka države. A budući da je oko <b>90% bankarskog sektora</b> u stranom vlasništvu, najveći dio te dobiti odlazi kao dividenda u inozemstvo.<sup><a href="#s5">5</a></sup></p>
+    <p>Ništa od ovoga nije teorija zavjere — sve su to javno objavljene stope i brojke ECB-a, HNB-a i Državnog zavoda za statistiku. Sustav radi točno kako je zamišljen. Pitanje je samo: <b>zašto bi ti u njemu bio izvor, a ne korisnik?</b></p>
+
+    <h2><span class="s">Rješenje</span>Što ako tvoj euro radi ono što bankin radi?</h2>
+    <p>Ista logika koju banka koristi na tvom novcu možeš primijeniti i sam — samo da prinos ide <b>tebi</b>. Umjesto da tvoju likvidnost plasira banka i zadrži zaradu, plasiraš je ti, kroz otvoreni protokol na blockchainu, i prinos je tvoj.</p>
+    <p>Motor koji to radi zove se <b>Hobba</b> — auditiran protokol na Solani koji tvoju imovinu plasira u provjerene prinosne vaultove (Perena, Kamino, Jupiter Lend) i <b>svakodnevno žanje prinos</b>. Posebnost: prinos može otplaćivati mali zajam koji podigneš protiv vlastite imovine — pa se pozicija <b>sama otplaćuje</b>. Ti ne radiš ništa; motor radi.</p>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><h4>Uložiš — od 1 €</h4><p>Tvoja imovina ostaje tvoja, u tvom skrbništvu, kao kolateral. Ne trebaš biti bogat da počneš.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h4>Motor plasira i žanje</h4><p>Hobba plasira likvidnost u provjerene vaultove i svaki dan automatski žanje prinos.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h4>Prinos dolazi tebi</h4><p>Zarada ide tebi i može sama otplaćivati poziciju — bez ručnog rada.</p></div></div>
+    </div>
+    <div class="callout good"><b>Ne moraš vjerovati na riječ.</b> Sve je vidljivo na lancu, u realnom vremenu. Mi smo prvi ušli — pozicija od 1 € s vlastitim novcem — i cijeli mehanizam možeš provjeriti sam: <a href="../../samootplativa-investicija/">kako to točno radi</a> i <a href="https://zivo.airkuna.com" target="_blank" rel="noopener">živa pozicija na lancu ↗</a>.</div>
+
+    <div class="ctabox" id="kreni">
+      <h3>Tvoj novac ne mora spavati.</h3>
+      <p>Kreni malim iznosom, uči, pa odluči. Od 1 €. Pristup je trenutno u zatvorenom testiranju — javi se i spojimo te.</p>
+      <div class="ctarow">
+        <a class="btn btn-gold" href="mailto:ms@airkuna.com?subject=Novac%20koji%20radi%20%E2%80%94%20kre%C4%87em%20od%201%20EUR">Kreni od 1 € →</a>
+        <a class="btn btn-outline" href="../../novac-koji-radi/">Pogledaj vizualno objašnjenje</a>
+        <a class="btn btn-outline" href="https://t.me/airkuna_com">Telegram zajednica</a>
+      </div>
+    </div>
+
+    <div class="sources">
+      <h4>Izvori</h4>
+      <ol>
+        <li id="s1">HNB — statistika depozita i kamatnih stopa kreditnih institucija (a vista depoziti ~32 mlrd €, kamata ~0,2%), 2024.–2026. <a href="https://www.hnb.hr/en/statistics/statistical-data/financial-sector/other-monetary-financial-institutions/credit-institutions/interest-rates" target="_blank" rel="noopener">hnb.hr</a></li>
+        <li id="s2">ECB — Key ECB interest rates (deposit facility rate vrhunac 4,00%, 20.09.2023.–11.06.2024.). <a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/key_ecb_interest_rates/html/index.en.html" target="_blank" rel="noopener">ecb.europa.eu</a></li>
+        <li id="s3">ECB MFI statistika kamatnih stopa (a vista depoziti kućanstava ~0,38% eurozona / HNB ~0,18–0,19% HR), 2024. <a href="https://www.ecb.europa.eu/press/stats/mfi/html/ecb.mir2408~e51c6b9889.en.html" target="_blank" rel="noopener">ecb.europa.eu</a></li>
+        <li id="s4">HNB godišnje izvješće / medijski prenos — kamata isplaćena bankama na prekonoćne depozite 532,2 mil € (2024.). <a href="https://tockanai.hr/biznis/financije/hnb-bankama-za-prekonocne-depozite-isplatio-kamate-5322-mil-eura-84396/" target="_blank" rel="noopener">tockanai.hr</a></li>
+        <li id="s5">HNB — Komentar kretanja u bankovnom sustavu za 2024. (neto dobit 1,53 mlrd €, ROE 16,4%, strano vlasništvo ~90%). <a href="https://www.hnb.hr/en/-/komentar-kretanja-u-bankovnom-sustavu-za-2024" target="_blank" rel="noopener">hnb.hr</a></li>
+        <li id="s6">DZS — EDP notifikacija / godišnji BDP (deficit opće države 2024. ≈ 2,0 mlrd € / 2,3% BDP-a). <a href="https://podaci.dzs.hr/2026/hr/121263" target="_blank" rel="noopener">podaci.dzs.hr</a></li>
+      </ol>
+      <p class="disclaimer">Brojke su zaokružene i neovisno provjerene; podaci se revidiraju pa uz svaku tvrdnju vrijedi datum objave izvora. Ovaj tekst je <b>edukativno objašnjenje</b>, a ne investicijski, pravni ni porezni savjet, ponuda ni financijska promocija. Kriptoimovina je volatilna i može izgubiti vrijednost; prinos varira i nije zajamčen. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e; njegove tvrdnje (audit, prinos, dostupnost) provjerite samostalno.</p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../../"><img src="coin.svg" alt="" style="width:26px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Svi članci</a>
+    </div>
+    <p class="fnote">
+      Ilustrativno objašnjenje za širu publiku. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. Ekonomske brojke potječu iz javnih izvora (HNB, ECB, DZS) i zaokružene su. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
