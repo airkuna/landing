@@ -36,10 +36,10 @@ p.body{font-size:17px;color:var(--ink);margin-top:18px}
 /* header */
 header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:18px}
-header .nav{max-width:1280px}
+header .nav{max-width:none}
 .brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:21px;color:var(--navy);white-space:nowrap;flex:0 0 auto}
 .brand img{width:34px;height:34px}
-.navlinks{display:flex;align-items:center;gap:22px;font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap}
+.navlinks{display:flex;align-items:center;gap:17px;font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap}
 .navlinks a:hover{color:var(--gold)}
 .navlinks a{position:relative}
 .nav .btn-sm{flex:0 0 auto}
@@ -60,7 +60,7 @@ header .nav{max-width:1280px}
 .drawer nav a{padding:14px 4px;font-size:16px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--line)}
 .drawer nav a:hover{color:var(--gold)}
 .drawer .btn{margin-top:22px;justify-content:center;width:100%}
-@media(max-width:1080px){.navlinks{display:none}.nav>.btn-sm{display:none}.navtoggle{display:inline-flex}}
+@media(max-width:1220px){.navlinks{display:none}.nav>.btn-sm{display:none}.navtoggle{display:inline-flex}}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:13px 24px;border-radius:999px;transition:.2s;cursor:pointer;border:1.5px solid transparent}
@@ -224,9 +224,10 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
       <a href="#kako">Kako radi</a>
       <a href="#roadmap">Roadmap</a>
       <a href="#status">Status</a>
-      <a href="#financiranje">Financiranje</a>
       <a href="zamasnjak/">Zamašnjak</a>
-      <a href="samootplativa-investicija/">Samootplativa investicija</a>
+      <a href="samootplativa-investicija/">Samootplativa</a>
+      <a href="novac-koji-radi/">Novac koji radi</a>
+      <a href="blog/">Blog</a>
       <a href="https://airkuna.org">Stablecoin</a>
     </nav>
     <a class="btn btn-navy btn-sm" href="#financiranje">Podrži projekt</a>
@@ -252,7 +253,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
     <a href="#status">Status</a>
     <a href="#financiranje">Financiranje</a>
     <a href="zamasnjak/">Zamašnjak</a>
-    <a href="samootplativa-investicija/">Samootplativa investicija</a>
+    <a href="samootplativa-investicija/">Samootplativa</a>
+    <a href="novac-koji-radi/">Novac koji radi</a>
+    <a href="blog/">Blog</a>
     <a href="https://airkuna.org">Stablecoin</a>
   </nav>
   <a class="btn btn-navy" href="#financiranje">Podrži projekt</a>
