@@ -317,6 +317,36 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     </div>
     <div class="callout warn" style="margin-top:16px"><b>Poštena napomena o brojci "Loan APY".</b> Sučelje Hobbe za male pozicije prikazuje jako negativan "Loan APY" (npr. −147% do −397%). To <b>ne</b> znači skrivenu naknadu — negativno znači da zarada premašuje kamatu (zajam se otplaćuje sam). Ali kod <b>sitnih</b> zajmova taj je postotak nestabilan omjer (zarada ÷ kredit) i zavaravajući je kao headline; u apsolutnom iznosu radi se o centima. Ovu smo primjedbu prenijeli i Hobba timu.</div>
 
+    <!-- VLASTITI KANAL / RIZNICA -->
+    <h2 id="kanal">Kako airKUNA gradi riznicu — vlastiti kanal</h2>
+    <p>Do sad si vidio <b>jednu</b> poziciju — našu. Ali prava mašina za riznicu nije naša pozicija, nego <b>kanal</b>. Dva se toka novca lako pobrkaju, pa ih razdvajamo pošteno:</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Tok</th><th>Što se događa</th><th>Učinak na riznicu</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vlastita pozicija</b> (1 SOL)</td><td>Prinos otplaćuje naš dug; na kraju držimo kolateral bez duga.</td><td>Deleveridž — <b>ne</b> puni riznicu izravno; skin-in-the-game dokaz.</td></tr>
+        <tr><td><b>airKUNA kao kanal</b> (origin)</td><td>Svaki korisnik koji uđe kroz airKUNA trajno je vezan za naš kanal; dio njegovog prinosa ide nama.</td><td><span class="badge g">gradi riznicu</span> automatski, na svakoj žetvi.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Naknada je transparentna i <b>ista za svakoga</b>: Hobba uzima 15% na <b>prinos</b> (ne na glavnicu — on-chain izmjereno <code>profit_fee_bps=1500</code>). Ugovor ima ugrađen „origin" revenue-share: kad korisnik uđe kroz partnerski kanal, tih 15% se dijeli.</p>
+
+    <div class="proof">
+      <h3>Podjela 15% naknade na prinos</h3>
+      <div class="sub">Model identičan postojećem partnerskom kanalu (origin 1), on-chain izmjeren.</div>
+      <div class="proofgrid">
+        <div class="pcell"><div class="k">Krajnji korisnik</div><div class="v">plaća 15%</div><div class="hint">uvijek isto, kroz svaki kanal</div></div>
+        <div class="pcell"><div class="k">airKUNA riznica</div><div class="v gold">9% prinosa</div><div class="hint">origin fee → Squads multisig</div></div>
+        <div class="pcell"><div class="k">Hobba</div><div class="v">6% prinosa</div><div class="hint">protokol</div></div>
+        <div class="pcell"><div class="k">Instrument riznice</div><div class="v" style="font-size:16px">Squads v4</div><div class="hint">Solana standard (kao Safe na EVM-u)</div></div>
+      </div>
+      <div class="addr">
+        Split empirijski izmjeren na postojećem kanalu: <code>9,0% + 6,0%</code> = 60% naknade partneru (<code>fee_share_bps=6000</code>). Prihod sjeda automatski u USDC račun riznice na svakoj žetvi — bez ručnog „claim" koraka.
+      </div>
+    </div>
+
+    <div class="callout"><b>Status — pošteno.</b> airKUNA kanal je <b>u dogovoru</b> s Hobba timom i <b>još nije aktivan</b> na lancu. Sama mehanika („origin" revenue-share, 6000 bps split) je stvarna i već radi za drugi kanal — mi tražimo isti aranžman i vlastitu riznicu u Squads multisigu. Dok aranžman nije potpisan i postavljen on-chain, ovo je <b>plan</b>, ne činjenica.</div>
+
     <!-- BROJKE -->
     <h2 id="brojke">Brojke — stanje protokola (iskreno)</h2>
     <p>Podaci s Hobbinog Dune dashboarda, 23.07.2026. Namjerno prikazujemo i ono što ide u prilog i ono što je rizik:</p>
