@@ -137,6 +137,26 @@ header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop
 .proof .addr code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:1px 6px;color:#DCE7F8;word-break:break-all}
 .proof .addr a{color:var(--gold-light);text-decoration:underline;text-underline-offset:2px}
 
+/* napredak otplate — dvije trake duga */
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:26px}
+.track{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}
+.track.measured{border-left:4px solid var(--green)}
+.track.zero{border-left:4px solid var(--gold)}
+.track .tlab{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.track h4{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:var(--navy);margin-top:6px;line-height:1.2}
+.track .tnums{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-variant-numeric:tabular-nums}
+.track .tbig{font-family:Fraunces,serif;font-weight:600;font-size:26px;color:var(--navy)}
+.track .tbig.green{color:var(--green)}
+.track .tbig.gold{color:var(--gold)}
+.track .tof{font-size:13px;color:var(--mute)}
+.tbar{height:10px;background:var(--soft);border:1px solid var(--line);border-radius:999px;margin-top:10px;overflow:hidden}
+.tbar i{display:block;height:100%;background:linear-gradient(90deg,#3fae63,var(--green))}
+.tbar i.gold{background:linear-gradient(90deg,var(--gold-light),var(--gold))}
+.track p{font-size:13.5px!important;color:var(--mute)!important;margin-top:12px!important}
+.track .verdict{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.track .verdict.g{background:var(--green-soft);color:var(--green)}
+.track .verdict.y{background:var(--gold-soft);color:#7a5a12}
+
 /* tables */
 .tblwrap{overflow-x:auto}
 .tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
@@ -174,6 +194,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a href="#ideja">Ideja</a>
       <a href="#dokaz">On-chain dokaz</a>
       <a href="#kako">Kako radi</a>
+      <a href="#napredak">Napredak otplate</a>
       <a href="#brojke">Brojke</a>
       <a href="#rizik">Rizici</a>
       <a href="#kako-i-ti">Kako i ti</a>
@@ -192,7 +213,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <p>Ulagatelj zadržava svoj <b>SOL u vlastitom skrbništvu</b> kao kolateral, podiže mali konzervativan zajam koji financira razvoj airKUNA-e, a <b>Hobba</b> — auditirani Solana protokol — svakodnevno žanje prinos na kolateralu i tim prinosom <b>automatski otplaćuje dug</b>. Ovo nije teorija: mehanizam smo provjerili na Solana lancu, transakciju po transakciju — a ulazni prag je simboličan: naša prva stvarna pozicija financira airKUNA-u <b>zajmom od ≈ 1 EUR</b>.</p>
     <div class="verified">
       <span class="vchip"><span class="dot"></span>Hobba program auditiran (Ackee, 15.06.2026.)</span>
-      <span class="vchip"><span class="dot"></span>Self-repaying dokazan on-chain</span>
+      <span class="vchip"><span class="dot"></span>1.033 USDC duga otplaćeno iz prinosa (mjereno 27.07.)</span>
       <span class="vchip"><span class="dot"></span>Živi dokaz: <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">1 SOL → 1,14 USDC</a></span>
       <span class="vchip"><span class="dot"></span>Prati uživo na lancu: <a href="https://zivo.airkuna.com" target="_blank" rel="noopener">zivo.airkuna.com ↗</a></span>
     </div>
@@ -206,16 +227,16 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <p class="lede" style="margin-top:0" id="ideja">U jednoj rečenici: umjesto da ulagatelj proda imovinu da bi financirao airKUNA-u, on je <b>zadržava</b> — a razvoj se financira iz <b>prinosa</b> koji ta imovina zarađuje dok stoji kao kolateral. Zajam koji ide u riznicu airKUNA-e mali je u odnosu na kolateral, pa ga nosivi prinos (carry) s vremenom otplati. Rezultat: <b>ulog koji se sam otplaćuje</b>, uz zadržanu izloženost SOL-u i alokaciju u airKUNA-i.</p>
 
     <div class="callout good">
-      <b>Zašto je ovo stvarno, a ne marketing.</b> Hobbin motor ("Sonnar") uzima idle kolateral, plasira ga u prinosne vaultove (Perena, Kamino, Jupiter Lend) i <b>svakodnevno žanje prinos te njime otplaćuje dug</b>. U jednom ~16-satnom uzorku na lancu izbrojali smo <b>17× žetve prinosa (HarvestVault)</b> i <b>30× automatske otplate (OperatorRepay)</b>. To je "self-repaying" u doslovnom, on-chain smislu — ne obećanje na slajdu.
+      <b>Zašto je ovo stvarno, a ne marketing.</b> Hobbin motor ("Sonnar") uzima idle kolateral, plasira ga u prinosne vaultove (Perena, Kamino, Jupiter Lend) i <b>svakodnevno žanje prinos te njime otplaćuje dug</b>. Ugovor pritom sam emitira događaj <code>UserHarvestPayout</code> s poljem <code>debt_repaid</code> — pa "self-repaying" nije metafora nego <b>broj koji piše u lancu</b>. Dekodirali smo sve te događaje: od 14.04. do 27.07.2026. požnjeveno je <b>1.280,73 USDC</b> prinosa, od čega je <b>1.033,01 USDC otišlo izravno na otplatu dugova</b> korisnika. Motor je radio i danas.
     </div>
 
     <div class="callout warn">
-      <b>Što ovo nije.</b> Nije bez rizika i nije zajamčeno. To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima i mladom protokolu. Hobba je <b>u produkciji, ali u zatvorenom testiranju</b>, s malim ukupnim depozitima (~$340k) i visokom koncentracijom. Ako SOL padne duboko, prinos padne ispod kamate, ili protokol zakaže — teza se ruši. Sve to kvantificiramo niže, bez uljepšavanja.
+      <b>Što ovo nije.</b> Nije bez rizika i nije zajamčeno. To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima i mladom protokolu. Hobba je <b>u produkciji, ali u zatvorenom testiranju</b>, s malim ukupnim depozitima (~$346k) i visokom koncentracijom. Ako SOL padne duboko, prinos padne ispod kamate, ili protokol zakaže — teza se ruši. Sve to kvantificiramo niže, bez uljepšavanja.
     </div>
 
     <!-- ON-CHAIN DOKAZ -->
     <h2 id="dokaz">On-chain dokaz — provjerljiv od svakoga</h2>
-    <p>Za razliku od uobičajenih "trust me" prezentacija, cijeli mehanizam je javan na Solani. Evo ključnih artefakata koje svatko može otvoriti u blok-exploreru:</p>
+    <p>Za razliku od uobičajenih "trust me" prezentacija, cijeli mehanizam je javan na Solani. Evo ključnih artefakata koje svatko može otvoriti u blok-exploreru — <b>svježe izmjereno 27.07.2026.</b></p>
 
     <div class="tblwrap">
     <table class="tbl">
@@ -223,16 +244,19 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <tbody>
         <tr><td><b>Hobba program (smart contract)</b></td><td><code>Hobbakk1…aE2i8qG</code> <a href="https://solscan.io/account/Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG" target="_blank" rel="noopener">↗ Solscan</a></td><td><span class="badge g">potvrđeno</span></td></tr>
         <tr><td><b>Sigurnosni audit</b></td><td>Ackee Blockchain Security, 15.06.2026. <a href="https://hobba.io/ackee-hobba-audit-report.pdf" target="_blank" rel="noopener">↗ izvještaj</a></td><td><span class="badge g">objavljen</span></td></tr>
-        <tr><td><b>Self-repaying mehanizam</b></td><td>17× <code>HarvestVault</code> + 30× <code>OperatorRepay</code> (~16 h uzorak)</td><td><span class="badge g">aktivno</span></td></tr>
+        <tr><td><b>Self-repaying mehanizam</b></td><td><b>1.033,01 USDC duga otplaćeno iz prinosa</b> (zbroj polja <code>debt_repaid</code> u svim <code>UserHarvestPayout</code> događajima, 14.04.–27.07.2026.) od ukupno 1.280,73 USDC požnjeveno</td><td><span class="badge g">mjereno</span></td></tr>
+        <tr><td><b>Kadenca motora</b></td><td>699 žetvi u 32 dana (26.06.–27.07.), <b>130 od 23.07.</b>, zadnja danas — bez ijednog dana pauze</td><td><span class="badge g">radi danas</span></td></tr>
         <tr><td><b>Prinosne integracije</b></td><td>Jupiter Lend <code>jupr81…e3Bdzi</code>, Kamino, Perena</td><td><span class="badge g">on-chain</span></td></tr>
         <tr><td><b>Živi dokaz (naš wallet)</b></td><td>1 SOL kolateral → 1,14 USDC zajam <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">↗ wallet</a></td><td><span class="badge g">izvršeno</span></td></tr>
         <tr><td><b>Motor servisira i našu poziciju</b></td><td><code>OperatorRepay</code> obuhvatio naš position račun, 12.07.2026. <a href="https://solscan.io/tx/3XLt7WbZiqVin9vtDYB1HKWFvyUYN4Ym899e5tX1g66JQGpB5kqHj3Xd9DDm3Su5BaGDjeGz8vbYVuptNK64ZE4q" target="_blank" rel="noopener">↗ tx</a></td><td><span class="badge g">potvrđeno</span></td></tr>
-        <tr><td><b>Naknada protokola</b></td><td><b>15% od požnjevenog prinosa</b> — 0% na glavnicu, depozit ili zajam. Pročitano iz config računa programa <a href="https://solscan.io/account/9fisLWPRhyfhaQfi1GbpSvJPSSr11h7iS3oLabRtiAPf" target="_blank" rel="noopener">↗ Solscan</a> i potvrđeno u 36/36 žetvi</td><td><span class="badge g">izmjerili smo sami</span></td></tr>
-        <tr><td><b>Ugrađeni partnerski model</b></td><td>Ugovor ima "origin" mehanizam: dio naknade automatski se dijeli s kanalom koji je doveo korisnika (revenue-share na razini smart contracta)</td><td><span class="badge g">u ugovoru</span></td></tr>
-        <tr><td><b>Ukupni depoziti (Dune, 23.07.2026.)</b></td><td>≈ $341.593 · 87 korisnika · 3.281 tx <a href="https://dune.com/igor_hobba/hobba-mainnet" target="_blank" rel="noopener">↗ dashboard</a></td><td><span class="badge y">rano, ali raste</span></td></tr>
+        <tr><td><b>Naknada protokola</b></td><td><b>15% od požnjevenog prinosa</b> — 0% na glavnicu, depozit ili zajam. Pročitano iz config računa programa (<code>profit_fee_bps=1500</code>) <a href="https://solscan.io/account/9fisLWPRhyfhaQfi1GbpSvJPSSr11h7iS3oLabRtiAPf" target="_blank" rel="noopener">↗ Solscan</a> i potvrđeno u <b>svakoj žetvi od 14.07.2026.</b> (prije toga: 0%, pa kratko 25% — vidi napomenu ispod)</td><td><span class="badge g">izmjerili smo sami</span></td></tr>
+        <tr><td><b>Partnerski (origin) revenue-share</b></td><td><b>Proradio na lancu 23.07.2026.</b> Prvi partnerski kanal (origin 1) u 5 dana: 17,32 USDC prinosa → 2,60 USDC naknade (<b>točno 15,000%</b>) → <b>1,56 USDC partneru</b> (<b>točno 60,000% naknade</b>)</td><td><span class="badge g">živo, mjereno</span></td></tr>
+        <tr><td><b>Ukupni depoziti (TVL, 27.07.2026.)</b></td><td><b>≈ $345.544</b> · 3.836 SOL + 0,804 cbBTC · 84 walleta / 96 pozicija · 3.436 tx <a href="https://dune.com/igor_hobba/hobba-mainnet" target="_blank" rel="noopener">↗ dashboard</a></td><td><span class="badge y">rano, ali raste</span></td></tr>
       </tbody>
     </table>
     </div>
+
+    <div class="callout warn"><b>Korekcija koju sami objavljujemo: naknada nije oduvijek bila 15%.</b> Kad smo dekodirali svaku žetvu od početka, ispalo je da je stvarna naknada bila <b>0% do 07.07.2026.</b>, zatim <b>25% od 09. do 12.07.</b>, i tek <b>od 14.07.2026. stabilno 15%</b> — točno u dinar, svaki dan. Ranija verzija ove stranice sugerirala je 15% kroz cijelo razdoblje. To je bilo netočno i ovime je ispravljeno. Naknada je parametar koji admin može mijenjati (<code>set_profit_fee</code>) — to je stvaran rizik, ne detalj, i zato ga mjerimo iznova pri svakom ažuriranju.</div>
 
     <div class="callout"><b>Tko stoji iza Hobbe.</b> Hobba je <b>hrvatski projekt iz Zagreba</b>, s timom koji nosi iskustvo iz vodećih Solana projekata. airKUNA je <b>korisnik</b> protokola, a ne njegov autor. Ulagatelji trebaju provesti vlastitu dubinsku analizu svakog protokola u kanalu.</div>
 
@@ -296,7 +320,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       </div>
       <div class="simlog" id="simLog"><b>Kako novac teče — animirano.</b> Pritisni „Pokreni" (ili pusti da krene samo) i prati petlju: deposit → zajam → plasman → žetva/otplata → izlaz.</div>
       <div class="simzero">Trošak ulagatelja kroz cijelu petlju: <b id="simCost">0 €</b> glavnice — dug plaća prinos.</div>
-      <div class="cap"><b>Petlja koja se sama zatvara.</b> Navy = korak koji se upravo događa, zlatno = već odrađeno. Koraci žetve i otplate (harvest → repay) su oni koje smo prebrojali na lancu — 17× + 30× u 16-satnom uzorku.</div>
+      <div class="cap"><b>Petlja koja se sama zatvara.</b> Navy = korak koji se upravo događa, zlatno = već odrađeno. Korak žetve i otplate (harvest → repay) je onaj koji smo izmjerili na lancu — 699 žetvi u zadnjih 32 dana, 1.033 USDC dugova otplaćeno iz prinosa.</div>
     </div>
 
     <!-- ŽIVI DOKAZ -->
@@ -305,12 +329,12 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 
     <div class="proof">
       <h3>Pozicija #1 · founder wallet</h3>
-      <div class="sub">Izvršeno 08.07.2026. na Solana mainnetu. Provjerljivo na Solscanu (wallet niže).</div>
+      <div class="sub">Izvršeno 08.07.2026. na Solana mainnetu; stanje ponovno izmjereno 27.07.2026. Provjerljivo na Solscanu (wallet niže).</div>
       <div class="proofgrid">
-        <div class="pcell"><div class="k">Kolateral</div><div class="v">1 SOL</div><div class="hint">u vlastitom skrbništvu</div></div>
-        <div class="pcell"><div class="k">Podignut zajam</div><div class="v gold">1,14 USDC</div><div class="hint">LTV ≈ 1,5%</div></div>
-        <div class="pcell"><div class="k">Kolateral radi u</div><div class="v" style="font-size:16px">Perena USD vault</div><div class="hint">preko Hobbe</div></div>
-        <div class="pcell"><div class="k">Procijenjena zarada</div><div class="v">$1,73/god.</div><div class="hint">&gt; kamata na zajam → self-repaying</div></div>
+        <div class="pcell"><div class="k">Kolateral</div><div class="v">1 SOL</div><div class="hint">u vlastitom skrbništvu · ≈ $77</div></div>
+        <div class="pcell"><div class="k">Podignut zajam</div><div class="v gold">1,14 USDC</div><div class="hint">LTV ≈ 1,5% · nepromijenjen</div></div>
+        <div class="pcell"><div class="k">Motor posudio i plasirao</div><div class="v" style="font-size:19px">45,04 USDC</div><div class="hint">→ Perena vault, preko Hobbe</div></div>
+        <div class="pcell"><div class="k">Motor otplatio iz prinosa</div><div class="v">7,63 USDC</div><div class="hint">16,95% · mjereno na lancu</div></div>
       </div>
       <div class="addr">
         Wallet (javan): <code>6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA</code> · <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">otvori na Solscanu</a><br/>
@@ -320,6 +344,51 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <div class="ctarow" style="margin-top:18px">
       <a class="btn-gold" href="https://zivo.airkuna.com" target="_blank" rel="noopener">Prati ovu poziciju uživo na lancu →</a>
     </div>
+    <!-- NAPREDAK OTPLATE -->
+    <h2 id="napredak">Napredak otplate — što se stvarno dogodilo, mjereno na lancu</h2>
+    <p>Ovo je dio koji smo dosad mogli samo projicirati. Sada smo dekodirali <b>svaki Anchor događaj</b> koji je Hobbin program ikad emitirao za naš novčanik i pročitali stanje računa pozicije s mainneta. Rezultat je precizan — i tjera nas na jednu poštenu ispravku.</p>
+
+    <p>Ispostavilo se da <b>naša pozicija nosi dva odvojena duga</b>, a dosadašnja verzija stranice miješala ih je u jedan. Razdvojeno:</p>
+
+    <div class="tracks">
+      <div class="track measured">
+        <div class="tlab">Dug 1 · poluga motora</div>
+        <h4>Što je motor posudio protiv našeg kolaterala</h4>
+        <div class="tnums"><span class="tbig green">7,63 USDC</span><span class="tof">otplaćeno od 45,04</span></div>
+        <div class="tbar"><i style="width:16.95%"></i></div>
+        <div class="tnums" style="margin-top:8px"><span class="tof"><b>16,95%</b> otplaćeno</span><span class="tof">preostalo 37,40 USDC</span></div>
+        <p>Motor je 08.07. protiv našeg 1 SOL kolaterala posudio <b>45,038455 USDC</b> i plasirao ih u Perena vault (<code>OperatorBorrowed</code>). Već 12.07. vratio je <b>7,634980 USDC</b> (<code>OperatorRepaid</code>). Stanje računa pozicije danas pokazuje <code>deposited_to_vault = 37,403475 USDC</code> — <b>45,038455 − 7,634980 na mikro-USDC točno</b>. Dekodirani događaji i živo stanje lanca se slažu do zadnje znamenke.</p>
+        <span class="verdict g">mjereno na lancu</span>
+      </div>
+      <div class="track zero">
+        <div class="tlab">Dug 2 · naš vlastiti zajam</div>
+        <h4>1,14 USDC koji je otišao u riznicu airKUNA-e</h4>
+        <div class="tnums"><span class="tbig gold">0,00 USDC</span><span class="tof">otplaćeno od 1,14</span></div>
+        <div class="tbar"><i class="gold" style="width:0%"></i></div>
+        <div class="tnums" style="margin-top:8px"><span class="tof"><b>0%</b> otplaćeno</span><span class="tof">preostalo 1,14 USDC</span></div>
+        <p><b>Ovdje se brojka nije ni pomaknula.</b> Za naš novčanik ne postoji nijedan <code>UserRepaid</code> ni <code>UserHarvestPayout</code> događaj. Motor dijeli prinos na <b>22 pozicije</b>, ali naša (još) nije među njima — od 60 pozicija s poluženim kapitalom, žetvu prima 22. Projekcija „~8 mjeseci" i dalje stoji kao <b>računica pri objavljenim stopama</b>, ali on-chain brojač naše otplate zasad pokazuje nulu.</p>
+        <span class="verdict y">projekcija, ne mjerenje</span>
+      </div>
+    </div>
+
+    <div class="callout warn"><b>Zašto ovo objavljujemo, iako nam ne ide u prilog.</b> Bilo bi lakše prikazati samo prvu traku — ona je mjerena, uspješna i doslovno dokazuje da se dug otplaćuje sam. Ali to bi bio odabir podatka koji laska. Istina je oboje: <b>mehanizam radi i vidi se u brojkama</b> (1.033 USDC dugova otplaćeno iz prinosa na razini protokola), a <b>naš konkretni mikro-zajam još nije zahvaćen</b>. Kad se to promijeni, promjena će se pojaviti sama, na istom position računu, bez da je itko mora najaviti.</div>
+
+    <h3>Potpuni dnevnik naše pozicije — svi događaji, ikad</h3>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Vrijeme (UTC)</th><th>Događaj</th><th class="num">Iznos</th><th>Značenje</th></tr></thead>
+      <tbody>
+        <tr><td class="num">08.07. 14:39:23</td><td><code>UserInitialized</code></td><td class="num">—</td><td>Hobba otvara naš position račun</td></tr>
+        <tr><td class="num">08.07. 14:39:52</td><td><code>UserDeposited</code></td><td class="num"><b>1,000000000 SOL</b></td><td>kolateral ulazi, ostaje naš</td></tr>
+        <tr><td class="num">08.07. 14:39:52</td><td><code>UserBorrowed</code></td><td class="num"><b>1,140000 USDC</b></td><td>naš zajam → riznica airKUNA-e</td></tr>
+        <tr><td class="num">08.07. 15:02:44</td><td><code>OperatorBorrowed</code></td><td class="num">45,038455 USDC</td><td>motor poluži kolateral i plasira u vault</td></tr>
+        <tr><td class="num">12.07. 14:00:00</td><td><code>OperatorRepaid</code></td><td class="num">7,634980 USDC</td><td><span class="badge g">otplata iz prinosa</span></td></tr>
+        <tr><td class="num">13.07. – 27.07.</td><td><i>ništa</i></td><td class="num">—</td><td>15 dana bez ijednog događaja na našoj poziciji</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--mute)">Metoda: svi <code>Program data:</code> logovi Hobbinog programa dekodirani su preko Anchor discriminatora (<code>sha256("event:&lt;Ime&gt;")[0:8]</code>) prema IDL-u 0.1.4, a stanje računa pročitano je s <code>api.mainnet-beta.solana.com</code>. Nijedan broj na ovoj stranici nije očitan iz sučelja — svi su izračunati iz lanca i ponovljivi.</p>
+
     <div class="callout warn" style="margin-top:16px"><b>Poštena napomena o brojci "Loan APY".</b> Sučelje Hobbe za male pozicije prikazuje jako negativan "Loan APY" (npr. −147% do −397%). To <b>ne</b> znači skrivenu naknadu — negativno znači da zarada premašuje kamatu (zajam se otplaćuje sam). Ali kod <b>sitnih</b> zajmova taj je postotak nestabilan omjer (zarada ÷ kredit) i zavaravajući je kao headline; u apsolutnom iznosu radi se o centima. Ovu smo primjedbu prenijeli i Hobba timu.</div>
 
     <!-- VLASTITI KANAL / RIZNICA -->
@@ -338,7 +407,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 
     <div class="proof">
       <h3>Podjela 15% naknade na prinos</h3>
-      <div class="sub">Model identičan postojećem partnerskom kanalu (origin 1), on-chain izmjeren.</div>
+      <div class="sub">Model identičan postojećem partnerskom kanalu (origin 1) — koji je <b>23.07.2026. proradio na lancu</b> i sad se mjeri u stvarnom novcu.</div>
       <div class="proofgrid">
         <div class="pcell"><div class="k">Krajnji korisnik</div><div class="v">plaća 15%</div><div class="hint">uvijek isto, kroz svaki kanal</div></div>
         <div class="pcell"><div class="k">airKUNA riznica</div><div class="v gold">9% prinosa</div><div class="hint">origin fee → Squads multisig</div></div>
@@ -346,28 +415,35 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
         <div class="pcell"><div class="k">Instrument riznice</div><div class="v" style="font-size:16px">Squads v4</div><div class="hint">Solana standard (kao Safe na EVM-u)</div></div>
       </div>
       <div class="addr">
-        Split empirijski izmjeren na postojećem kanalu: <code>9,0% + 6,0%</code> = 60% naknade partneru (<code>fee_share_bps=6000</code>). Prihod sjeda automatski u USDC račun riznice na svakoj žetvi — bez ručnog „claim" koraka.
+        Split empirijski izmjeren na postojećem kanalu: <code>9,0% + 6,0%</code> = 60% naknade partneru (<code>fee_share_bps=6000</code>). Prihod sjeda automatski u USDC račun riznice na svakoj žetvi — bez ručnog „claim" koraka.<br/>
+        <b>Prvih 5 dana tog kanala (23.–27.07.2026.), dekodirano iz lanca:</b> 15 žetvi · 17,3222 USDC prinosa · 2,5983 USDC naknade (<b>15,000%</b> — u dlaku) · <b>1,5590 USDC partneru</b> (<b>60,000%</b> naknade) · 11,5696 USDC otišlo na otplatu duga korisnika.
       </div>
     </div>
 
-    <div class="callout"><b>Status — pošteno.</b> airKUNA kanal je <b>u dogovoru</b> s Hobba timom i <b>još nije aktivan</b> na lancu. Sama mehanika („origin" revenue-share, 6000 bps split) je stvarna i već radi za drugi kanal — mi tražimo isti aranžman i vlastitu riznicu u Squads multisigu. Dok aranžman nije potpisan i postavljen on-chain, ovo je <b>plan</b>, ne činjenica.</div>
+    <div class="callout"><b>Status — pošteno.</b> Do prošlog tjedna smo za „origin" revenue-share mogli reći samo da postoji u kodu. Od <b>23.07.2026.</b> on <b>stvarno teče</b>: prvi partnerski kanal primio je 1,56 USDC u pet dana, a omjeri (15% / 60%) poklapaju se s ugovorom do treće decimale. To je dobra vijest za model — i dalje mala brojka, jer je i sam protokol malen. Ono što se <b>nije</b> promijenilo: <b>airKUNA-in vlastiti origin još nije registriran na lancu.</b> Aranžman s Hobba timom je u dogovoru, riznica u Squads multisigu je predviđena. Dok naš origin ID ne postoji u lancu, prihod airKUNA-e iz ovog kanala je <b>0 EUR</b> — plan, ne činjenica.</div>
 
     <!-- BROJKE -->
     <h2 id="brojke">Brojke — stanje protokola (iskreno)</h2>
-    <p>Podaci s Hobbinog Dune dashboarda, 23.07.2026. Namjerno prikazujemo i ono što ide u prilog i ono što je rizik:</p>
+    <p>Stanje na dan <b>27.07.2026.</b>, izračunato iz Hobbinih on-chain događaja (vlastiti Dune upiti, ne očitanje sučelja). Namjerno prikazujemo i ono što ide u prilog i ono što je rizik:</p>
     <div class="tblwrap">
     <table class="tbl">
-      <thead><tr><th>Metrika</th><th>Vrijednost</th><th>Čitanje</th></tr></thead>
+      <thead><tr><th>Metrika</th><th class="num">23.07.2026.</th><th class="num">27.07.2026.</th><th>Čitanje</th></tr></thead>
       <tbody>
-        <tr><td>Ukupni depoziti (TVL)</td><td class="num">≈ $341.593</td><td><span class="badge g">+26% u 15 dana</span> i dalje malo — zatvoreno testiranje</td></tr>
-        <tr><td>Novi depoziti</td><td class="num">402 SOL u jednoj tx (22.07.)</td><td>rast dolazi iz novih pologa, ne samo cijene</td></tr>
-        <tr><td>Sastav kolaterala</td><td class="num">SOL 85% · cbBTC 15%</td><td>dominira SOL, kako i teza pretpostavlja</td></tr>
-        <tr><td>Broj korisnika</td><td class="num">87</td><td><span class="badge y">rana faza</span> +15 od 08.07.</td></tr>
-        <tr><td>Transakcija</td><td class="num">3.281</td><td>protokol je aktivan svaki dan — bez ijednog dana pauze od 26.06.</td></tr>
-        <tr><td>Koncentracija</td><td class="num">top 3 walleta ≈ 72% TVL-a (08.07.)</td><td><span class="badge r">visoka</span> mali broj velikih depozitara</td></tr>
+        <tr><td>Ukupni depoziti (TVL)</td><td class="num">$338.446</td><td class="num"><b>$345.544</b></td><td><span class="badge g">+2,1% u 4 dana</span> · +33% od 08.07.</td></tr>
+        <tr><td>SOL kolateral</td><td class="num">3.753,8 SOL</td><td class="num"><b>3.836,4 SOL</b></td><td>+82,5 SOL novih pologa u 4 dana</td></tr>
+        <tr><td>cbBTC kolateral</td><td class="num">0,7616</td><td class="num"><b>0,8040</b></td><td>+0,042 cbBTC</td></tr>
+        <tr><td>Cijena SOL-a</td><td class="num">$76,90</td><td class="num">$76,41</td><td><span class="badge g">važno</span> cijena je <b>pala</b> — sav rast TVL-a je iz pologa, ne iz cijene</td></tr>
+        <tr><td>Sastav kolaterala</td><td class="num">85% / 15%</td><td class="num">SOL 84,8% · cbBTC 15,2%</td><td>dominira SOL, kako i teza pretpostavlja</td></tr>
+        <tr><td>Pozicije (wallet × kolateral)</td><td class="num">90</td><td class="num"><b>96</b></td><td><span class="badge y">rana faza</span> +6 u 4 dana</td></tr>
+        <tr><td>Različiti walleti</td><td class="num">79</td><td class="num"><b>84</b></td><td>naše brojanje događaja; Hobbin dashboard broji po drugoj definiciji</td></tr>
+        <tr><td>Transakcija (ukupno)</td><td class="num">3.281</td><td class="num"><b>3.436</b></td><td>+155 · protokol radi svaki dan, bez pauze od 26.06.</td></tr>
+        <tr><td>Žetve prinosa</td><td class="num">—</td><td class="num"><b>130 od 23.07.</b></td><td>699 u zadnjih 32 dana; zadnja danas</td></tr>
+        <tr><td>Dug otplaćen iz prinosa</td><td class="num">—</td><td class="num"><b>1.033,01 USDC</b></td><td><span class="badge g">kumulativno</span> od 1.280,73 USDC požnjevenog prinosa</td></tr>
+        <tr><td>Koncentracija</td><td class="num" colspan="2">top 3 walleta ≈ 72% TVL-a (08.07.)</td><td><span class="badge r">visoka</span> mali broj velikih depozitara</td></tr>
       </tbody>
     </table>
     </div>
+    <p style="font-size:14px;color:var(--mute)">Napomena o brojanju korisnika: Hobbin javni dashboard pokazivao je „87 korisnika" 23.07., dok naše brojanje istih događaja daje 79 walleta / 90 pozicija na taj datum. Riječ je o <b>različitom pravilu brojanja</b>, ne o proturječju — mi objavljujemo vlastitu, dosljedno mjerenu definiciju i kažemo koja je.</p>
 
     <!-- RIZIK -->
     <h2 id="rizik">Rizici — jasno izrečeno</h2>
@@ -435,7 +511,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a class="backbtn" href="../">← Natrag na airKUNA</a>
     </div>
     <p class="fnote">
-      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci su snimljeni 08.07.2026. (pozicija) odnosno 23.07.2026. (protokol) i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci snimljeni su <b>27.07.2026.</b> (i pozicija i protokol) i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
       <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
     </p>
   </div>
@@ -451,7 +527,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     {e:"e1",n:["u","h"],log:"<b>1 · Deposit.</b> 1 SOL ulazi u Hobbu kao kolateral — i dalje je ulagateljev, samo je počeo raditi.",u:"→ 1 SOL kao kolateral",h:"kolateral: 1 SOL",debt:0},
     {e:"e2",n:["h","r"],log:"<b>2 · Zajam.</b> Protiv kolaterala podiže se 1,14 USDC (≈ 1 EUR) i ide u riznicu airKUNA-e. LTV ≈ 1,5 % — sićušan.",r:"1,14 USDC + ugovor o udjelu",debt:1.14},
     {e:"e3",n:["h","v"],log:"<b>3 · Plasman.</b> Hobba automatski šalje kolateral u prinosne vaultove (Perena · Kamino · Jupiter Lend).",v:"1 SOL radi (~8 % APY)",debt:1.14},
-    {e:"e4",n:["v","h"],log:"<b>4 · HarvestVault + OperatorRepay.</b> Motor žanje prinos i njime automatski otplaćuje dug. Na lancu: 17× žetva + 30× otplata u 16 h.",debt:0.76},
+    {e:"e4",n:["v","h"],log:"<b>4 · HarvestVault + OperatorRepay.</b> Motor žanje prinos i njime automatski otplaćuje dug. Na lancu: 699 žetvi u 32 dana, 1.033 USDC otplaćenog duga.",debt:0.76},
     {e:"e4",n:["v","h"],log:"… tjedni prolaze — žetva → otplata, svaki dan, bez ijednog poteza ulagatelja …",debt:0.38},
     {e:"e4",n:["v","h"],log:"<b>≈ 8 mjeseci od pologa:</b> dug otplaćen do nule. Ulagatelj nije uplatio ništa — sve je platio prinos.",debt:0,h:"kolateral: 1 SOL · dug 0"},
     {e:"e5",n:["h","u"],log:"<b>5 · Izlaz.</b> Kolateral je slobodan — 1 SOL se vraća ulagatelju.",u:"1 SOL natrag ✓",h:"kolateral oslobođen",debt:0},
