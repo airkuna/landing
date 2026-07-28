@@ -198,6 +198,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a href="#brojke">Brojke</a>
       <a href="#rizik">Rizici</a>
       <a href="#kako-i-ti">Kako i ti</a>
+      <a href="../hobba-nalazi/">Nalazi</a>
       <a href="../zamasnjak/">Zamašnjak</a>
       <a href="../novac-koji-radi/">Novac koji radi</a>
       <a href="../blog/">Blog</a>
@@ -366,12 +367,16 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
         <div class="tnums"><span class="tbig gold">0,00 USDC</span><span class="tof">otplaćeno od 1,14</span></div>
         <div class="tbar"><i class="gold" style="width:0%"></i></div>
         <div class="tnums" style="margin-top:8px"><span class="tof"><b>0%</b> otplaćeno</span><span class="tof">preostalo 1,14 USDC</span></div>
-        <p><b>Ovdje se brojka nije ni pomaknula.</b> Za naš novčanik ne postoji nijedan <code>UserRepaid</code> ni <code>UserHarvestPayout</code> događaj. Motor dijeli prinos na <b>22 pozicije</b>, ali naša (još) nije među njima — od 60 pozicija s poluženim kapitalom, žetvu prima 22. Projekcija „~8 mjeseci" i dalje stoji kao <b>računica pri objavljenim stopama</b>, ali on-chain brojač naše otplate zasad pokazuje nulu.</p>
-        <span class="verdict y">projekcija, ne mjerenje</span>
+        <p><b>Ovdje se brojka nije ni pomaknula</b> — ali ne zato što kapital ne radi. Za naš novčanik ne postoji nijedan <code>UserRepaid</code> ni <code>UserHarvestPayout</code>, jer <b>žetva još nije okinula</b>: prinos se akumulira u <b>cijeni vaultnog udjela</b>, a knjiži se tek kad ga <code>harvest_vault</code> kristalizira. Naš račun drži <b>34,713899 udjela</b> — kapital je plasiran i zarađuje.</p>
+        <p>Zašto još nije okinulo: kroz svih 60 poziciju vidi se <b>prag od ~1 USDC</b> — prva žetva svake male pozicije iznosi 1,0008–1,0035 USDC. Uz ~0,0084 USDC dnevno, naša akumulacija je danas ≈ 0,18 USDC, pa prvu žetvu očekujemo <b>oko 2.11.2026.</b> Otplata je dakle <b>skokovita</b>, ne glatka.</p>
+        <span class="verdict y">akumulira se, nije proknjiženo</span>
+        <p style="margin-top:12px!important"><a href="../hobba-nalazi/#prag" style="color:var(--gold);font-weight:600;font-size:13.5px">Dokazi i računica → nalazi i otvorena pitanja</a></p>
       </div>
     </div>
 
-    <div class="callout warn"><b>Zašto ovo objavljujemo, iako nam ne ide u prilog.</b> Bilo bi lakše prikazati samo prvu traku — ona je mjerena, uspješna i doslovno dokazuje da se dug otplaćuje sam. Ali to bi bio odabir podatka koji laska. Istina je oboje: <b>mehanizam radi i vidi se u brojkama</b> (1.033 USDC dugova otplaćeno iz prinosa na razini protokola), a <b>naš konkretni mikro-zajam još nije zahvaćen</b>. Kad se to promijeni, promjena će se pojaviti sama, na istom position računu, bez da je itko mora najaviti.</div>
+    <div class="callout warn"><b>Zašto ovo objavljujemo, iako nam ne ide u prilog.</b> Bilo bi lakše prikazati samo prvu traku — ona je mjerena, uspješna i doslovno dokazuje da se dug otplaćuje sam. Ali to bi bio odabir podatka koji laska. Istina je oboje: <b>mehanizam radi i vidi se u brojkama</b> (1.033 USDC dugova otplaćeno iz prinosa na razini protokola), a <b>naš konkretni mikro-zajam još čeka prvu žetvu</b>. Kad okine, promjena će se pojaviti sama, na istom position računu, bez da je itko mora najaviti.</div>
+
+    <div class="callout"><b>Tehnički detalji i pitanja za Hobbu.</b> Cijela metoda mjerenja, tablica koja pokazuje prag od ~1 USDC kroz svih 60 poziciju, te <b>osam otvorenih pitanja</b> na koja se izvana ne može odgovoriti (uključujući ono o bruto naspram neto opterećenja kolaterala) stoje na zasebnoj, javnoj stranici — <a href="../hobba-nalazi/" style="color:var(--gold);font-weight:600">on-chain nalazi i otvorena pitanja →</a> Objavljena je javno namjerno, da se o njoj može raspravljati s Hobba timom otvoreno.</div>
 
     <h3>Potpuni dnevnik naše pozicije — svi događaji, ikad</h3>
     <div class="tblwrap">

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hobba — on-chain nalazi i otvorena pitanja · airKUNA</title>
+<meta name="description" content="Što smo izmjerili na Hobbinom programu čitajući isključivo Solana lanac: mehanika žetve prinosa, uočeni prag od ~1 USDC, i osam pitanja na koja se izvana ne može odgovoriti. Radni dokument, otvoren za ispravke." />
+<link rel="icon" href="../coin.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy);flex:0 0 auto}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:20px;font-size:14.5px;font-weight:500;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;white-space:nowrap;padding:0 6px}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a{flex:0 0 auto}
+.navlinks a:hover{color:var(--gold)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;border:1.5px solid transparent;flex:0 0 auto}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+@media(max-width:560px){.nav .btn-navy{display:none}}
+
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:60px 0 54px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(29px,4.4vw,47px);line-height:1.07;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:740px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:24px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+.prose{padding:54px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:54px 0 6px}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:17.5px;color:var(--navy);font-weight:700;margin:28px 0 0}
+.prose p{margin-top:14px;font-size:16.5px}
+.prose ul,.prose ol{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82;word-break:break-all}
+.lede{font-size:18px!important;color:var(--mute)!important}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;margin-top:22px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:11px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl code{font-family:ui-monospace,Menlo,monospace;font-size:.85em;color:#0A3B82;word-break:break-all}
+.tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.tbl tr.us{background:var(--gold-soft)}
+.tbl tr.us:hover{background:var(--gold-soft)}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+
+/* pitanja */
+.q{background:#fff;border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:14px;padding:20px 24px;margin-top:16px;box-shadow:var(--shadow-sm)}
+.q .qn{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.q h4{font-family:Fraunces,serif;font-weight:600;font-size:18.5px;color:var(--navy);margin-top:6px;line-height:1.25}
+.q p{font-size:14.5px!important;color:var(--mute)!important;margin-top:10px!important}
+.q p b{color:var(--navy)}
+.q .why{margin-top:10px;font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:10px}
+.q .why b{color:var(--navy)}
+
+.proof{margin-top:28px;background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.10),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:26px 26px;box-shadow:var(--shadow)}
+.proof h3{color:#fff;font-family:Fraunces,serif;font-weight:600;font-size:20px;margin:0}
+.proof .sub{color:#B9C8E2;font-size:13.5px;margin-top:4px}
+.proof .addr{margin-top:16px;font-size:12.5px;color:#A9BBD8;line-height:1.95}
+.proof .addr code{font-family:ui-monospace,Menlo,monospace;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:1px 6px;color:#DCE7F8;word-break:break-all}
+.proof .addr a{color:var(--gold-light);text-decoration:underline;text-underline-offset:2px}
+
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:50px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7);font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="../coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#metoda">Metoda</a>
+      <a href="#zetva">Kako žetva radi</a>
+      <a href="#prag">Prag od 1 USDC</a>
+      <a href="#pitanja">Pitanja</a>
+      <a href="../samootplativa-investicija/">Samootplativa investicija</a>
+      <a href="https://zivo.airkuna.com">Živi nadzor ↗</a>
+    </nav>
+    <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=Hobba%20%E2%80%94%20on-chain%20nalazi">Kontakt</a>
+  </div>
+</header>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Radni dokument · otvoren za ispravke</span>
+    <h1>Hobba iz perspektive lanca — što se izvana može izmjeriti, a što ne</h1>
+    <p>Ovo nije recenzija ni ocjena. Ovo je popis onoga što smo <b>uspjeli</b> izmjeriti čitajući isključivo Solana mainnet, i — važnije — popis pitanja na koja <b>izvana nema odgovora</b>. Objavljeno javno namjerno: lakše je iterirati nad dokumentom koji obje strane vide nego nad e-mailom.</p>
+    <div class="docmeta">
+      <span>Mjereno 27.–28.07.2026.</span>
+      <span>airKUNA je korisnik Hobbe, ne autor</span>
+      <span>Sve je ponovljivo — upiti i adrese na dnu</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <p class="lede" style="margin-top:0">Kratko: mehanizam radi i to se vidi u brojkama. Naša vlastita pozicija je premala da bi ga okinula, i to smo isprva krivo pročitali kao „ništa se ne događa". Ovaj dokument ispravlja to čitanje i skuplja otvorena pitanja na jedno mjesto.</p>
+
+    <!-- METODA -->
+    <h2 id="metoda">Metoda — i zašto joj vjerovati samo do granice</h2>
+    <p>Sve brojke dolje dobivene su dekodiranjem <code>Program data:</code> logova Hobbinog programa preko Anchor diskriminatora (<code>sha256("event:&lt;Ime&gt;")[0:8]</code>), uz layout iz IDL-a <code>0.1.4</code> (iz npm paketa <code>@hobba-io/core</code> — <b>on-chain IDL nije objavljen</b>), plus izravno čitanje stanja računa s mainneta.</p>
+    <p><b>Ništa nije prepisano iz sučelja.</b> Gdje smo nešto morali pretpostaviti, dolje to izrijekom piše.</p>
+
+    <div class="callout warn"><b>Granica metode.</b> Izvana se vidi <b>izvršenje</b>, ne <b>namjera</b>. Risk engine (odabir vaultova, tempiranje žetve) radi off-chain i za nas je crna kutija. Zato dio nalaza niže nosi oznaku „zaključak iz podataka" — što znači: obrazac je jak, ali nismo ga pročitali iz koda i može imati drugo objašnjenje.</p></div>
+
+    <!-- ŽETVA -->
+    <h2 id="zetva">Kako žetva zapravo radi — i zašto nula ne znači nula</h2>
+    <p>Prinos <b>ne</b> pristiže kao transakcija. Akumulira se u <b>cijeni vaultnog udjela</b>. Tek instrukcija <code>harvest_vault</code> to kristalizira: izračuna profit kao <i>vrijednost udjela − cost basis</i>, uzme naknadu, ostatak razdijeli na otplatu duga i isplatu korisniku — i tek tada emitira <code>UserHarvestPayout</code> s poljima <code>gross_harvest</code>, <code>fee_amount</code>, <code>debt_repaid</code>, <code>user_amount</code>.</p>
+
+    <div class="callout good"><b>Ispravak vlastitog ranijeg čitanja.</b> Prvo smo objavili da je na našoj poziciji „otplaćeno 0,00 USDC". To je točno — ali nepotpuno, jer implicira da kapital ne radi. Zapravo: naš position račun drži <b>34,713899 vaultnih udjela</b> protiv cost basisa od <b>37,403475 USDC</b>. Kapital je plasiran i zarađuje; ništa nije proknjiženo jer žetva još nije okinula. Nula u <code>debt_repaid</code> znači „nije kristalizirano", ne „nije zarađeno".</div>
+
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Što drži naš position račun</th><th>Mint</th><th class="num">Količina</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vaultni udjel</b> — imovina koja nosi prinos</td><td><code>star9ag…RGiFM</code></td><td class="num"><b>34,713899</b></td></tr>
+        <tr><td>Position token (Hobba)</td><td><code>B7opsVGR…irYCwB</code></td><td class="num">1</td></tr>
+        <tr><td>WSOL</td><td><code>So1111…111112</code></td><td class="num">0</td></tr>
+        <tr><td>USDC</td><td><code>EPjFWdd5…yTDt1v</code></td><td class="num">0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--mute)">Mint authority tog udjela je upravo <code>current_vault</code> iz našeg <code>UserState</code> računa — potvrda da je to doista vaultni share token, a ne nešto drugo. Implicirana nabavna cijena udjela: <code>37,403475 ÷ 34,713899 = 1,077478</code>. Pozicija je u plusu ako je trenutna cijena udjela viša od toga. <b>Trenutnu cijenu nismo pročitali</b> — v. pitanje 2.</p>
+
+    <!-- PRAG -->
+    <h2 id="prag">Uočeni prag: žetva kreće tek na ~1 USDC</h2>
+    <p>Pitanje koje je pokrenulo ovaj dokument: zašto naša pozicija nije među 22 koje primaju žetvu, iako je poluženi kapital uredno plasiran? Pogledali smo svih <b>60 pozicija</b> s <code>OperatorBorrowed</code> i usporedili ih s brojem žetvi.</p>
+
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th class="num">Posuđeno (zbroj, USDC)</th><th class="num">Žetvi</th><th class="num">Prosjek po žetvi</th></tr></thead>
+      <tbody>
+        <tr><td class="num">47.747,75</td><td class="num">170</td><td class="num">1,6659</td></tr>
+        <tr><td class="num">29.216,25</td><td class="num">180</td><td class="num">1,3245</td></tr>
+        <tr><td class="num">17.127,67</td><td class="num">52</td><td class="num">1,1019</td></tr>
+        <tr><td class="num">4.411,40</td><td class="num">108</td><td class="num">1,1984</td></tr>
+        <tr><td class="num">624,25</td><td class="num">13</td><td class="num">1,0228</td></tr>
+        <tr><td class="num">233,09</td><td class="num">2</td><td class="num"><b>1,0008</b></td></tr>
+        <tr><td class="num">77,23</td><td class="num">2</td><td class="num"><b>1,0035</b></td></tr>
+        <tr><td class="num">49,32</td><td class="num">2</td><td class="num"><b>1,0025</b></td></tr>
+        <tr><td class="num">39,09</td><td class="num">1</td><td class="num"><b>1,0015</b></td></tr>
+        <tr class="us"><td class="num"><b>45,04 — naša pozicija</b></td><td class="num"><b>0</b></td><td class="num">—</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p><b>Obrazac:</b> prosjek po žetvi je u rasponu 1,0–1,7 USDC <i>bez obzira na veličinu pozicije</i>. Da žetva ide po rasporedu, velike bi pozicije imale višestruko veće iznose po žetvi. Umjesto toga velike jednostavno <b>prelaze prag češće</b> (170–180 puta), a male jednom ili nijednom — i <b>prva žetva svake male pozicije je 1,0008–1,0035 USDC</b>. To izgleda kao fiksni prag od ~1 USDC, ne postotni.</p>
+
+    <div class="callout warn"><b>Ovo je zaključak iz podataka, ne iz koda.</b> IDL ne izlaže nikakvu takvu konstantu. Jednako je moguće da je riječ o politici operatora ili o ekonomici troška transakcije (ne isplati se slati žetvu za nekoliko centi) kao i o provjeri u ugovoru. Zato je to <b>pitanje 1</b>, a ne tvrdnja.</div>
+
+    <h3>Što to znači za nas konkretno</h3>
+    <p>Uz ~37,4 USDC u vaultu i ~8,2% APY sa snapshota, akumulacija je oko <b>0,0084 USDC dnevno</b>. Do danas ≈ <b>0,18 USDC</b>. Do praga od 1 USDC treba još oko <b>98 dana</b> → prva žetva oko <b>2. studenoga 2026.</b></p>
+    <p>Posljedica koju vrijedi izgovoriti naglas: otplata malog kredita <b>nije glatka, nego skokovita</b>. Stotinu dana ništa, pa odjednom ~0,85 USDC (1 USDC bruto minus 15% naknade) sjedne na dug od 1,14. Naša ranija projekcija „~8 mjeseci" time nije oborena — dobila je oblik.</p>
+    <p style="font-size:14px;color:var(--mute)">APY od 8,2% je <b>pretpostavka</b> preuzeta sa snapshota sučelja od 08.07., a ne mjerenje. Točan iznos akumuliranog prinosa dobio bi se iz trenutne cijene udjela — v. pitanje 2.</p>
+
+    <!-- PITANJA -->
+    <h2 id="pitanja">Osam pitanja na koja izvana nema odgovora</h2>
+    <p>Poredano po tome koliko mijenjaju sliku za krajnjeg korisnika.</p>
+
+    <div class="q">
+      <div class="qn">Pitanje 1 · mehanika</div>
+      <h4>Postoji li minimalni prag za žetvu i je li on u ugovoru ili u politici operatora?</h4>
+      <p>Podaci sugeriraju ~1 USDC. Ako je to fiksni prag, male pozicije čekaju mjesecima na prvu otplatu — što je potpuno u redu, ali <b>treba stajati u dokumentaciji</b>, jer inače „samootplativo" zvuči kao dnevni proces.</p>
+      <div class="why"><b>Zašto pitamo:</b> mi javno pokazujemo poziciju od 1 EUR kao ulazni primjer. Ako takva pozicija realno čeka ~100 dana na prvi pomak, to je informacija koju korisnik zaslužuje unaprijed.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 2 · transparentnost</div>
+      <h4>Može li se trenutna cijena vaultnog udjela očitati bez simulacije transakcije?</h4>
+      <p>Bez nje korisnik ne može sam izračunati koliko je zaradio između dvije žetve — a to je jedina brojka koja mu stvarno govori radi li kapital. Instrukcija <code>price_of_share</code> postoji, ali je treba simulirati; nema read-only računa s cijenom.</p>
+      <div class="why"><b>Zašto pitamo:</b> naš živi nadzor bi tu brojku odmah prikazao. Trenutno umjesto nje moramo modelirati iz pretpostavljenog APY-ja, što je slabije.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 3 · rizik</div>
+      <h4>Gleda li likvidacijski prag bruto ili neto zaduženje kolaterala?</h4>
+      <p>Na našem 1 SOL vise dva duga: naših <b>1,14 USDC</b> i operatorskih <b>45,04 USDC</b>. Sučelje prikazuje LTV <b>1,5%</b> — to je samo korisnički zajam. Bruto opterećenje istog kolaterala je <b>~60%</b>, uz prag likvidacije od 85%.</p>
+      <p>Ekonomski je operatorskih 45 USDC pokriveno vaultnom pozicijom koju je kupilo (carry trade, neto ravno). <b>Ali</b> ako likvidacijska logika gleda bruto dug, poruka „SOL bi morao pasti 98%" je znatno preoptimistična.</p>
+      <div class="why"><b>Zašto pitamo:</b> ovo je jedina stavka na popisu koja bi, ako ide u krivu stranu, mijenjala procjenu rizika za korisnika — ne samo očekivanja. Zato ju i objavljujemo, iako je <b>neprovjerena</b> i sasvim moguće bezopasna.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 4 · mehanika</div>
+      <h4>Koji dug otplaćuje <code>debt_repaid</code> — korisnikov zajam ili operatorsku polugu?</h4>
+      <p>Na našoj poziciji <code>OperatorRepaid</code> (7,634980 USDC, 12.07.) bio je <b>zaseban događaj</b>, ne dio žetve — što sugerira dva odvojena puta. Izvana se ne vidi koji od njih žetva servisira.</p>
+      <div class="why"><b>Zašto pitamo:</b> od odgovora ovisi hoće li naša prva žetva u studenom smanjiti dug od 1,14 ili polugu od 37,40.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 5 · oznaka</div>
+      <h4>Je li vault doista Perena?</h4>
+      <p>Račun <code>sM6P4mh5…QF7A</code> u vlasništvu je programa <code>save8RQ…pD9H</code> (Save / ex-Solend obitelj), dok IDL enum kaže <code>vault_provider = 1 (Perena)</code>, a sučelje 08.07. pisalo je „Perena USD vault". Moguće je da je riječ o white-labelu; <b>nismo potvrdili ni jedno ni drugo</b> i zato to nigdje ne tvrdimo.</p>
+      <div class="why"><b>Zašto pitamo:</b> korisniku koji radi dubinsku analizu bitno je koji protokol stvarno drži njegov kapital.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 6 · konfiguracija</div>
+      <h4>Zašto naša pozicija ima drugog operatora od globalnog?</h4>
+      <p><code>UserState.operator</code> = <code>67aoqr6W…Rfvk</code>, dok <code>ProgramConfig.operator</code> = <code>FHgh76AC…tgCYg</code>. Postavljeno instrukcijom <code>SetUserOperator</code> 12.07.2026. Pretpostavljamo da je namjerno, ali ne znamo znači li išta za tempo servisiranja.</p>
+      <div class="why"><b>Zašto pitamo:</b> ako per-user operator utječe na to koliko često pozicija ulazi u žetvu, to je varijabla koju korisnik ne vidi.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 7 · naknada</div>
+      <h4>Je li 15% sada stabilno stanje?</h4>
+      <p>Izmjereno po danima: <b>0%</b> do 07.07.2026., <b>25%</b> od 09. do 12.07., <b>15,000%</b> od 14.07. nadalje — u dlaku, svaki dan. Danas <code>profit_fee_bps = 1500</code>. Naknadu admin može mijenjati (<code>set_profit_fee</code>), a dokumentacija je uopće ne spominje.</p>
+      <div class="why"><b>Zašto pitamo:</b> mi smo tu povijest sami objavili jer smo ranije netočno implicirali „15% oduvijek". Volimo znati stojimo li iza točne brojke ubuduće.</div>
+    </div>
+
+    <div class="q">
+      <div class="qn">Pitanje 8 · suradnja</div>
+      <h4>Registracija airKUNA-e kao „origin" kanala</h4>
+      <p>Mehanizam radi i mjerljiv je: od <b>23.07.2026.</b> prvi partnerski kanal (origin 1) primio je u pet dana 1,5590 USDC — omjeri <b>15,000%</b> naknade i <b>60,000%</b> partnerskog udjela izlaze točno. Tražimo isti aranžman, uz <b>Squads v4 vault</b> kao receiver (za što presedan već postoji u origin-u 1).</p>
+      <div class="why"><b>Status:</b> dok naš origin ID ne postoji na lancu, prihod airKUNA-e iz ovog kanala je <b>0 EUR</b> — i tako i pišemo na svim stranicama.</div>
+    </div>
+
+    <!-- ŠTO SMO NAŠLI DOBRO -->
+    <h2>Što je, mjereno, dobro</h2>
+    <p>Da popis pitanja ne ostavi krivi dojam — ovo su nalazi koji idu Hobbi u prilog i koje smo također izmjerili, a ne pretpostavili:</p>
+    <ul>
+      <li><b>Motor stvarno otplaćuje dugove.</b> Zbroj polja <code>debt_repaid</code> kroz sve žetve: <b>1.033,01 USDC</b> od <b>1.280,73 USDC</b> požnjevenog prinosa (14.04.–27.07.2026.).</li>
+      <li><b>Radi bez prekida.</b> 699 žetvi u 32 dana, bez ijednog dana pauze; zadnja na dan mjerenja.</li>
+      <li><b>Naknada je točno onakva kakvom se predstavlja</b> — 15,000% na prinos, nikad na glavnicu, potvrđeno u svakoj žetvi od 14.07.</li>
+      <li><b>Partnerski split je egzaktan</b> — 60,000% naknade partneru, do treće decimale.</li>
+      <li><b>Rast dolazi iz pologa, ne iz cijene.</b> TVL $259.862 (08.07.) → <b>$345.544</b> (27.07.), dok je cijena SOL-a u istom razdoblju <i>pala</i> ($77,76 → $76,41).</li>
+      <li><b>Događaji i stanje računa se slažu do zadnje znamenke.</b> <code>45,038455 − 7,634980 = 37,403475</code> = živo stanje <code>deposited_to_vault</code>. Nema neslaganja između onoga što ugovor emitira i onoga što drži.</li>
+    </ul>
+
+    <!-- PROVJERA -->
+    <h2>Provjeri sam</h2>
+    <div class="proof">
+      <h3>Adrese i izvori</h3>
+      <div class="sub">Sve javno. Nijedan podatak na ovoj stranici ne traži da nam vjerujete na riječ.</div>
+      <div class="addr">
+        Hobba program: <code>Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG</code> · <a href="https://solscan.io/account/Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG" target="_blank" rel="noopener">Solscan ↗</a><br/>
+        Naš wallet: <code>6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA</code> · <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">Solscan ↗</a><br/>
+        Naš position račun: <code>A2Pmj1ArCn3REhAnpbXcqqgHNcrrexLPEA1YdK9oyLEX</code> · <a href="https://solscan.io/account/A2Pmj1ArCn3REhAnpbXcqqgHNcrrexLPEA1YdK9oyLEX" target="_blank" rel="noopener">Solscan ↗</a><br/>
+        ProgramConfig: <code>9fisLWPRhyfhaQfi1GbpSvJPSSr11h7iS3oLabRtiAPf</code> · Vault: <code>sM6P4mh53CnG4faN4Fo3seY7wMSAiHdy8o6gKjwQF7A</code><br/>
+        Share mint: <code>star9agSpjiFe3M49B3RniVU4CMBBEK3Qnaqn3RGiFM</code> · Obligation (JupLend): <code>9dvcngz5zNuzncwzY7AWrCpLPrtmUVyaz6mgCgivb9qY</code><br/>
+        Dune upiti: <a href="https://dune.com/queries/8127360" target="_blank" rel="noopener">8127360 (populacija žetvi)</a> · <a href="https://dune.com/queries/8125404" target="_blank" rel="noopener">8125404 (fee/origin split)</a> · <a href="https://dune.com/queries/8125398" target="_blank" rel="noopener">8125398 (event mix)</a> · <a href="https://dune.com/queries/7530804" target="_blank" rel="noopener">7530804 (TVL)</a>
+      </div>
+    </div>
+
+    <div class="callout"><b>Poziv na ispravak.</b> Ako je bilo koji nalaz gore kriv — a posebno pitanja 1, 3 i 5, gdje zaključujemo iz obrasca a ne iz koda — javite i ispravit ćemo javno, s datumom. Ovaj dokument postoji da bi se mijenjao.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=Hobba%20%E2%80%94%20ispravak%20nalaza">Pošalji ispravak</a>
+      <a class="btn-outline" href="https://zivo.airkuna.com" target="_blank" rel="noopener">Živi nadzor pozicije ↗</a>
+      <a class="btn-outline" href="../samootplativa-investicija/">Objašnjenje modela</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="../coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Natrag na airKUNA</a>
+    </div>
+    <p class="fnote">
+      Tehnički radni dokument. Nije revizija, sigurnosni audit, ocjena protokola, ponuda ni investicijski savjet. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e; airKUNA je njegov korisnik, ne autor. Nalazi su snimljeni 27.–28.07.2026. i mijenjaju se; provjerite ih sami u blok-exploreru. Dijelovi označeni kao „zaključak iz podataka" nisu potvrđeni uvidom u izvorni kod i mogu imati drugo objašnjenje. Kriptoimovina je volatilna i može izgubiti svu vrijednost.<br/><br/>
+      <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
