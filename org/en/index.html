@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>airKUNA — why a euro stablecoin matters for the local economy</title>
+<meta name="description" content="Najstarije hrvatsko sredstvo plaćanja postaje najnovije. Zašto stablecoin 1:1 s eurom, kako nastaje novac, zašto centralizirana likvidnost šteti lokalnoj ekonomiji — i kuharica kako izdati svoj euro stablecoin." />
+<link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.org/en/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.org/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.org/en/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.org/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --red:#C0181C; --red-soft:#FBE7E7;
+  --green:#1A7A3C;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.narrow{max-width:820px;margin:0 auto;padding:0 24px}
+section{padding:92px 0}
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h2.title{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,4vw,46px);line-height:1.08;letter-spacing:-.01em;margin:14px 0 0;color:var(--navy)}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--mute);max-width:720px;margin-top:18px}
+.center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
+p.body{font-size:17px;color:var(--ink);margin-top:18px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:21px;color:var(--navy)}
+.brand img{width:34px;height:34px}
+.navlinks{display:flex;gap:28px;font-size:14.5px;font-weight:500}
+.navlinks a:hover{color:var(--gold)}
+@media(max-width:900px){.navlinks{display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:13px 24px;border-radius:999px;transition:.2s;cursor:pointer;border:1.5px solid transparent}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7)}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700);transform:translateY(-2px)}
+.btn-sm{padding:9px 18px;font-size:14px}
+
+.hero{position:relative;background:radial-gradient(900px 520px at 80% 5%,rgba(227,175,53,.18),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 58%,var(--navy-800));color:#fff;overflow:hidden;padding:96px 0 104px}
+.hero:after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;opacity:.5}
+.hero .wrap{position:relative;z-index:2;text-align:center}
+.hero .pill{display:inline-block;background:rgba(227,175,53,.16);color:var(--gold-light);font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:999px;letter-spacing:.02em}
+.hero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.02em;margin:22px auto 0;max-width:14ch}
+.hero h1 .gold{color:var(--gold-light)}
+.hero p.sub{font-size:clamp(17px,2.2vw,21px);color:#C9D6EC;margin:24px auto 0;max-width:620px}
+.hero-cta{display:flex;gap:14px;margin-top:36px;justify-content:center;flex-wrap:wrap}
+.hero .hook{margin-top:46px;font-family:Fraunces,serif;font-style:italic;font-size:clamp(20px,2.6vw,28px);color:#fff;opacity:.92}
+
+.eyebrow.red{color:var(--red)}
+.quote{font-family:Fraunces,serif;font-size:clamp(23px,3.3vw,37px);line-height:1.2;color:var(--navy);font-weight:500;text-align:center}
+.quote .gold{color:var(--gold)}.quote .red{color:var(--red)}
+
+.grid{display:grid;gap:22px;margin-top:46px}
+.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.g3,.g4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow-sm);transition:.25s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.card .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--navy);color:var(--gold-light);font-family:Fraunces,serif;font-weight:600;font-size:19px;margin-bottom:16px}
+.card .ico.year{font-size:12.5px;font-weight:500;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.card h3{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.card p{color:var(--mute);font-size:15px}
+
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:42px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.bg-soft{background:var(--soft)}
+.bg-navy{background:radial-gradient(700px 420px at 78% 12%,rgba(227,175,53,.12),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff}
+.bg-navy .title{color:#fff}.bg-navy .lead{color:#B9C8E2}
+.bg-red{background:linear-gradient(160deg,#4a0d0f,#7a1418);color:#fff}
+.bg-red .title{color:#fff}.bg-red .lead{color:#f0cccd}.bg-red .eyebrow{color:#f3a9ab}
+
+/* stat band */
+.statband{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center;margin-top:10px}
+@media(max-width:740px){.statband{grid-template-columns:1fr;gap:34px}}
+.statband .num{font-family:Fraunces,serif;font-weight:600;font-size:clamp(34px,5vw,54px);line-height:1}
+.statband .num.red{color:#ffb4b6}.statband .num.gold{color:var(--gold-light)}
+.statband .lab{font-size:14.5px;margin-top:12px;opacity:.85;max-width:300px;margin-left:auto;margin-right:auto}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:44px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:13px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl .foreign{color:var(--red);font-weight:600;white-space:nowrap}
+.tbl .dom{color:var(--green);font-weight:600;white-space:nowrap}
+.tbl .tot{background:var(--navy-900);color:#fff;font-weight:600}
+.tbl .tot td{border-bottom:0}
+@media(max-width:680px){.tbl{font-size:13px}.tbl th,.tbl td{padding:10px 9px}}
+
+/* vs compare */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:46px}
+@media(max-width:760px){.vs{grid-template-columns:1fr}}
+.vs .col{border-radius:var(--r);padding:30px;background:#fff;border:1px solid var(--line)}
+.vs .old{border-top:5px solid var(--red)}
+.vs .new{border-top:5px solid var(--gold)}
+.vs h3{font-family:Fraunces,serif;font-size:23px;font-weight:600;margin-bottom:4px}
+.vs .old h3{color:var(--red)}.vs .new h3{color:var(--navy)}
+.vs .tag{font-size:13px;color:var(--mute);margin-bottom:18px}
+.vs ul{list-style:none;display:grid;gap:14px}
+.vs li{display:flex;gap:12px;font-size:15px;line-height:1.5}
+.vs li:before{flex:0 0 20px;font-weight:700;font-size:17px}
+.vs .old li:before{content:"\2715";color:var(--red)}
+.vs .new li:before{content:"\2713";color:var(--gold)}
+
+/* cookbook steps */
+.steps{display:grid;gap:18px;margin-top:44px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;box-shadow:var(--shadow-sm)}
+.step .n{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--navy-700),var(--navy));color:var(--gold-light);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:600;font-size:26px}
+.step h3{font-size:19px;color:var(--navy);font-weight:600;margin-bottom:5px}
+.step p{color:var(--mute);font-size:15px}
+
+.fact{background:linear-gradient(160deg,var(--navy-900),var(--navy));color:#fff;border-radius:var(--r);padding:34px;box-shadow:var(--shadow)}
+.fact h3{font-family:Fraunces,serif;font-weight:600;font-size:24px;margin-bottom:18px}
+.fact .frow{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
+.fact .frow:last-child{border-bottom:0}.fact .frow span:first-child{color:#A9BBD8}.fact .frow span:last-child{font-weight:600;text-align:right}
+
+.cta{background:radial-gradient(700px 400px at 80% 20%,rgba(227,175,53,.18),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:26px;padding:64px 40px;text-align:center;box-shadow:var(--shadow)}
+.cta h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,4vw,42px);line-height:1.1}
+.cta p{color:#C9D6EC;max-width:600px;margin:18px auto 30px}
+
+footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);font-size:14px}
+.fgrid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.fnote{max-width:560px;font-size:13px;color:var(--mute);margin-top:26px;line-height:1.7;border-top:1px solid var(--line);padding-top:22px}
+
+/* feature row (investor) */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:900px){.row{grid-template-columns:1fr;gap:36px}}
+.bullets{list-style:none;margin-top:22px;display:grid;gap:16px}
+.bullets li{display:flex;gap:14px;font-size:15.5px}
+.bullets .b{flex:0 0 26px;height:26px;border-radius:50%;background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:14px;margin-top:1px}
+.bullets b{color:var(--navy)}
+/* live stack */
+.live{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+@media(max-width:760px){.live{grid-template-columns:1fr}}
+.live a{display:block;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;transition:.2s}
+.live a:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+.live .u{font-weight:600;color:var(--navy);font-size:16px}
+.live .d{color:var(--mute);font-size:14px;margin-top:7px}
+
+.reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.src{font-size:12px;color:#9aa6b8;margin-top:26px;text-align:center}
+.src a{text-decoration:underline}
+
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;margin-left:10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700}
+.langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);line-height:1;transition:.2s}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#stablecoin">Stablecoin</a>
+      <a href="#novac">How money is created</a>
+      <a href="#problem">Problem</a>
+      <a href="#banke">Bank comparison</a>
+      <a href="#kuharica">Cookbook</a>
+      <a href="#partneri">For partners</a>
+    </nav>
+    <a class="btn btn-navy btn-sm" href="https://airkuna.com">Digital identity →</a>
+    <div class="langsw"><a href="/" hreflang="hr">HR</a><a href="/en/" hreflang="en" aria-current="true">EN</a></div>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero">
+  <div class="wrap">
+    <span class="pill">Open concept · A digital euro for the local economy</span>
+    <h1>The kuna is back. <span class="gold">This time as a euro.</span></h1>
+    <p class="sub">Croatia's oldest means of payment becomes its newest — a regulated euro stablecoin, backed 1:1 by the euro. Here is why that matters, and why today's system works against the local economy.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#problem">Why this matters</a>
+      <a class="btn btn-ghost" href="#kuharica">Cookbook: issue your own</a>
+    </div>
+    <div class="hook">"From fur to code."</div>
+  </div>
+</section>
+
+<!-- KUNA STORY -->
+<section id="prica">
+  <div class="narrow center">
+    <span class="eyebrow">Three lives of one kuna</span>
+    <h2 class="title">A currency named after value, not after money</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">"Kuna" is the Croatian word for the pine marten. In the Middle Ages marten fur was money — the "marturina" tax was paid in pelts. The kuna has been a means of payment in these lands for a thousand years.</p>
+  </div>
+  <div class="wrap">
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico year">1994</div><h3>Born with the state</h3><p>On 30 May 1994 the kuna became the official currency of the young Croatia. On the coins: a nightingale, a tuna, a bear.</p></div>
+      <div class="card reveal"><div class="ico year">2023</div><h3>Withdrawn</h3><p>On 1 January 2023 Croatia adopted the euro at a rate of 7.53450 kn = €1. The farewell was an emotional one.</p></div>
+      <div class="card reveal"><div class="ico">≡</div><h3>Reborn</h3><p>Now the kuna comes back as a digital euro — the name people love, the value they count on: 1 KUNA = 1 EUR.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STABLECOIN 101 -->
+<section id="stablecoin" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Stablecoins in one minute</span>
+    <h2 class="title">What is a stablecoin, anyway?</h2>
+    <p class="body" style="text-align:left">A stablecoin is a digital token whose value is <b>pegged 1:1 to real money</b> — here, to the euro. It is not speculation: for every token in circulation there is one euro in reserve, and you can redeem the token back into euros <b>at par</b> at any time. The difference from the number in your bank account? A stablecoin is <b>programmable, transferable in a second, 24/7, without intermediaries</b> — and transparent on a public chain.</p>
+  </div>
+  <div class="wrap">
+    <div class="statband" style="color:var(--navy)">
+      <div class="reveal"><div class="num gold">~$27.6 trillion</div><div class="lab">settled in stablecoins in 2024 — more than Visa and Mastercard combined</div></div>
+      <div class="reveal"><div class="num gold">1 : 1</div><div class="lab">every regulated euro stablecoin is backed by a euro in reserve</div></div>
+      <div class="reveal"><div class="num gold">24/7</div><div class="lab">settlement in seconds, no bank opening hours and no borders</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDOGENOUS MONEY -->
+<section id="novac">
+  <div class="narrow center">
+    <span class="eyebrow">First, understand money</span>
+    <h2 class="title">Banks do not lend out your savings</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Contrary to the textbook: when a bank grants a loan it <b>creates new money</b> — by crediting the borrower's account. Loans create deposits. It is estimated that around <b>97% of the money</b> in circulation came into being exactly that way (Bank of England, 2014).</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  A[Bank grants a loan]:::bank --> B[(A NEW deposit appears<br/>in the borrower's account)]:::new
+  B --> C[Money enters the economy]:::flow
+  C --> D{Whoever decides on credit,<br/>decides what gets built}:::key
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef new fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef flow fill:#EAF0FA,stroke:#9aa9c2,color:#14202E;
+  classDef key fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+      </div>
+      <div class="cap">The power to create money = the power to allocate credit. The only question is who holds it, and for whose benefit.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDIT SIMULATION: BRICK -->
+<section id="simulacija" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">The simplest example</span>
+    <h2 class="title">Where the interest goes: a story about a brick</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Three neighbours, one bank (foreign-owned). The brick was made locally, the money circulated between neighbours — but the interest permanently leaves the community.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  BANK["Bank<br/>foreign owner"]:::out -- "1 · loan EUR 10,000" --> KUPAC["Brick buyer"]:::loc
+  KUPAC -- "2 · pays EUR 10,000" --> PROIZ["Brick maker"]:::loc
+  PROIZ -- "3 · deposit EUR 10,000" --> BANK
+  KUPAC -- "4 · 10 instalments = ~EUR 12,950" --> BANK
+  BANK -. "5 · ~EUR 2,950 interest out" .-> X((Abroad)):::out
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">A €10,000 loan at 5% over 10 years → ~€12,950 is repaid. A clean ~€2,950 of interest goes to the bank's foreign owner.</div>
+    </div>
+    <p class="center" style="color:var(--mute);font-size:15px;margin-top:24px;max-width:720px;margin-left:auto;margin-right:auto">Multiply that by thousands of loans and you see the scale of the outflow. The higher the rate and the longer the term, the more value leaves the community.</p>
+  </div>
+</section>
+
+<!-- PROBLEM: EXTRACTION -->
+<section id="problem" class="bg-red">
+  <div class="narrow center">
+    <span class="eyebrow">Problem</span>
+    <h2 class="title">An extractive economy</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">When credit decisions and profit accumulation are centralised outside the country, locally created value systematically leaves. Croatia's banking sector is almost entirely foreign-owned — and the profit travels to the parent company.</p>
+  </div>
+  <div class="wrap">
+    <div class="statband">
+      <div class="reveal"><div class="num red">~90%</div><div class="lab">of banking assets in Croatia are foreign-owned</div></div>
+      <div class="reveal"><div class="num red">&gt;€3bn</div><div class="lab">of dividends paid to foreign owners 2022–2024 — ~98% taken out of the country</div></div>
+      <div class="reveal"><div class="num red">€1.53bn</div><div class="lab">record banking sector profit in 2024 (Croatian National Bank)</div></div>
+    </div>
+    <div class="figure reveal" style="background:rgba(255,255,255,.96)">
+      <div class="mermaid">
+flowchart TB
+  S([Savers and businesses in Croatia]):::loc --> BANK[Bank in Croatia]:::bank
+  BANK -- loans, interest, fees --> PROFIT[Locally created profit]:::gold
+  PROFIT -- dividend --> PARENT[Foreign parent<br/>Italy · Austria · Hungary]:::out
+  PARENT -. capital leaves the local economy .-> X((Abroad)):::out
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Local liquidity is created here — and the multiplier is lost when the profit goes abroad.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BANK TABLE -->
+<section id="banke">
+  <div class="narrow center">
+    <span class="eyebrow red">Who holds your money</span>
+    <h2 class="title">Six banks, five foreign parents</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">The largest banks in Croatia and where their profit travels. Domestic (state) ownership is the exception, not the rule.</p>
+  </div>
+  <div class="wrap" style="overflow-x:auto">
+    <table class="tbl reveal">
+      <thead><tr><th>Bank</th><th>Parent</th><th>Ownership</th><th>Market share</th><th>Profit goes…</th></tr></thead>
+      <tbody>
+        <tr><td>Zagrebačka banka</td><td>UniCredit</td><td class="foreign">Italy</td><td>~25.6%</td><td class="foreign">~€431m to parent</td></tr>
+        <tr><td>Privredna banka Zagreb (PBZ)</td><td>Intesa Sanpaolo</td><td class="foreign">Italy</td><td>~20.5%</td><td class="foreign">~€371m to parent</td></tr>
+        <tr><td>Erste &amp; Steiermärkische</td><td>Erste Group</td><td class="foreign">Austria</td><td>~18.1%</td><td class="foreign">~€120m to parent</td></tr>
+        <tr><td>OTP banka</td><td>OTP Group</td><td class="foreign">Hungary</td><td>~10.1%</td><td class="foreign">~€75m to parent</td></tr>
+        <tr><td>Raiffeisenbank (RBA)</td><td>Raiffeisen</td><td class="foreign">Austria</td><td>~8.1%</td><td class="foreign">~€70m to parent</td></tr>
+        <tr><td>Hrvatska poštanska banka (HPB)</td><td>Republic of Croatia</td><td class="dom">Croatia</td><td>~9.4%</td><td class="dom">stays in Croatia</td></tr>
+        <tr class="tot"><td colspan="2">Sector total</td><td colspan="2">~88.9% foreign-owned</td><td>~€2bn out over 18 months</td></tr>
+      </tbody>
+    </table>
+    <p class="src">Sources: Croatian National Bank / HUB, N1, Bloomberg Adria, Telegram, NHS. Figures rounded; they refer to 2024 profit / 2025 payouts and the 2023–2024 aggregate.</p>
+  </div>
+</section>
+
+<!-- OWNERSHIP TREE -->
+<section id="vlasnistvo">
+  <div class="narrow center">
+    <span class="eyebrow red">Who actually earns</span>
+    <h2 class="title">The chain does not stop at the "foreign parent"</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">The interest and fees you pay your bank travel via Milan and Turin all the way to a Wall Street fund — and to a 460-year-old foundation.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart TD
+  KLIJENT(["Client in Croatia"]):::loc --> ZABA["Zagrebačka banka"]:::bank
+  KLIJENT --> PBZ["Privredna banka Zagreb"]:::bank
+  ZABA -- "96.2%" --> UC["UniCredit · Italy"]:::out
+  PBZ -- "100%" --> IS["Intesa Sanpaolo · Italy"]:::out
+  UC --> BR1["BlackRock 7.38% · USA"]:::own
+  UC --> NB1["Norges Bank 3.01% · Norway"]:::own
+  UC --> CRT["Fondazione CRT 2.29%<br/>a 19th-century savings bank"]:::own
+  IS --> CSP["Compagnia di San Paolo 6.63%<br/>founded 1563"]:::own
+  IS --> CARI["Fondazione Cariplo 5.52%<br/>founded 1823"]:::own
+  IS --> BR2["BlackRock ~5% · USA"]:::own
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef own fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+      </div>
+      <div class="cap">BlackRock and Vanguard hold shares on behalf of clients (pension funds, savings). The Italian foundations fund cultural projects in Italy — partly out of profit made in Croatia.</div>
+    </div>
+    <p class="src">Sources: UniCredit / Intesa Sanpaolo IR; simplywall.st; Wikipedia (Compagnia di San Paolo 1563, Cariplo 1823).</p>
+  </div>
+</section>
+
+<!-- HISTORY: SELL-OFF -->
+<section id="povijest" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">How we got here</span>
+    <h2 class="title">Paid for them, sold them, and now pay again</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Taxpayers bailed out the banks, the state sold them for less than the bailout cost, and foreign owners have extracted profit ever since.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  A["1991–2002<br/>BAILOUT<br/>~USD 5.5bn<br/>23% of GDP"]:::out --> B["1999–2002<br/>PRIVATISATION<br/>sold for<br/>~EUR 1–1.5bn"]:::bank
+  B --> C["2003–2024<br/>EXTRACTION<br/>&gt;EUR 10bn<br/>of profit out"]:::out
+  B -. "had it been invested<br/>in the S&amp;P 500" .-> E(("≈ EUR 8.2bn<br/>today")):::gold
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef bank fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">The number of banks fell from 60 (1997) to ~20 (2025). Had the proceeds of the 4 key sales been invested in the S&P 500, they would be worth ~€8.2bn today.</div>
+    </div>
+    <p class="src">Sources: Croatian National Bank, State Agency for Deposit Insurance; inflation and S&P 500 values rounded to 2025/2026.</p>
+  </div>
+</section>
+
+<!-- TWO MODELS -->
+<section class="bg-soft" style="border-top:1px solid var(--line)">
+  <div class="narrow center">
+    <span class="eyebrow">Two models, one difference</span>
+    <h2 class="title">Where the value stays</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">This is not about banks being "evil". It is about where liquidity accumulates — and who controls the monetary infrastructure.</p>
+  </div>
+  <div class="wrap">
+    <div class="vs">
+      <div class="col old reveal">
+        <h3>The centralised system</h3>
+        <div class="tag">ZABA/UniCredit · PBZ/Intesa · Erste · OTP · RBA…</div>
+        <ul>
+          <li>Credit decisions and profit centralised outside the country</li>
+          <li>Dividends systematically go to the foreign parent</li>
+          <li>An opaque system, opening hours, intermediaries</li>
+          <li>The customer cannot see where or how their money "works"</li>
+          <li>Slow cross-border transfers and fees</li>
+        </ul>
+      </div>
+      <div class="col new reveal">
+        <h3>A euro stablecoin (1:1)</h3>
+        <div class="tag">the airKUNA model · reserve under control, on-chain</div>
+        <ul>
+          <li>Reserve 100% backed in euro, redemption at par</li>
+          <li>The reserve can sit in an <b>ethical bank</b> that channels it into local lending</li>
+          <li>Transparent on a public chain — anyone can verify the backing</li>
+          <li>Settlement in a second, 24/7, borderless, programmable</li>
+          <li>Value and payment margins can stay in the domestic economy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATOR ECONOMY -->
+<section id="kreator">
+  <div class="narrow center">
+    <span class="eyebrow">Who this helps</span>
+    <h2 class="title">A creator in Croatia loses 15–40%</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">The concrete face of the problem: when you collect a subscription or a donation, every intermediary takes a cut. On micro amounts that exceeds half.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  P(["Patron pays EUR 1.00"]):::loc --> PF["−10% platform<br/>EUR 0.90"]:::out
+  PF --> PR["−processing<br/>EUR 0.75"]:::out
+  PR --> K(["Creator keeps<br/>EUR 0.75"]):::out
+  K -. "same amount on-chain" .-> SOL(["euro on-chain<br/>fee ~EUR 0.00025"]):::gold
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef out fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">A quarter of every €1 donation disappears in fees. An on-chain euro charges a fraction of a cent — so the value stays with the creator.</div>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico">%</div><h3>15–40% in fees</h3><p>platforms (Patreon 10%), card processing and currency conversion together eat a large share of a creator's revenue.</p></div>
+      <div class="card reveal"><div class="ico">€</div><h3>~€28–33bn</h3><p>the value of the EU creator-economy segment (2025); up to €135bn by 2032.</p></div>
+      <div class="card reveal"><div class="ico">+</div><h3>Merchant of Record</h3><p>a regulated entity takes on VAT and compliance instead of the creator — no VAT filings across 27 countries.</p></div>
+    </div>
+    <p class="src">Sources: Patreon Help Center; Stripe; Goldman Sachs; BNP Paribas. Solana fee: solana.com.</p>
+  </div>
+</section>
+
+<!-- COOKBOOK -->
+<section id="kuharica">
+  <div class="narrow center">
+    <span class="eyebrow">Cookbook</span>
+    <h2 class="title">How to issue your own euro stablecoin</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">The recipe is no secret — the regulatory framework (MiCA) is clear and the technology is open source. Five steps from euro to token.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  S1[1 · EMI licence]:::a --> S2[2 · Reserve +<br/>safeguarding]:::a
+  S2 --> S3[3 · Smart contract<br/>mint / burn]:::b
+  S3 --> S4[4 · SEPA<br/>on/off-ramp]:::a
+  S4 --> S5[5 · Right to redeem<br/>at par]:::gold
+  classDef a fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef b fill:#0A3B82,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Five steps to a regulated euro stablecoin (a MiCA e-money token).</div>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><div><h3>E-money licence (EMI)</h3><p>The issuer must be a licensed e-money institution (or partner with one). A licence in one EU/EEA state gives passporting across the whole EU and SEPA.</p></div></div>
+      <div class="step reveal"><div class="n">2</div><div><h3>Reserve and safeguarding</h3><p>One euro for every token. Funds are held segregated at a credit institution, in safe low-risk assets, with an independent audit and public attestations of backing.</p></div></div>
+      <div class="step reveal"><div class="n">3</div><div><h3>Smart contract: mint and burn</h3><p>A euro payment in → the contract mints a token; a redemption → the contract burns it. Compliance rules (KYC, limits, blacklists) are built into every transfer.</p></div></div>
+      <div class="step reveal"><div class="n">4</div><div><h3>SEPA on/off-ramp</h3><p>The token is tied to an IBAN: a SEPA payment to that IBAN automatically mints the token in the wallet; the exit returns euros over SEPA (ideally SEPA Instant).</p></div></div>
+      <div class="step reveal"><div class="n">5</div><div><h3>The right to redeem at par</h3><p>Any holder can exchange the token for euros 1:1 at any time. That is a regulatory requirement — and the main source of trust.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF: MONERIUM -->
+<section class="bg-navy">
+  <div class="wrap">
+    <div class="center"><span class="eyebrow">Not theory</span>
+    <h2 class="title">Monerium already does this</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">The recipe is proven in production. EURe is a regulated euro stablecoin that has been running for years — airKUNA applies the same model in a Croatian and regional context.</p></div>
+    <div style="max-width:620px;margin:44px auto 0">
+      <div class="fact reveal">
+        <h3>Monerium EURe</h3>
+        <div class="frow"><span>Status</span><span>The first e-money EMI on a blockchain (est. 2016)</span></div>
+        <div class="frow"><span>Regulation</span><span>MiCA e-money token (EMT)</span></div>
+        <div class="frow"><span>IBAN / SEPA</span><span>via LHV Pank</span></div>
+        <div class="frow"><span>Chains</span><span>Ethereum, Gnosis, Polygon, Arbitrum, Base, Linea</span></div>
+        <div class="frow"><span>Issued</span><span>~€25m of regulated e-money</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCALE + GNOSIS -->
+<section id="razmjer">
+  <div class="narrow center">
+    <span class="eyebrow">Scale and infrastructure</span>
+    <h2 class="title">Tiny in volume — powerful in capability</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">EURe holds only ~€25m — about <b>two millionths</b> of all euro money in circulation. Yet that same euro, on-chain, travels for a fraction of a cent, settles in seconds and can be spent on a Visa card.</p>
+  </div>
+  <div class="wrap">
+    <div class="figure reveal">
+      <div class="mermaid">
+flowchart LR
+  M1["Euro M1<br/>~EUR 11,270,000m"]:::big -.-> EURE["EURe<br/>~EUR 25m<br/>≈ 2 millionths"]:::small
+  EURE --> CAP["But: ~5 s settlement ·<br/>fee a fraction of a cent ·<br/>80M+ Visa locations"]:::cap
+  classDef big fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef small fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef cap fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">For every €1 in EURe there is ~€60,000 of paper euro — and yet EURe does everything cash cannot.</div>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico">⛓</div><h3>Gnosis Chain</h3><p>The home chain for EURe. A fee of <b>~$0.001–0.01</b> per transaction, ~5 s blocks; gas is paid in a stablecoin (xDAI), so the cost is predictable.</p></div>
+      <div class="card reveal"><div class="ico">▦</div><h3>Gnosis Pay</h3><p>A self-custody <b>Visa card</b> that spends EURe directly at <b>80+ million</b> Visa locations — the on-chain euro in real life.</p></div>
+      <div class="card reveal"><div class="ico">↑</div><h3>Enormous headroom</h3><p>All on-chain euro amounts to just ~€395m. The base is minimal, the capability proven — what is missing is a regional player.</p></div>
+    </div>
+    <p class="src">Sources: CoinGecko / CoinMarketCap (EURe); ECB (euro M1/M3); Gnosis.io, Gnosisscan, Gnosis Pay.</p>
+  </div>
+</section>
+
+<!-- MARKET / OPPORTUNITY -->
+<section id="trziste" class="bg-soft">
+  <div class="narrow center">
+    <span class="eyebrow">Market and opportunity</span>
+    <h2 class="title">The smallest segment — and the fastest growing</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Euro stablecoins are less than 1% of the global market, but they exploded after MiCA. The regulatory gap is closed, and the space for a regional player is wide open.</p>
+  </div>
+  <div class="wrap">
+    <div class="grid g4">
+      <div class="card reveal"><div class="ico">$</div><h3>&gt;$280bn</h3><p>total stablecoin market capitalisation (ECB, Nov 2025); ~8% of the crypto market.</p></div>
+      <div class="card reveal"><div class="ico">€</div><h3>~99% USD</h3><p>of the market is dollar-denominated — the euro segment is just ~€395m, leaving enormous headroom.</p></div>
+      <div class="card reveal"><div class="ico">◔</div><h3>$2 trillion</h3><p>projected stablecoin market size by 2028 (ECB).</p></div>
+      <div class="card reveal"><div class="ico">★</div><h3>The CEE space</h3><p>there is no dominant regional euro stablecoin. Whoever first connects SEPA and minting defines the standard.</p></div>
+    </div>
+    <p class="src">Source: ECB Financial Stability Review 11/2025.</p>
+  </div>
+</section>
+
+<!-- BUSINESS MODEL / TREASURY -->
+<section id="poslovni">
+  <div class="wrap row">
+    <div>
+      <span class="eyebrow">Business model</span>
+      <h2 class="title">Treasury yield — like USDC and EURe</h2>
+      <p class="lead">Reserves are held in interest-bearing, low-risk euro instruments. The yield on the reserve (treasury yield) is the primary source of revenue — and in a DAO model it can flow back into the community and local lending.</p>
+      <ul class="bullets">
+        <li><span class="b">·</span><div>At Circle (USDC), <b>~94% of revenue</b> comes from exactly this reserve yield.</div></li>
+        <li><span class="b">·</span><div>Revenue scales <b>linearly</b> with token circulation.</div></li>
+        <li><span class="b">·</span><div>The reserve can also be a <b>stable deposit base</b> for an ethical bank that channels it into the real economy.</div></li>
+      </ul>
+    </div>
+    <div class="fact reveal">
+      <h3>Illustrative</h3>
+      <div class="frow"><span>Reserve (example)</span><span>€25,000,000</span></div>
+      <div class="frow"><span>Annual yield</span><span>~2.5%</span></div>
+      <div class="frow"><span>Annual amount to distribute</span><span>≈ €625,000</span></div>
+      <div class="frow"><span>Scaling</span><span>linear with circulation</span></div>
+      <p style="color:#8FA3C4;font-size:12.5px;margin-top:16px">Illustrative, not an offer. Euro yields are lower than dollar yields.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE STACK -->
+<section id="live" class="bg-navy">
+  <div class="narrow center">
+    <span class="eyebrow">Already working today</span>
+    <h2 class="title">Not a prototype — the whole stack is live</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto">A real Monerium IBAN (LHV), real transactions on Gnosis Chain. Open it on your phone and try it.</p>
+  </div>
+  <div class="wrap">
+    <div class="live">
+      <a href="https://wallet.domovina.ai" target="_blank"><div class="u">wallet.domovina.ai →</div><div class="d">A self-custody EURe wallet — passkey (Face ID), no seed phrase. SEPA → EURe and sending.</div></a>
+      <a href="https://pay.domovina.ai" target="_blank"><div class="u">pay.domovina.ai →</div><div class="d">Payment codes: SEPA EPC QR, HUB3 (FINA), on-chain EIP-681.</div></a>
+      <a href="https://mpt.domovina.ai" target="_blank"><div class="u">mpt.domovina.ai →</div><div class="d">Backend: Monerium API, mint/burn orchestration (Safe + Zodiac Roles).</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- VISION / CTA -->
+<section id="partneri">
+  <div class="narrow center">
+    <p class="quote reveal">Croatia lost the kuna in 2023.<br/>We are bringing it back — this time as a <span class="gold">euro</span>, on-chain, <span class="red">with the value staying home</span>.</p>
+  </div>
+  <div class="wrap" style="margin-top:54px">
+    <div class="cta reveal">
+      <span class="eyebrow" style="color:var(--gold-light)">airKUNA DAO · for partners and the community</span>
+      <h2>A digital kuna for the local economy</h2>
+      <p>The concept is open and the technology is proven. The stablecoin is intended to be governed by the <b>airKUNA DAO</b> (in formation) — as a community public good. We are looking for partners, ethical banking partners and collaborators.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn-gold" href="https://t.me/airkuna_com">Join us — t.me/airkuna_com</a>
+        <a class="btn btn-ghost" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20joining">Email: ms@airkuna.com</a>
+        <a class="btn btn-ghost" href="https://airkuna.com/en/">Digital identity (Personhood) →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <a class="brand" href="#top"><img src="coin.svg" alt="" style="width:30px" /> airKUNA</a>
+      <div style="display:flex;gap:40px;flex-wrap:wrap">
+        <div><strong style="color:var(--navy)">Understand</strong><br/><a href="#novac">How money is created</a><br/><a href="#simulacija">The brick story</a><br/><a href="#problem">An extractive economy</a><br/><a href="#vlasnistvo">Who actually earns</a><br/><a href="#povijest">History of the sell-off</a></div>
+        <div><strong style="color:var(--navy)">Further</strong><br/><a href="#banke">Bank comparison</a><br/><a href="#kuharica">Cookbook</a><br/><a href="#trziste">Market</a><br/><a href="#poslovni">Business model</a><br/><a href="#partneri">For partners</a><br/><a href="https://airkuna.com/en/">Digital identity (.com)</a></div>
+      </div>
+    </div>
+    <p class="fnote">
+      <b>A note on the name:</b> Croatia has been in the euro area since 1 January 2023; the kuna no longer exists as a currency. "KUNA" is a <b>brand</b> (a digital Croatian euro), and the underlying value of the token is the <b>euro</b>. Under MiCA the token is an e-money token (EMT) referencing the euro.<br/><br/>
+      Educational and informational content — <b>not financial advice</b> and not an offer. Figures are rounded and supported by public sources. © 2026 airKUNA.<br/><br/>
+      airKUNA is an open concept; in the long run it is intended to be led by the community through the <b>airKUNA DAO</b> (in formation).
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
+const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

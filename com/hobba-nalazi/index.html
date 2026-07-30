@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Hobba — on-chain nalazi i otvorena pitanja · airKUNA</title>
 <meta name="description" content="Što smo izmjerili na Hobbinom programu čitajući isključivo Solana lanac: mehanika žetve prinosa, uočeni prag od ~1 USDC, i osam pitanja na koja se izvana ne može odgovoriti. Radni dokument, otvoren za ispravke." />
+<link rel="canonical" href="https://airkuna.com/hobba-nalazi/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.com/hobba-nalazi/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.com/en/hobba-findings/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.com/hobba-nalazi/" />
 <link rel="icon" href="../coin.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,7 +38,11 @@ header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop
 .navlinks a{flex:0 0 auto}
 .navlinks a:hover{color:var(--gold)}
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;border:1.5px solid transparent;flex:0 0 auto}
-.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+.btn-navy{background:var(--navy);color:#fff}
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;margin-left:10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);transition:.2s;line-height:1}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
 @media(max-width:560px){.nav .btn-navy{display:none}}
 
 .dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:60px 0 54px}
@@ -118,6 +126,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a href="https://zivo.airkuna.com">Živi nadzor ↗</a>
     </nav>
     <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=Hobba%20%E2%80%94%20on-chain%20nalazi">Kontakt</a>
+    <div class="langsw"><a href="./" hreflang="hr" aria-current="true">HR</a><a href="../en/hobba-findings/" hreflang="en">EN</a></div>
   </div>
 </header>
 
@@ -137,20 +146,20 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 <article class="prose">
   <div class="doc">
 
-    <p class="lede" style="margin-top:0">Kratko: mehanizam radi i to se vidi u brojkama. Naša vlastita pozicija je premala da bi ga okinula, i to smo isprva krivo pročitali kao „ništa se ne događa". Ovaj dokument ispravlja to čitanje i skuplja otvorena pitanja na jedno mjesto.</p>
+    <p class="lede" style="margin-top:0">Kratko: mehanizam radi i to se vidi u brojkama. Naša vlastita pozicija je premala da bi ga okinula, i to smo isprva krivo pročitali kao „ništa se ne događa“. Ovaj dokument ispravlja to čitanje i skuplja otvorena pitanja na jedno mjesto.</p>
 
     <!-- METODA -->
     <h2 id="metoda">Metoda — i zašto joj vjerovati samo do granice</h2>
     <p>Sve brojke dolje dobivene su dekodiranjem <code>Program data:</code> logova Hobbinog programa preko Anchor diskriminatora (<code>sha256("event:&lt;Ime&gt;")[0:8]</code>), uz layout iz IDL-a <code>0.1.4</code> (iz npm paketa <code>@hobba-io/core</code> — <b>on-chain IDL nije objavljen</b>), plus izravno čitanje stanja računa s mainneta.</p>
     <p><b>Ništa nije prepisano iz sučelja.</b> Gdje smo nešto morali pretpostaviti, dolje to izrijekom piše.</p>
 
-    <div class="callout warn"><b>Granica metode.</b> Izvana se vidi <b>izvršenje</b>, ne <b>namjera</b>. Risk engine (odabir vaultova, tempiranje žetve) radi off-chain i za nas je crna kutija. Zato dio nalaza niže nosi oznaku „zaključak iz podataka" — što znači: obrazac je jak, ali nismo ga pročitali iz koda i može imati drugo objašnjenje.</p></div>
+    <div class="callout warn"><b>Granica metode.</b> Izvana se vidi <b>izvršenje</b>, ne <b>namjera</b>. Risk engine (odabir vaultova, tempiranje žetve) radi off-chain i za nas je crna kutija. Zato dio nalaza niže nosi oznaku „zaključak iz podataka“ — što znači: obrazac je jak, ali nismo ga pročitali iz koda i može imati drugo objašnjenje.</div>
 
     <!-- ŽETVA -->
     <h2 id="zetva">Kako žetva zapravo radi — i zašto nula ne znači nula</h2>
     <p>Prinos <b>ne</b> pristiže kao transakcija. Akumulira se u <b>cijeni vaultnog udjela</b>. Tek instrukcija <code>harvest_vault</code> to kristalizira: izračuna profit kao <i>vrijednost udjela − cost basis</i>, uzme naknadu, ostatak razdijeli na otplatu duga i isplatu korisniku — i tek tada emitira <code>UserHarvestPayout</code> s poljima <code>gross_harvest</code>, <code>fee_amount</code>, <code>debt_repaid</code>, <code>user_amount</code>.</p>
 
-    <div class="callout good"><b>Ispravak vlastitog ranijeg čitanja.</b> Prvo smo objavili da je na našoj poziciji „otplaćeno 0,00 USDC". To je točno — ali nepotpuno, jer implicira da kapital ne radi. Zapravo: naš position račun drži <b>34,713899 vaultnih udjela</b> protiv cost basisa od <b>37,403475 USDC</b>. Kapital je plasiran i zarađuje; ništa nije proknjiženo jer žetva još nije okinula. Nula u <code>debt_repaid</code> znači „nije kristalizirano", ne „nije zarađeno".</div>
+    <div class="callout good"><b>Ispravak vlastitog ranijeg čitanja.</b> Prvo smo objavili da je na našoj poziciji „otplaćeno 0,00 USDC“. To je točno — ali nepotpuno, jer implicira da kapital ne radi. Zapravo: naš position račun drži <b>34,713899 vaultnih udjela</b> protiv cost basisa od <b>37,403475 USDC</b>. Kapital je plasiran i zarađuje; ništa nije proknjiženo jer žetva još nije okinula. Nula u <code>debt_repaid</code> znači „nije kristalizirano“, ne „nije zarađeno“.</div>
 
     <div class="tblwrap">
     <table class="tbl">
@@ -193,7 +202,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 
     <h3>Što to znači za nas konkretno</h3>
     <p>Uz ~37,4 USDC u vaultu i ~8,2% APY sa snapshota, akumulacija je oko <b>0,0084 USDC dnevno</b>. Do danas ≈ <b>0,18 USDC</b>. Do praga od 1 USDC treba još oko <b>98 dana</b> → prva žetva oko <b>2. studenoga 2026.</b></p>
-    <p>Posljedica koju vrijedi izgovoriti naglas: otplata malog kredita <b>nije glatka, nego skokovita</b>. Stotinu dana ništa, pa odjednom ~0,85 USDC (1 USDC bruto minus 15% naknade) sjedne na dug od 1,14. Naša ranija projekcija „~8 mjeseci" time nije oborena — dobila je oblik.</p>
+    <p>Posljedica koju vrijedi izgovoriti naglas: otplata malog kredita <b>nije glatka, nego skokovita</b>. Stotinu dana ništa, pa odjednom ~0,85 USDC (1 USDC bruto minus 15% naknade) sjedne na dug od 1,14. Naša ranija projekcija „~8 mjeseci“ time nije oborena — dobila je oblik.</p>
     <p style="font-size:14px;color:var(--mute)">APY od 8,2% je <b>pretpostavka</b> preuzeta sa snapshota sučelja od 08.07., a ne mjerenje. Točan iznos akumuliranog prinosa dobio bi se iz trenutne cijene udjela — v. pitanje 2.</p>
 
     <!-- PITANJA -->
@@ -203,7 +212,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <div class="q">
       <div class="qn">Pitanje 1 · mehanika</div>
       <h4>Postoji li minimalni prag za žetvu i je li on u ugovoru ili u politici operatora?</h4>
-      <p>Podaci sugeriraju ~1 USDC. Ako je to fiksni prag, male pozicije čekaju mjesecima na prvu otplatu — što je potpuno u redu, ali <b>treba stajati u dokumentaciji</b>, jer inače „samootplativo" zvuči kao dnevni proces.</p>
+      <p>Podaci sugeriraju ~1 USDC. Ako je to fiksni prag, male pozicije čekaju mjesecima na prvu otplatu — što je potpuno u redu, ali <b>treba stajati u dokumentaciji</b>, jer inače „samootplativo“ zvuči kao dnevni proces.</p>
       <div class="why"><b>Zašto pitamo:</b> mi javno pokazujemo poziciju od 1 EUR kao ulazni primjer. Ako takva pozicija realno čeka ~100 dana na prvi pomak, to je informacija koju korisnik zaslužuje unaprijed.</div>
     </div>
 
@@ -218,7 +227,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <div class="qn">Pitanje 3 · rizik</div>
       <h4>Gleda li likvidacijski prag bruto ili neto zaduženje kolaterala?</h4>
       <p>Na našem 1 SOL vise dva duga: naših <b>1,14 USDC</b> i operatorskih <b>45,04 USDC</b>. Sučelje prikazuje LTV <b>1,5%</b> — to je samo korisnički zajam. Bruto opterećenje istog kolaterala je <b>~60%</b>, uz prag likvidacije od 85%.</p>
-      <p>Ekonomski je operatorskih 45 USDC pokriveno vaultnom pozicijom koju je kupilo (carry trade, neto ravno). <b>Ali</b> ako likvidacijska logika gleda bruto dug, poruka „SOL bi morao pasti 98%" je znatno preoptimistična.</p>
+      <p>Ekonomski je operatorskih 45 USDC pokriveno vaultnom pozicijom koju je kupilo (carry trade, neto ravno). <b>Ali</b> ako likvidacijska logika gleda bruto dug, poruka „SOL bi morao pasti 98%“ je znatno preoptimistična.</p>
       <div class="why"><b>Zašto pitamo:</b> ovo je jedina stavka na popisu koja bi, ako ide u krivu stranu, mijenjala procjenu rizika za korisnika — ne samo očekivanja. Zato ju i objavljujemo, iako je <b>neprovjerena</b> i sasvim moguće bezopasna.</div>
     </div>
 
@@ -232,7 +241,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <div class="q">
       <div class="qn">Pitanje 5 · oznaka</div>
       <h4>Je li vault doista Perena?</h4>
-      <p>Račun <code>sM6P4mh5…QF7A</code> u vlasništvu je programa <code>save8RQ…pD9H</code> (Save / ex-Solend obitelj), dok IDL enum kaže <code>vault_provider = 1 (Perena)</code>, a sučelje 08.07. pisalo je „Perena USD vault". Moguće je da je riječ o white-labelu; <b>nismo potvrdili ni jedno ni drugo</b> i zato to nigdje ne tvrdimo.</p>
+      <p>Račun <code>sM6P4mh5…QF7A</code> u vlasništvu je programa <code>save8RQ…pD9H</code> (Save / ex-Solend obitelj), dok IDL enum kaže <code>vault_provider = 1 (Perena)</code>, a sučelje 08.07. pisalo je „Perena USD vault“. Moguće je da je riječ o white-labelu; <b>nismo potvrdili ni jedno ni drugo</b> i zato to nigdje ne tvrdimo.</p>
       <div class="why"><b>Zašto pitamo:</b> korisniku koji radi dubinsku analizu bitno je koji protokol stvarno drži njegov kapital.</div>
     </div>
 
@@ -247,12 +256,12 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <div class="qn">Pitanje 7 · naknada</div>
       <h4>Je li 15% sada stabilno stanje?</h4>
       <p>Izmjereno po danima: <b>0%</b> do 07.07.2026., <b>25%</b> od 09. do 12.07., <b>15,000%</b> od 14.07. nadalje — u dlaku, svaki dan. Danas <code>profit_fee_bps = 1500</code>. Naknadu admin može mijenjati (<code>set_profit_fee</code>), a dokumentacija je uopće ne spominje.</p>
-      <div class="why"><b>Zašto pitamo:</b> mi smo tu povijest sami objavili jer smo ranije netočno implicirali „15% oduvijek". Volimo znati stojimo li iza točne brojke ubuduće.</div>
+      <div class="why"><b>Zašto pitamo:</b> mi smo tu povijest sami objavili jer smo ranije netočno implicirali „15% oduvijek“. Volimo znati stojimo li iza točne brojke ubuduće.</div>
     </div>
 
     <div class="q">
       <div class="qn">Pitanje 8 · suradnja</div>
-      <h4>Registracija airKUNA-e kao „origin" kanala</h4>
+      <h4>Registracija airKUNA-e kao „origin“ kanala</h4>
       <p>Mehanizam radi i mjerljiv je: od <b>23.07.2026.</b> prvi partnerski kanal (origin 1) primio je u pet dana 1,5590 USDC — omjeri <b>15,000%</b> naknade i <b>60,000%</b> partnerskog udjela izlaze točno. Tražimo isti aranžman, uz <b>Squads v4 vault</b> kao receiver (za što presedan već postoji u origin-u 1).</p>
       <div class="why"><b>Status:</b> dok naš origin ID ne postoji na lancu, prihod airKUNA-e iz ovog kanala je <b>0 EUR</b> — i tako i pišemo na svim stranicama.</div>
     </div>
@@ -302,7 +311,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a class="backbtn" href="../">← Natrag na airKUNA</a>
     </div>
     <p class="fnote">
-      Tehnički radni dokument. Nije revizija, sigurnosni audit, ocjena protokola, ponuda ni investicijski savjet. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e; airKUNA je njegov korisnik, ne autor. Nalazi su snimljeni 27.–28.07.2026. i mijenjaju se; provjerite ih sami u blok-exploreru. Dijelovi označeni kao „zaključak iz podataka" nisu potvrđeni uvidom u izvorni kod i mogu imati drugo objašnjenje. Kriptoimovina je volatilna i može izgubiti svu vrijednost.<br/><br/>
+      Tehnički radni dokument. Nije revizija, sigurnosni audit, ocjena protokola, ponuda ni investicijski savjet. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e; airKUNA je njegov korisnik, ne autor. Nalazi su snimljeni 27.–28.07.2026. i mijenjaju se; provjerite ih sami u blok-exploreru. Dijelovi označeni kao „zaključak iz podataka“ nisu potvrđeni uvidom u izvorni kod i mogu imati drugo objašnjenje. Kriptoimovina je volatilna i može izgubiti svu vrijednost.<br/><br/>
       <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
     </p>
   </div>

@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Zamašnjak riznice — DeFi financiranje bez razvodnjavanja udjela · airKUNA</title>
 <meta name="description" content="Iskreno objašnjenje za ulagatelje: kako se razvoj airKUNA-e može financirati konzervativnim zajmom uz kolateral u vlastitom skrbništvu nad SOL-om, koristeći postojeće neovisne DeFi primitivce (Solflare, Squads, Hobba, Jupiter, Circle EURC, Monerium). Nije investicijski savjet." />
+<link rel="canonical" href="https://airkuna.com/zamasnjak/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.com/zamasnjak/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.com/en/treasury-flywheel/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.com/zamasnjak/" />
 <link rel="icon" href="coin.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -126,6 +130,16 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 .btn-gold:hover{transform:translateY(-2px)}
 .btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
 .btn-outline:hover{border-color:var(--gold)}
+
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;margin-left:10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700}
+.langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);line-height:1;transition:.2s}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;margin-left:10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700}
+.langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);line-height:1;transition:.2s}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
 </style>
 </head>
 <body>
@@ -141,7 +155,9 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a href="../samootplativa-investicija/">Hobba: on-chain dokaz</a>
       <a href="../sazetak/">Financiranje / grantovi</a>
     </nav>
+    
     <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20Treasury%20Flywheel%20%E2%80%94%20investor">Kontakt</a>
+    <div class="langsw"><a href="./" hreflang="hr" aria-current="true">HR</a><a href="../en/treasury-flywheel/" hreflang="en">EN</a></div>
   </div>
 </header>
 
@@ -170,7 +186,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     </div>
 
     <div class="callout warn">
-      <b>Što nije.</b> Nije bez rizika i nije "otporno na likvidaciju". To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima, gubitku pariteta stablecoina i tečajnom riziku. Ako SOL padne dovoljno duboko, ili LST/stablecoin izgubi paritet, ili prinos padne ispod kamate, teza se ruši. Odjeljci u nastavku kvantificiraju svaku od tih stavki umjesto da ih otklanjaju odmahivanjem ruke.
+      <b>Što nije.</b> Nije bez rizika i nije „otporno na likvidaciju“. To je <b>polužena usmjerena pozicija u SOL-u</b> uz izloženost pametnim ugovorima, gubitku pariteta stablecoina i tečajnom riziku. Ako SOL padne dovoljno duboko, ili LST/stablecoin izgubi paritet, ili prinos padne ispod kamate, teza se ruši. Odjeljci u nastavku kvantificiraju svaku od tih stavki umjesto da ih otklanjaju odmahivanjem ruke.
     </div>
 
     <!-- STACK -->
@@ -242,7 +258,7 @@ flowchart TB
           <div class="out"><div class="k"><span>Zadržani SOL pri cilju</span></div><div class="v gold" id="oRetain">€333,333</div><div class="hint" id="oMult">≈ 3.3× glavnice (potencijal rasta cijene, nije zajamčen)</div></div>
         </div>
       </div>
-      <div class="disc">Samo ilustrativan model — nije ponuda, nudba, projekcija ni investicijski savjet. Prinose, kamate na posudbu, LTV granice i pragove likvidacije određuju protokoli trećih strana i neprestano se mijenjaju. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
+      <div class="disc">Samo ilustrativan model — nije ponuda, poziv na ulaganje, projekcija ni investicijski savjet. Prinose, kamate na posudbu, LTV granice i pragove likvidacije određuju protokoli trećih strana i neprestano se mijenjaju. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
     </div>
 
     <!-- RISK -->
@@ -263,7 +279,7 @@ flowchart TB
     </table>
     </div>
 
-    <div class="callout warn"><b>Stav o sistemskom riziku — iskreno uokviren.</b> Ovaj model počiva na neprekinutom radu nekoliko neovisnih protokola (kreditno tržište, LST, DEX agregator, izdavatelj stablecoina, SEPA kanal). Koreliran neuspjeh među njima oštetio bi ili uništio poziciju. <b>Ne</b> otklanjamo to kao "zanemarivo"; tretiramo ga kao glavni, svjestan rizik strategije i sukladno tome određujemo veličinu pozicija.</div>
+    <div class="callout warn"><b>Stav o sistemskom riziku — iskreno uokviren.</b> Ovaj model počiva na neprekinutom radu nekoliko neovisnih protokola (kreditno tržište, LST, DEX agregator, izdavatelj stablecoina, SEPA kanal). Koreliran neuspjeh među njima oštetio bi ili uništio poziciju. <b>Ne</b> otklanjamo to kao „zanemarivo“; tretiramo ga kao glavni, svjestan rizik strategije i sukladno tome određujemo veličinu pozicija.</div>
 
     <!-- WHAT IT IS -->
     <h2>Što ulagatelj dobiva</h2>
@@ -273,7 +289,7 @@ flowchart TB
       <li><b>Financiranje airKUNA-e bez razvodnjavanja udjela</b> — razvoj se financira bez prodaje temeljnog vlasničkog udjela ili tokena na dnu tržišta.</li>
     </ul>
 
-    <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, nudba, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Tvrdnje protokola trećih strana (prinosi, MiCA status, revizije) treba neovisno provjeriti.</div>
+    <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, poziv na ulaganje, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Tvrdnje protokola trećih strana (prinosi, MiCA status, revizije) treba neovisno provjeriti.</div>
 
     <div class="ctarow">
       <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20Treasury%20Flywheel%20%E2%80%94%20discuss">Razgovarajte s timom</a>
@@ -291,7 +307,7 @@ flowchart TB
       <a class="backbtn" href="../">← Natrag na airKUNA</a>
     </div>
     <p class="fnote">
-      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. Brojke su okvirne i ovise o protokolima trećih strana izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, poziv na ulaganje, financijska promocija ni investicijski/pravni/porezni savjet. Brojke su okvirne i ovise o protokolima trećih strana izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
       <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
     </p>
   </div>

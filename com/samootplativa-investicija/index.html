@@ -6,6 +6,10 @@
 <title>Samootplativa investicija u airKUNA-u — pogonjena Hobbom · airKUNA</title>
 <meta name="description" content="Kako ulagatelj može financirati airKUNA-u a da mu se ulog sam otplati: SOL u vlastitom skrbništvu kao kolateral, mali konzervativan zajam u riznicu, a Hobbin motor prinosa (audited, Solana) svakodnevno žanje prinos i otplaćuje dug. Sve je provjereno on-chain. Nije investicijski savjet." />
 <link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.com/samootplativa-investicija/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.com/samootplativa-investicija/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.com/en/self-repaying-investment/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.com/samootplativa-investicija/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -27,17 +31,40 @@ a{color:inherit;text-decoration:none}
 .doc{max-width:900px;margin:0 auto;padding:0 24px}
 
 header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
 .brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy);flex:0 0 auto}
 .brand img{width:32px;height:32px}
-.navlinks{display:flex;gap:20px;font-size:14.5px;font-weight:500;color:var(--ink);flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;white-space:nowrap;padding:0 6px}
-.navlinks::-webkit-scrollbar{display:none}
+.navlinks{display:flex;gap:20px;font-size:14.5px;font-weight:500;color:var(--ink);flex:1;min-width:0;white-space:nowrap;padding:0 6px}
 .navlinks a{flex:0 0 auto}
 .navlinks a:hover{color:var(--gold)}
 .nav .btn{flex:0 0 auto}
-@media(max-width:560px){.nav .btn-navy{display:none}}
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
 .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+/* prebacivač jezika */
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.langsw a{padding:5px 11px;border-radius:999px;color:var(--mute);transition:.2s;line-height:1}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+
+/* hamburger + mobilni drawer */
+.navtoggle{display:none;flex:0 0 auto;width:42px;height:42px;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--navy);transition:.2s}
+.navtoggle:hover{border-color:var(--gold);color:var(--gold)}
+.navtoggle svg{width:22px;height:22px}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,22,49,.45);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:60}
+.drawer-overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(330px,86vw);background:var(--paper);box-shadow:-24px 0 70px -34px rgba(0,30,80,.55);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;padding:18px 22px 30px;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.drawer .dhead .brand{font-size:19px}
+.drawer .dclose{width:42px;height:42px;flex:0 0 auto;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:.2s}
+.drawer .dclose:hover{border-color:var(--gold);color:var(--gold)}
+.drawer nav{display:flex;flex-direction:column;margin-top:4px}
+.drawer nav a{padding:13px 4px;font-size:16px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--line)}
+.drawer nav a:hover{color:var(--gold)}
+.drawer .btn{margin-top:20px;justify-content:center;width:100%}
+.drawer .langsw{margin-top:18px;align-self:flex-start}
+@media(max-width:1024px){.navlinks{display:none}.nav>.btn-navy{display:none}.navtoggle{display:inline-flex}}
 
 .dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
 .dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
@@ -194,18 +221,52 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a href="#ideja">Ideja</a>
       <a href="#dokaz">On-chain dokaz</a>
       <a href="#kako">Kako radi</a>
-      <a href="#napredak">Napredak otplate</a>
-      <a href="#brojke">Brojke</a>
+      <a href="#napredak">Napredak</a>
       <a href="#rizik">Rizici</a>
       <a href="#kako-i-ti">Kako i ti</a>
       <a href="../hobba-nalazi/">Nalazi</a>
-      <a href="../zamasnjak/">Zamašnjak</a>
-      <a href="../novac-koji-radi/">Novac koji radi</a>
-      <a href="../blog/">Blog</a>
     </nav>
     <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Kontakt</a>
+    <div class="langsw">
+      <a href="./" hreflang="hr" aria-current="true">HR</a>
+      <a href="../en/self-repaying-investment/" hreflang="en">EN</a>
+    </div>
+    <button class="navtoggle" id="navToggle" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
   </div>
 </header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <button class="dclose" id="drawerClose" aria-label="Zatvori izbornik">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#ideja">Ideja</a>
+    <a href="#dokaz">On-chain dokaz</a>
+    <a href="#kako">Kako radi</a>
+    <a href="#napredak">Napredak otplate</a>
+    <a href="#kanal">Vlastiti kanal</a>
+    <a href="#brojke">Brojke</a>
+    <a href="#rizik">Rizici</a>
+    <a href="#kako-i-ti">Kako i ti</a>
+    <a href="../hobba-nalazi/">On-chain nalazi</a>
+    <a href="../zamasnjak/">Zamašnjak</a>
+    <a href="../novac-koji-radi/">Novac koji radi</a>
+    <a href="../blog/">Blog</a>
+    <a href="https://zivo.airkuna.com" target="_blank" rel="noopener">Živi nadzor ↗</a>
+    <a href="../">Naslovnica airKUNA</a>
+  </nav>
+  <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Kontakt</a>
+  <div class="langsw">
+    <a href="./" hreflang="hr" aria-current="true">HR</a>
+    <a href="../en/self-repaying-investment/" hreflang="en">EN</a>
+  </div>
+</aside>
 
 <section class="dochero">
   <div class="doc">
@@ -228,7 +289,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     <p class="lede" style="margin-top:0" id="ideja">U jednoj rečenici: umjesto da ulagatelj proda imovinu da bi financirao airKUNA-u, on je <b>zadržava</b> — a razvoj se financira iz <b>prinosa</b> koji ta imovina zarađuje dok stoji kao kolateral. Zajam koji ide u riznicu airKUNA-e mali je u odnosu na kolateral, pa ga nosivi prinos (carry) s vremenom otplati. Rezultat: <b>ulog koji se sam otplaćuje</b>, uz zadržanu izloženost SOL-u i alokaciju u airKUNA-i.</p>
 
     <div class="callout good">
-      <b>Zašto je ovo stvarno, a ne marketing.</b> Hobbin motor ("Sonnar") uzima idle kolateral, plasira ga u prinosne vaultove (Perena, Kamino, Jupiter Lend) i <b>svakodnevno žanje prinos te njime otplaćuje dug</b>. Ugovor pritom sam emitira događaj <code>UserHarvestPayout</code> s poljem <code>debt_repaid</code> — pa "self-repaying" nije metafora nego <b>broj koji piše u lancu</b>. Dekodirali smo sve te događaje: od 14.04. do 27.07.2026. požnjeveno je <b>1.280,73 USDC</b> prinosa, od čega je <b>1.033,01 USDC otišlo izravno na otplatu dugova</b> korisnika. Motor je radio i danas.
+      <b>Zašto je ovo stvarno, a ne marketing.</b> Hobbin motor („Sonnar“) uzima idle kolateral, plasira ga u prinosne vaultove (Perena, Kamino, Jupiter Lend) i <b>svakodnevno žanje prinos te njime otplaćuje dug</b>. Ugovor pritom sam emitira događaj <code>UserHarvestPayout</code> s poljem <code>debt_repaid</code> — pa „self-repaying“ nije metafora nego <b>broj koji piše u lancu</b>. Dekodirali smo sve te događaje: od 14.04. do 27.07.2026. požnjeveno je <b>1.280,73 USDC</b> prinosa, od čega je <b>1.033,01 USDC otišlo izravno na otplatu dugova</b> korisnika. Motor je radio i danas.
     </div>
 
     <div class="callout warn">
@@ -237,7 +298,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 
     <!-- ON-CHAIN DOKAZ -->
     <h2 id="dokaz">On-chain dokaz — provjerljiv od svakoga</h2>
-    <p>Za razliku od uobičajenih "trust me" prezentacija, cijeli mehanizam je javan na Solani. Evo ključnih artefakata koje svatko može otvoriti u blok-exploreru — <b>svježe izmjereno 27.07.2026.</b></p>
+    <p>Za razliku od uobičajenih „trust me“ prezentacija, cijeli mehanizam je javan na Solani. Evo ključnih artefakata koje svatko može otvoriti u blok-exploreru — <b>svježe izmjereno 27.07.2026.</b></p>
 
     <div class="tblwrap">
     <table class="tbl">
@@ -319,7 +380,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
           </div>
         </div>
       </div>
-      <div class="simlog" id="simLog"><b>Kako novac teče — animirano.</b> Pritisni „Pokreni" (ili pusti da krene samo) i prati petlju: deposit → zajam → plasman → žetva/otplata → izlaz.</div>
+      <div class="simlog" id="simLog"><b>Kako novac teče — animirano.</b> Pritisni „Pokreni“ (ili pusti da krene samo) i prati petlju: deposit → zajam → plasman → žetva/otplata → izlaz.</div>
       <div class="simzero">Trošak ulagatelja kroz cijelu petlju: <b id="simCost">0 €</b> glavnice — dug plaća prinos.</div>
       <div class="cap"><b>Petlja koja se sama zatvara.</b> Navy = korak koji se upravo događa, zlatno = već odrađeno. Korak žetve i otplate (harvest → repay) je onaj koji smo izmjerili na lancu — 699 žetvi u zadnjih 32 dana, 1.033 USDC dugova otplaćeno iz prinosa.</div>
     </div>
@@ -368,7 +429,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
         <div class="tbar"><i class="gold" style="width:0%"></i></div>
         <div class="tnums" style="margin-top:8px"><span class="tof"><b>0%</b> otplaćeno</span><span class="tof">preostalo 1,14 USDC</span></div>
         <p><b>Ovdje se brojka nije ni pomaknula</b> — ali ne zato što kapital ne radi. Za naš novčanik ne postoji nijedan <code>UserRepaid</code> ni <code>UserHarvestPayout</code>, jer <b>žetva još nije okinula</b>: prinos se akumulira u <b>cijeni vaultnog udjela</b>, a knjiži se tek kad ga <code>harvest_vault</code> kristalizira. Naš račun drži <b>34,713899 udjela</b> — kapital je plasiran i zarađuje.</p>
-        <p>Zašto još nije okinulo: kroz svih 60 poziciju vidi se <b>prag od ~1 USDC</b> — prva žetva svake male pozicije iznosi 1,0008–1,0035 USDC. Uz ~0,0084 USDC dnevno, naša akumulacija je danas ≈ 0,18 USDC, pa prvu žetvu očekujemo <b>oko 2.11.2026.</b> Otplata je dakle <b>skokovita</b>, ne glatka.</p>
+        <p>Zašto još nije okinulo: kroz svih 60 pozicija vidi se <b>prag od ~1 USDC</b> — prva žetva svake male pozicije iznosi 1,0008–1,0035 USDC. Uz ~0,0084 USDC dnevno, naša akumulacija je danas ≈ 0,18 USDC, pa prvu žetvu očekujemo <b>oko 02.11.2026.</b> Otplata je dakle <b>skokovita</b>, ne glatka.</p>
         <span class="verdict y">akumulira se, nije proknjiženo</span>
         <p style="margin-top:12px!important"><a href="../hobba-nalazi/#prag" style="color:var(--gold);font-weight:600;font-size:13.5px">Dokazi i računica → nalazi i otvorena pitanja</a></p>
       </div>
@@ -376,7 +437,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 
     <div class="callout warn"><b>Zašto ovo objavljujemo, iako nam ne ide u prilog.</b> Bilo bi lakše prikazati samo prvu traku — ona je mjerena, uspješna i doslovno dokazuje da se dug otplaćuje sam. Ali to bi bio odabir podatka koji laska. Istina je oboje: <b>mehanizam radi i vidi se u brojkama</b> (1.033 USDC dugova otplaćeno iz prinosa na razini protokola), a <b>naš konkretni mikro-zajam još čeka prvu žetvu</b>. Kad okine, promjena će se pojaviti sama, na istom position računu, bez da je itko mora najaviti.</div>
 
-    <div class="callout"><b>Tehnički detalji i pitanja za Hobbu.</b> Cijela metoda mjerenja, tablica koja pokazuje prag od ~1 USDC kroz svih 60 poziciju, te <b>osam otvorenih pitanja</b> na koja se izvana ne može odgovoriti (uključujući ono o bruto naspram neto opterećenja kolaterala) stoje na zasebnoj, javnoj stranici — <a href="../hobba-nalazi/" style="color:var(--gold);font-weight:600">on-chain nalazi i otvorena pitanja →</a> Objavljena je javno namjerno, da se o njoj može raspravljati s Hobba timom otvoreno.</div>
+    <div class="callout"><b>Tehnički detalji i pitanja za Hobbu.</b> Cijela metoda mjerenja, tablica koja pokazuje prag od ~1 USDC kroz svih 60 pozicija, te <b>osam otvorenih pitanja</b> na koja se izvana ne može odgovoriti (uključujući ono o bruto naspram neto opterećenja kolaterala) stoje na zasebnoj, javnoj stranici — <a href="../hobba-nalazi/" style="color:var(--gold);font-weight:600">on-chain nalazi i otvorena pitanja →</a> Objavljena je javno namjerno, da se o njoj može raspravljati s Hobba timom otvoreno.</div>
 
     <h3>Potpuni dnevnik naše pozicije — svi događaji, ikad</h3>
     <div class="tblwrap">
@@ -394,11 +455,11 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     </div>
     <p style="font-size:14px;color:var(--mute)">Metoda: svi <code>Program data:</code> logovi Hobbinog programa dekodirani su preko Anchor discriminatora (<code>sha256("event:&lt;Ime&gt;")[0:8]</code>) prema IDL-u 0.1.4, a stanje računa pročitano je s <code>api.mainnet-beta.solana.com</code>. Nijedan broj na ovoj stranici nije očitan iz sučelja — svi su izračunati iz lanca i ponovljivi.</p>
 
-    <div class="callout warn" style="margin-top:16px"><b>Poštena napomena o brojci "Loan APY".</b> Sučelje Hobbe za male pozicije prikazuje jako negativan "Loan APY" (npr. −147% do −397%). To <b>ne</b> znači skrivenu naknadu — negativno znači da zarada premašuje kamatu (zajam se otplaćuje sam). Ali kod <b>sitnih</b> zajmova taj je postotak nestabilan omjer (zarada ÷ kredit) i zavaravajući je kao headline; u apsolutnom iznosu radi se o centima. Ovu smo primjedbu prenijeli i Hobba timu.</div>
+    <div class="callout warn" style="margin-top:16px"><b>Poštena napomena o brojci „Loan APY“.</b> Sučelje Hobbe za male pozicije prikazuje jako negativan „Loan APY“ (npr. −147% do −397%). To <b>ne</b> znači skrivenu naknadu — negativno znači da zarada premašuje kamatu (zajam se otplaćuje sam). Ali kod <b>sitnih</b> zajmova taj je postotak nestabilan omjer (zarada ÷ kredit) i zavaravajući je kao headline; u apsolutnom iznosu radi se o centima. Ovu smo primjedbu prenijeli i Hobba timu.</div>
 
     <!-- VLASTITI KANAL / RIZNICA -->
     <h2 id="kanal">Kako airKUNA gradi riznicu — vlastiti kanal</h2>
-    <p>Do sad si vidio <b>jednu</b> poziciju — našu. Ali prava mašina za riznicu nije naša pozicija, nego <b>kanal</b>. Dva se toka novca lako pobrkaju, pa ih razdvajamo pošteno:</p>
+    <p>Dosad si vidio <b>jednu</b> poziciju — našu. Ali prava mašina za riznicu nije naša pozicija, nego <b>kanal</b>. Dva se toka novca lako pobrkaju, pa ih razdvajamo pošteno:</p>
     <div class="tblwrap">
     <table class="tbl">
       <thead><tr><th>Tok</th><th>Što se događa</th><th>Učinak na riznicu</th></tr></thead>
@@ -408,7 +469,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       </tbody>
     </table>
     </div>
-    <p>Naknada je transparentna i <b>ista za svakoga</b>: Hobba uzima 15% na <b>prinos</b> (ne na glavnicu — on-chain izmjereno <code>profit_fee_bps=1500</code>). Ugovor ima ugrađen „origin" revenue-share: kad korisnik uđe kroz partnerski kanal, tih 15% se dijeli.</p>
+    <p>Naknada je transparentna i <b>ista za svakoga</b>: Hobba uzima 15% na <b>prinos</b> (ne na glavnicu — on-chain izmjereno <code>profit_fee_bps=1500</code>). Ugovor ima ugrađen „origin“ revenue-share: kad korisnik uđe kroz partnerski kanal, tih 15% se dijeli.</p>
 
     <div class="proof">
       <h3>Podjela 15% naknade na prinos</h3>
@@ -420,12 +481,12 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
         <div class="pcell"><div class="k">Instrument riznice</div><div class="v" style="font-size:16px">Squads v4</div><div class="hint">Solana standard (kao Safe na EVM-u)</div></div>
       </div>
       <div class="addr">
-        Split empirijski izmjeren na postojećem kanalu: <code>9,0% + 6,0%</code> = 60% naknade partneru (<code>fee_share_bps=6000</code>). Prihod sjeda automatski u USDC račun riznice na svakoj žetvi — bez ručnog „claim" koraka.<br/>
+        Split empirijski izmjeren na postojećem kanalu: <code>9,0% + 6,0%</code> = 60% naknade partneru (<code>fee_share_bps=6000</code>). Prihod sjeda automatski u USDC račun riznice na svakoj žetvi — bez ručnog „claim“ koraka.<br/>
         <b>Prvih 5 dana tog kanala (23.–27.07.2026.), dekodirano iz lanca:</b> 15 žetvi · 17,3222 USDC prinosa · 2,5983 USDC naknade (<b>15,000%</b> — u dlaku) · <b>1,5590 USDC partneru</b> (<b>60,000%</b> naknade) · 11,5696 USDC otišlo na otplatu duga korisnika.
       </div>
     </div>
 
-    <div class="callout"><b>Status — pošteno.</b> Do prošlog tjedna smo za „origin" revenue-share mogli reći samo da postoji u kodu. Od <b>23.07.2026.</b> on <b>stvarno teče</b>: prvi partnerski kanal primio je 1,56 USDC u pet dana, a omjeri (15% / 60%) poklapaju se s ugovorom do treće decimale. To je dobra vijest za model — i dalje mala brojka, jer je i sam protokol malen. Ono što se <b>nije</b> promijenilo: <b>airKUNA-in vlastiti origin još nije registriran na lancu.</b> Aranžman s Hobba timom je u dogovoru, riznica u Squads multisigu je predviđena. Dok naš origin ID ne postoji u lancu, prihod airKUNA-e iz ovog kanala je <b>0 EUR</b> — plan, ne činjenica.</div>
+    <div class="callout"><b>Status — pošteno.</b> Do prošlog tjedna smo za „origin“ revenue-share mogli reći samo da postoji u kodu. Od <b>23.07.2026.</b> on <b>stvarno teče</b>: prvi partnerski kanal primio je 1,56 USDC u pet dana, a omjeri (15% / 60%) poklapaju se s ugovorom do treće decimale. To je dobra vijest za model — i dalje mala brojka, jer je i sam protokol malen. Ono što se <b>nije</b> promijenilo: <b>airKUNA-in vlastiti origin još nije registriran na lancu.</b> Aranžman s Hobba timom je u dogovoru, riznica u Squads multisigu je predviđena. Dok naš origin ID ne postoji u lancu, prihod airKUNA-e iz ovog kanala je <b>0 EUR</b> — plan, ne činjenica.</div>
 
     <!-- BROJKE -->
     <h2 id="brojke">Brojke — stanje protokola (iskreno)</h2>
@@ -441,14 +502,14 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
         <tr><td>Sastav kolaterala</td><td class="num">85% / 15%</td><td class="num">SOL 84,8% · cbBTC 15,2%</td><td>dominira SOL, kako i teza pretpostavlja</td></tr>
         <tr><td>Pozicije (wallet × kolateral)</td><td class="num">90</td><td class="num"><b>96</b></td><td><span class="badge y">rana faza</span> +6 u 4 dana</td></tr>
         <tr><td>Različiti walleti</td><td class="num">79</td><td class="num"><b>84</b></td><td>naše brojanje događaja; Hobbin dashboard broji po drugoj definiciji</td></tr>
-        <tr><td>Transakcija (ukupno)</td><td class="num">3.281</td><td class="num"><b>3.436</b></td><td>+155 · protokol radi svaki dan, bez pauze od 26.06.</td></tr>
+        <tr><td>Transakcije (ukupno)</td><td class="num">3.281</td><td class="num"><b>3.436</b></td><td>+155 · protokol radi svaki dan, bez pauze od 26.06.</td></tr>
         <tr><td>Žetve prinosa</td><td class="num">—</td><td class="num"><b>130 od 23.07.</b></td><td>699 u zadnjih 32 dana; zadnja danas</td></tr>
         <tr><td>Dug otplaćen iz prinosa</td><td class="num">—</td><td class="num"><b>1.033,01 USDC</b></td><td><span class="badge g">kumulativno</span> od 1.280,73 USDC požnjevenog prinosa</td></tr>
         <tr><td>Koncentracija</td><td class="num" colspan="2">top 3 walleta ≈ 72% TVL-a (08.07.)</td><td><span class="badge r">visoka</span> mali broj velikih depozitara</td></tr>
       </tbody>
     </table>
     </div>
-    <p style="font-size:14px;color:var(--mute)">Napomena o brojanju korisnika: Hobbin javni dashboard pokazivao je „87 korisnika" 23.07., dok naše brojanje istih događaja daje 79 walleta / 90 pozicija na taj datum. Riječ je o <b>različitom pravilu brojanja</b>, ne o proturječju — mi objavljujemo vlastitu, dosljedno mjerenu definiciju i kažemo koja je.</p>
+    <p style="font-size:14px;color:var(--mute)">Napomena o brojanju korisnika: Hobbin javni dashboard pokazivao je „87 korisnika“ 23.07., dok naše brojanje istih događaja daje 79 walleta / 90 pozicija na taj datum. Riječ je o <b>različitom pravilu brojanja</b>, ne o proturječju — mi objavljujemo vlastitu, dosljedno mjerenu definiciju i kažemo koja je.</p>
 
     <!-- RIZIK -->
     <h2 id="rizik">Rizici — jasno izrečeno</h2>
@@ -475,7 +536,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <li><b>Zadržanu izloženost SOL-u</b> — glavnica ostaje ulagateljeva, u vlastitom skrbništvu, s punim potencijalom rasta (i pada) SOL-a.</li>
       <li><b>Alokaciju u airKUNA-i</b> — zajam u riznicu financira razvoj; veličinu i instrument bilo kakvog udjela/alokacije utvrđuje zaseban, formalan ugovor, a ne ova stranica.</li>
       <li><b>Ulog koji se sam otplaćuje</b> — dug se servisira iz prinosa kolaterala, a ne prodajom glavnice na dnu tržišta.</li>
-      <li><b>Punu provjerljivost</b> — svaka tvrdnja je na lancu; ništa se ne mora uzeti "na riječ".</li>
+      <li><b>Punu provjerljivost</b> — svaka tvrdnja je na lancu; ništa se ne mora uzeti „na riječ“.</li>
     </ul>
 
     <!-- KAKO I TI -->
@@ -498,12 +559,12 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a class="btn-outline" href="https://zivo.airkuna.com" target="_blank" rel="noopener">Pogledaj živu poziciju ↗</a>
     </div>
 
-    <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, nudba, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Hobba i ostali navedeni protokoli su neovisne treće strane; njihove tvrdnje (prinosi, audit, dostupnost) treba neovisno provjeriti. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
+    <div class="callout"><b>Pravna i regulatorna napomena.</b> Ova stranica je <b>objašnjenje</b>, a ne ponuda vrijednosnih papira, poziv na ulaganje, financijska promocija ni investicijski/porezni/pravni savjet. Svako stvarno sudjelovanje bilo bi dokumentirano formalnim ugovorom, uz procjenu prikladnosti i primjenjivo pravo (uklj. MiCA / MiFID II i hrvatsku regulativu). airKUNA / ITalk je softverska tvrtka bez skrbništva i ne pruža regulirane financijske usluge. Hobba i ostali navedeni protokoli su neovisne treće strane; njihove tvrdnje (prinosi, audit, dostupnost) treba neovisno provjeriti. Kriptoimovina je volatilna i može izgubiti svu vrijednost.</div>
 
     <div class="ctarow">
-      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Razgovarajte s timom</a>
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20samootplativa%20investicija%20(Hobba)">Razgovaraj s timom</a>
       <a class="btn-outline" href="https://t.me/airkuna_com">Javna rasprava — t.me/airkuna_com</a>
-      <a class="btn-outline" href="../zamasnjak/">Pogledajte širi model zamašnjaka</a>
+      <a class="btn-outline" href="../zamasnjak/">Pogledaj širi model zamašnjaka</a>
     </div>
 
   </div>
@@ -516,7 +577,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
       <a class="backbtn" href="../">← Natrag na airKUNA</a>
     </div>
     <p class="fnote">
-      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, nudba, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci snimljeni su <b>27.07.2026.</b> (i pozicija i protokol) i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
+      Ilustrativno objašnjenje za ulagatelje. Nije ponuda, poziv na ulaganje, financijska promocija ni investicijski/pravni/porezni savjet. On-chain podaci snimljeni su <b>27.07.2026.</b> (i pozicija i protokol) i mijenjaju se; provjerite ih sami u blok-exploreru. Hobba je neovisan protokol treće strane izvan kontrole airKUNA-e. Kriptoimovina je volatilna i može izgubiti svu vrijednost. airKUNA / ITalk je pružatelj softvera bez skrbništva; regulirane funkcije obavljaju licencirane strane.<br/><br/>
       <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
     </p>
   </div>
@@ -530,8 +591,8 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
   var STEPS=[
     {n:["u"],log:"<b>Početak.</b> Ulagatelj drži 1 SOL u vlastitom novčaniku (Solflare). Dug: 0.",u:"1 SOL",h:"—",v:"—",r:"—",debt:0},
     {e:"e1",n:["u","h"],log:"<b>1 · Deposit.</b> 1 SOL ulazi u Hobbu kao kolateral — i dalje je ulagateljev, samo je počeo raditi.",u:"→ 1 SOL kao kolateral",h:"kolateral: 1 SOL",debt:0},
-    {e:"e2",n:["h","r"],log:"<b>2 · Zajam.</b> Protiv kolaterala podiže se 1,14 USDC (≈ 1 EUR) i ide u riznicu airKUNA-e. LTV ≈ 1,5 % — sićušan.",r:"1,14 USDC + ugovor o udjelu",debt:1.14},
-    {e:"e3",n:["h","v"],log:"<b>3 · Plasman.</b> Hobba automatski šalje kolateral u prinosne vaultove (Perena · Kamino · Jupiter Lend).",v:"1 SOL radi (~8 % APY)",debt:1.14},
+    {e:"e2",n:["h","r"],log:"<b>2 · Zajam.</b> Protiv kolaterala podiže se 1,14 USDC (≈ 1 EUR) i ide u riznicu airKUNA-e. LTV ≈ 1,5% — sićušan.",r:"1,14 USDC + ugovor o udjelu",debt:1.14},
+    {e:"e3",n:["h","v"],log:"<b>3 · Plasman.</b> Hobba automatski šalje kolateral u prinosne vaultove (Perena · Kamino · Jupiter Lend).",v:"1 SOL radi (~8% APY)",debt:1.14},
     {e:"e4",n:["v","h"],log:"<b>4 · HarvestVault + OperatorRepay.</b> Motor žanje prinos i njime automatski otplaćuje dug. Na lancu: 699 žetvi u 32 dana, 1.033 USDC otplaćenog duga.",debt:0.76},
     {e:"e4",n:["v","h"],log:"… tjedni prolaze — žetva → otplata, svaki dan, bez ijednog poteza ulagatelja …",debt:0.38},
     {e:"e4",n:["v","h"],log:"<b>≈ 8 mjeseci od pologa:</b> dug otplaćen do nule. Ulagatelj nije uplatio ništa — sve je platio prinos.",debt:0,h:"kolateral: 1 SOL · dug 0"},
@@ -592,6 +653,18 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
     io.observe($("simfig"));
   }
   apply();
+})();
+</script>
+
+<script>
+(function(){
+  var drawer=document.getElementById('drawer'),ov=document.getElementById('drawerOverlay'),
+      tog=document.getElementById('navToggle'),cls=document.getElementById('drawerClose');
+  function open(){drawer.classList.add('open');ov.classList.add('open');tog.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function close(){drawer.classList.remove('open');ov.classList.remove('open');tog.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  tog.addEventListener('click',open);cls.addEventListener('click',close);ov.addEventListener('click',close);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
 })();
 </script>
 

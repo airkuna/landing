@@ -6,6 +6,10 @@
 <title>airKUNA — zašto je euro stablecoin važan za lokalnu ekonomiju</title>
 <meta name="description" content="Najstarije hrvatsko sredstvo plaćanja postaje najnovije. Zašto stablecoin 1:1 s eurom, kako nastaje novac, zašto centralizirana likvidnost šteti lokalnoj ekonomiji — i kuharica kako izdati svoj euro stablecoin." />
 <link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.org/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.org/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.org/en/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.org/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -155,6 +159,11 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
 .reveal.in{opacity:1;transform:none}
 .src{font-size:12px;color:#9aa6b8;margin-top:26px;text-align:center}
 .src a{text-decoration:underline}
+
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;margin-left:10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700}
+.langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);line-height:1;transition:.2s}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
 </style>
 </head>
 <body>
@@ -171,6 +180,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
       <a href="#partneri">Za partnere</a>
     </nav>
     <a class="btn btn-navy btn-sm" href="https://airkuna.com">Digitalni identitet →</a>
+    <div class="langsw"><a href="/" hreflang="hr" aria-current="true">HR</a><a href="/en/" hreflang="en">EN</a></div>
   </div>
 </header>
 
@@ -184,7 +194,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
       <a class="btn btn-gold" href="#problem">Zašto je ovo važno</a>
       <a class="btn btn-ghost" href="#kuharica">Kuharica: izdaj svoj</a>
     </div>
-    <div class="hook">„Od krzna do koda."</div>
+    <div class="hook">„Od krzna do koda.“</div>
   </div>
 </section>
 
@@ -193,7 +203,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
   <div class="narrow center">
     <span class="eyebrow">Tri života jedne kune</span>
     <h2 class="title">Valuta nazvana po vrijednosti, ne po novcu</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Kuna je hrvatska riječ za životinju kunu zlaticu. U srednjem vijeku kunje krzno bilo je novac — porez „marturina" plaćao se u krznu. Kuna je sredstvo plaćanja u ovim krajevima već tisuću godina.</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Kuna je hrvatska riječ za životinju kunu zlaticu. U srednjem vijeku kunje krzno bilo je novac — porez „marturina“ plaćao se u krznu. Kuna je sredstvo plaćanja u ovim krajevima već tisuću godina.</p>
   </div>
   <div class="wrap">
     <div class="grid g3">
@@ -327,7 +337,7 @@ flowchart TB
 <section id="vlasnistvo">
   <div class="narrow center">
     <span class="eyebrow red">Tko zapravo zarađuje</span>
-    <h2 class="title">Lanac ne staje kod „strane matice"</h2>
+    <h2 class="title">Lanac ne staje kod „strane matice“</h2>
     <p class="lead" style="margin-left:auto;margin-right:auto">Kamata i naknada koju platiš svojoj banci putuje preko Milana i Torina sve do fonda na Wall Streetu — i zaklade stare 460 godina.</p>
   </div>
   <div class="wrap">
@@ -384,7 +394,7 @@ flowchart LR
   <div class="narrow center">
     <span class="eyebrow">Dva modela, jedna razlika</span>
     <h2 class="title">Gdje vrijednost ostaje</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Nije riječ o tome da su banke „zle". Riječ je o tome gdje se akumulira likvidnost — i tko kontrolira novčanu infrastrukturu.</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Nije riječ o tome da su banke „zle“. Riječ je o tome gdje se akumulira likvidnost — i tko kontrolira novčanu infrastrukturu.</p>
   </div>
   <div class="wrap">
     <div class="vs">
@@ -395,7 +405,7 @@ flowchart LR
           <li>Odluka o kreditu i dobit centralizirane izvan zemlje</li>
           <li>Dividenda sustavno odlazi stranoj matici</li>
           <li>Neproziran sustav, radno vrijeme, posrednici</li>
-          <li>Korisnik ne vidi gdje i kako njegov novac „radi"</li>
+          <li>Korisnik ne vidi gdje i kako njegov novac „radi“</li>
           <li>Spori prekogranični prijenosi i naknade</li>
         </ul>
       </div>
@@ -609,7 +619,7 @@ flowchart LR
       </div>
     </div>
     <p class="fnote">
-      <b>Napomena o nazivu:</b> Hrvatska je u eurozoni od 1. 1. 2023.; kuna više ne postoji kao valuta. „KUNA" je <b>brand</b> (digitalni hrvatski euro), a underlying vrijednost tokena je <b>euro</b>. Pod MiCA-om token je e-money token (EMT) koji referencira euro.<br/><br/>
+      <b>Napomena o nazivu:</b> Hrvatska je u eurozoni od 1. 1. 2023.; kuna više ne postoji kao valuta. „KUNA“ je <b>brand</b> (digitalni hrvatski euro), a underlying vrijednost tokena je <b>euro</b>. Pod MiCA-om token je e-money token (EMT) koji referencira euro.<br/><br/>
       Edukativni i informativni sadržaj — <b>nije financijski savjet</b> ni ponuda. Brojke su zaokružene i potkrijepljene javnim izvorima. © 2026 airKUNA.<br/><br/>
       airKUNA je otvoreni koncept; dugoročno ga je zamišljeno da vodi zajednica kroz <b>airKUNA DAO</b> (u nastajanju).
     </p>

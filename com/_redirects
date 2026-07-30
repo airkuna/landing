@@ -1,2 +1,10 @@
 /hobba/*  /samootplativa-investicija/:splat  301
 /hobba   /samootplativa-investicija/  301
+
+# engleske stranice preseljene pod /en/ (30.07.2026.)
+/flywheel/*  /en/treasury-flywheel/  301
+/flywheel    /en/treasury-flywheel/  301
+/funding/*   /en/funding/  301
+/funding     /en/funding/  301
+/pitch/*     /en/pitch/  301
+/pitch       /en/pitch/  301

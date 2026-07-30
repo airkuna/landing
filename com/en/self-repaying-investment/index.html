@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The self-repaying investment in airKUNA — powered by Hobba · airKUNA</title>
+<meta name="description" content="How an investor can fund airKUNA and have the stake repay itself: self-custodied SOL as collateral, a small conservative loan into the treasury, and Hobba's yield engine (audited, Solana) harvesting yield daily to pay down the debt. Everything verified on-chain. Not investment advice." />
+<link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.com/en/self-repaying-investment/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.com/samootplativa-investicija/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.com/en/self-repaying-investment/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.com/samootplativa-investicija/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy);flex:0 0 auto}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:20px;font-size:14.5px;font-weight:500;color:var(--ink);flex:1;min-width:0;white-space:nowrap;padding:0 6px}
+.navlinks a{flex:0 0 auto}
+.navlinks a:hover{color:var(--gold)}
+.nav .btn{flex:0 0 auto}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+
+/* language switch */
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.langsw a{padding:5px 11px;border-radius:999px;color:var(--mute);transition:.2s;line-height:1}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+
+/* hamburger + mobile drawer */
+.navtoggle{display:none;flex:0 0 auto;width:42px;height:42px;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--navy);transition:.2s}
+.navtoggle:hover{border-color:var(--gold);color:var(--gold)}
+.navtoggle svg{width:22px;height:22px}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,22,49,.45);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:60}
+.drawer-overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(330px,86vw);background:var(--paper);box-shadow:-24px 0 70px -34px rgba(0,30,80,.55);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;padding:18px 22px 30px;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.drawer .dhead .brand{font-size:19px}
+.drawer .dclose{width:42px;height:42px;flex:0 0 auto;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:.2s}
+.drawer .dclose:hover{border-color:var(--gold);color:var(--gold)}
+.drawer nav{display:flex;flex-direction:column;margin-top:4px}
+.drawer nav a{padding:13px 4px;font-size:16px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--line)}
+.drawer nav a:hover{color:var(--gold)}
+.drawer .btn{margin-top:20px;justify-content:center;width:100%}
+.drawer .langsw{margin-top:18px;align-self:flex-start}
+@media(max-width:1024px){.navlinks{display:none}.nav>.btn-navy{display:none}.navtoggle{display:inline-flex}}
+
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:730px}
+.docmeta{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:26px;font-size:13px;color:#A9BBD8}
+.docmeta span{display:inline-flex;align-items:center;gap:8px}
+.docmeta span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-light)}
+
+.prose{padding:58px 0 40px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:56px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:17px;color:var(--navy);font-weight:700;margin:26px 0 0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82;word-break:break-all}
+.lede{font-size:18px!important;color:var(--mute)!important}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+
+/* verified strip */
+.verified{display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:26px}
+.vchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#DCE7F8}
+.vchip .dot{width:7px;height:7px;border-radius:50%;background:#3fae63;box-shadow:0 0 0 3px rgba(63,174,99,.25)}
+.vchip a{color:var(--gold-light);text-decoration:underline;text-underline-offset:2px}
+
+/* stack cards */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:26px}
+.stack .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.stack .layer{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.stack .name{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:var(--navy);margin-top:6px}
+.stack .who{font-size:12.5px;color:var(--mute);margin-top:2px}
+.stack .desc{font-size:14px;color:var(--ink);margin-top:9px}
+
+/* figure card */
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:34px}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+@media(max-width:640px){.figure{padding:20px 12px}}
+
+/* animated money-flow sim */
+.simctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.simbtn{font:inherit;font-weight:600;font-size:13.5px;padding:8px 18px;border-radius:999px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--navy);transition:.2s}
+.simbtn:hover{border-color:var(--gold)}
+.simbtn.primary{background:linear-gradient(135deg,var(--gold-light),var(--gold));border-color:transparent;color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7)}
+.simbtn.primary:hover{transform:translateY(-1px)}
+.simbtn:disabled{opacity:.4;cursor:default;transform:none}
+.simcount{font-size:12.5px;color:var(--mute);font-variant-numeric:tabular-nums;font-weight:600}
+.simscroll{overflow-x:auto;margin-top:18px}
+.simstage{position:relative;width:800px;height:425px;margin:0 auto}
+.simstage svg{position:absolute;inset:0;width:100%;height:100%}
+.simedge{stroke:#C6CEDD;stroke-width:1.5;fill:none;transition:stroke .3s}
+.simedge.done{stroke:var(--gold);stroke-width:2}
+.simedge.active{stroke:var(--navy);stroke-width:2.5;stroke-dasharray:8 6;animation:simdash .8s linear infinite}
+@keyframes simdash{to{stroke-dashoffset:-14}}
+.simlbl{font-size:11px;font-weight:600;fill:var(--mute)}
+.simnode{position:absolute;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;box-shadow:var(--shadow-sm);transition:border-color .3s,box-shadow .3s}
+.simnode .lab{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.simnode .nm{font-family:Fraunces,serif;font-weight:600;font-size:16.5px;color:var(--navy);margin-top:3px}
+.simnode .sub{font-size:11px;color:var(--mute);margin-top:2px}
+.simnode .bal{font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600;color:var(--navy);margin-top:8px;min-height:16px}
+.simnode.active{border-color:var(--navy);box-shadow:0 0 0 3px rgba(0,47,108,.12),var(--shadow-sm)}
+.simnode.done{border-color:var(--gold)}
+.simnode .debt{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.simnode .debt .dk{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);font-weight:600}
+.simnode .debt .dk b{color:var(--gold);font-variant-numeric:tabular-nums}
+.simnode .dbar{height:7px;background:var(--soft);border:1px solid var(--line);border-radius:999px;margin-top:5px;overflow:hidden}
+.simnode .dbar div{height:100%;width:0;background:linear-gradient(90deg,var(--gold-light),var(--gold));transition:width .5s}
+.simlog{margin-top:16px;background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:13px 17px;font-size:14px;color:var(--ink);min-height:52px}
+.simlog b{color:var(--navy)}
+.simzero{margin-top:12px;text-align:center;font-size:13px;color:var(--mute)}
+.simzero b{color:var(--green);font-variant-numeric:tabular-nums}
+
+/* kako-i-ti steps */
+.howsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:24px}
+.hstep{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 19px;box-shadow:var(--shadow-sm)}
+.hstep .n{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-family:Fraunces,serif;font-weight:600;display:flex;align-items:center;justify-content:center;font-size:15px}
+.hstep h4{font-family:Fraunces,serif;font-weight:600;font-size:16.5px;color:var(--navy);margin-top:11px}
+.hstep p{font-size:13.5px;color:var(--mute);margin-top:6px!important}
+.hstep .em{color:var(--gold);font-weight:600}
+
+/* evidence / proof card */
+.proof{margin-top:30px;background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.10),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:28px 26px;box-shadow:var(--shadow)}
+.proof h3{color:#fff;font-family:Fraunces,serif;font-weight:600;font-size:20px;display:flex;align-items:center;gap:10px}
+.proof .sub{color:#B9C8E2;font-size:13.5px;margin-top:4px}
+.proofgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+.pcell{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px}
+.pcell .k{font-size:11.5px;color:#A9BBD8;font-weight:600}
+.pcell .v{font-family:Fraunces,serif;font-weight:600;font-size:20px;color:#fff;margin-top:4px;font-variant-numeric:tabular-nums}
+.pcell .v.gold{color:var(--gold-light)}
+.pcell .hint{font-size:11px;color:#8FA3C4;margin-top:3px}
+.proof .addr{margin-top:18px;font-size:12px;color:#A9BBD8;line-height:1.9;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+.proof .addr code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:1px 6px;color:#DCE7F8;word-break:break-all}
+.proof .addr a{color:var(--gold-light);text-decoration:underline;text-underline-offset:2px}
+
+/* napredak otplate — dvije trake duga */
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:26px}
+.track{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}
+.track.measured{border-left:4px solid var(--green)}
+.track.zero{border-left:4px solid var(--gold)}
+.track .tlab{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.track h4{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:var(--navy);margin-top:6px;line-height:1.2}
+.track .tnums{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-variant-numeric:tabular-nums}
+.track .tbig{font-family:Fraunces,serif;font-weight:600;font-size:26px;color:var(--navy)}
+.track .tbig.green{color:var(--green)}
+.track .tbig.gold{color:var(--gold)}
+.track .tof{font-size:13px;color:var(--mute)}
+.tbar{height:10px;background:var(--soft);border:1px solid var(--line);border-radius:999px;margin-top:10px;overflow:hidden}
+.tbar i{display:block;height:100%;background:linear-gradient(90deg,#3fae63,var(--green))}
+.tbar i.gold{background:linear-gradient(90deg,var(--gold-light),var(--gold))}
+.track p{font-size:13.5px!important;color:var(--mute)!important;margin-top:12px!important}
+.track .verdict{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.track .verdict.g{background:var(--green-soft);color:var(--green)}
+.track .verdict.y{background:var(--gold-soft);color:#7a5a12}
+
+/* tables */
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;margin-top:24px;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;color:#0A3B82;word-break:break-all}
+.tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:50px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7);font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#idea">Idea</a>
+      <a href="#proof">On-chain proof</a>
+      <a href="#how">How it works</a>
+      <a href="#progress">Progress</a>
+      <a href="#risk">Risks</a>
+      <a href="#you-too">You too</a>
+      <a href="../hobba-findings/">Findings</a>
+    </nav>
+    <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20self-repaying%20investment%20(Hobba)">Contact</a>
+    <div class="langsw">
+      <a href="../../samootplativa-investicija/" hreflang="hr">HR</a>
+      <a href="./" hreflang="en" aria-current="true">EN</a>
+    </div>
+    <button class="navtoggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <button class="dclose" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#idea">Idea</a>
+    <a href="#proof">On-chain proof</a>
+    <a href="#how">How it works</a>
+    <a href="#progress">Repayment progress</a>
+    <a href="#channel">Our own channel</a>
+    <a href="#numbers">Numbers</a>
+    <a href="#risk">Risks</a>
+    <a href="#you-too">You too</a>
+    <a href="../hobba-findings/">On-chain findings</a>
+    <a href="../treasury-flywheel/">Treasury flywheel</a>
+    <a href="../money-that-works/">Money that works</a>
+    <a href="../blog/">Blog</a>
+    <a href="https://zivo.airkuna.com/en/" target="_blank" rel="noopener">Live monitor ↗</a>
+    <a href="../">airKUNA home</a>
+  </nav>
+  <a class="btn btn-navy" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20self-repaying%20investment%20(Hobba)">Contact</a>
+  <div class="langsw">
+    <a href="../../samootplativa-investicija/" hreflang="hr">HR</a>
+    <a href="./" hreflang="en" aria-current="true">EN</a>
+  </div>
+</aside>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Verified on-chain · Self-repaying investment</span>
+    <h1>An investment in airKUNA that repays itself</h1>
+    <p>The investor keeps their <b>SOL in self-custody</b> as collateral, draws a small conservative loan that funds airKUNA's development, and <b>Hobba</b> — an audited Solana protocol — harvests yield on that collateral daily and uses it to <b>pay down the debt automatically</b>. This is not theory: we verified the mechanism on the Solana chain, transaction by transaction — and the entry threshold is symbolic: our first real position funds airKUNA with a <b>loan of ≈ €1</b>.</p>
+    <div class="verified">
+      <span class="vchip"><span class="dot"></span>Hobba program audited (Ackee, 15 Jun 2026)</span>
+      <span class="vchip"><span class="dot"></span>1,033 USDC of debt repaid from yield (measured 27 Jul)</span>
+      <span class="vchip"><span class="dot"></span>Live proof: <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">1 SOL → 1.14 USDC</a></span>
+      <span class="vchip"><span class="dot"></span>Follow it live on-chain: <a href="https://zivo.airkuna.com/en/" target="_blank" rel="noopener">zivo.airkuna.com ↗</a></span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <!-- IDEJA -->
+    <p class="lede" style="margin-top:0" id="idea">In one sentence: instead of selling an asset to fund airKUNA, the investor <b>keeps</b> it — and development is financed out of the <b>yield</b> that asset earns while it sits as collateral. The loan that goes into airKUNA's treasury is small relative to the collateral, so the carry pays it off over time. The result: <b>a stake that repays itself</b>, with SOL exposure retained and an allocation in airKUNA.</p>
+
+    <div class="callout good">
+      <b>Why this is real, not marketing.</b> Hobba's engine ("Sonnar") takes idle collateral, deploys it into yield vaults (Perena, Kamino, Jupiter Lend) and <b>harvests yield daily, using it to repay debt</b>. The contract itself emits a <code>UserHarvestPayout</code> event with a <code>debt_repaid</code> field — so "self-repaying" is not a metaphor but <b>a number written on the chain</b>. We decoded every one of those events: between 14 Apr and 27 Jul 2026, <b>1,280.73 USDC</b> of yield was harvested, of which <b>1,033.01 USDC went straight to repaying users' debt</b>. The engine ran again today.
+    </div>
+
+    <div class="callout warn">
+      <b>What this is not.</b> It is neither risk-free nor guaranteed. It is a <b>leveraged directional position in SOL</b> with exposure to smart contracts and to a young protocol. Hobba is <b>in production but in closed testing</b>, with small total deposits (~$346k) and high concentration. If SOL falls deeply, if yield drops below the borrow rate, or if the protocol fails — the thesis breaks. We quantify all of it below, without varnish.
+    </div>
+
+    <!-- ON-CHAIN DOKAZ -->
+    <h2 id="proof">On-chain proof — anyone can check it</h2>
+    <p>Unlike the usual "trust me" pitch, the entire mechanism is public on Solana. Here are the key artefacts anyone can open in a block explorer — <b>freshly measured on 27 Jul 2026</b>.</p>
+
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Artefact</th><th>Value (abbreviated)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>Hobba program (smart contract)</b></td><td><code>Hobbakk1…aE2i8qG</code> <a href="https://solscan.io/account/Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG" target="_blank" rel="noopener">↗ Solscan</a></td><td><span class="badge g">confirmed</span></td></tr>
+        <tr><td><b>Security audit</b></td><td>Ackee Blockchain Security, 15 Jun 2026 <a href="https://hobba.io/ackee-hobba-audit-report.pdf" target="_blank" rel="noopener">↗ report</a></td><td><span class="badge g">published</span></td></tr>
+        <tr><td><b>Self-repaying mechanism</b></td><td><b>1,033.01 USDC of debt repaid from yield</b> (sum of the <code>debt_repaid</code> field across all <code>UserHarvestPayout</code> events, 14 Apr – 27 Jul 2026) out of 1,280.73 USDC harvested in total</td><td><span class="badge g">measured</span></td></tr>
+        <tr><td><b>Engine cadence</b></td><td>699 harvests in 32 days (26 Jun – 27 Jul), <b>130 since 23 Jul</b>, the latest today — without a single day off</td><td><span class="badge g">running today</span></td></tr>
+        <tr><td><b>Yield integrations</b></td><td>Jupiter Lend <code>jupr81…e3Bdzi</code>, Kamino, Perena</td><td><span class="badge g">on-chain</span></td></tr>
+        <tr><td><b>Live proof (our wallet)</b></td><td>1 SOL collateral → 1.14 USDC loan <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">↗ wallet</a></td><td><span class="badge g">executed</span></td></tr>
+        <tr><td><b>The engine services our position too</b></td><td><code>OperatorRepay</code> covered our position account, 12 Jul 2026 <a href="https://solscan.io/tx/3XLt7WbZiqVin9vtDYB1HKWFvyUYN4Ym899e5tX1g66JQGpB5kqHj3Xd9DDm3Su5BaGDjeGz8vbYVuptNK64ZE4q" target="_blank" rel="noopener">↗ tx</a></td><td><span class="badge g">confirmed</span></td></tr>
+        <tr><td><b>Protocol fee</b></td><td><b>15% of harvested yield</b> — 0% on principal, deposit or loan. Read from the program's config account (<code>profit_fee_bps=1500</code>) <a href="https://solscan.io/account/9fisLWPRhyfhaQfi1GbpSvJPSSr11h7iS3oLabRtiAPf" target="_blank" rel="noopener">↗ Solscan</a> and confirmed in <b>every harvest since 14 Jul 2026</b> (before that: 0%, then briefly 25% — see the note below)</td><td><span class="badge g">we measured it ourselves</span></td></tr>
+        <tr><td><b>Partner (origin) revenue share</b></td><td><b>Went live on-chain on 23 Jul 2026.</b> The first partner channel (origin 1) over 5 days: 17.32 USDC of yield → 2.60 USDC of fees (<b>exactly 15.000%</b>) → <b>1.56 USDC to the partner</b> (<b>exactly 60.000% of the fee</b>)</td><td><span class="badge g">live, measured</span></td></tr>
+        <tr><td><b>Total deposits (TVL, 27 Jul 2026)</b></td><td><b>≈ $345,544</b> · 3,836 SOL + 0.804 cbBTC · 84 wallets / 96 positions · 3,436 tx <a href="https://dune.com/igor_hobba/hobba-mainnet" target="_blank" rel="noopener">↗ dashboard</a></td><td><span class="badge y">early, but growing</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout warn"><b>A correction we are publishing about ourselves: the fee was not always 15%.</b> When we decoded every harvest from the beginning, the actual fee turned out to be <b>0% until 7 Jul 2026</b>, then <b>25% from 9 to 12 Jul</b>, and only <b>from 14 Jul 2026 a steady 15%</b> — to the cent, every day. An earlier version of this page implied 15% across the whole period. That was inaccurate and is corrected here. The fee is a parameter an admin can change (<code>set_profit_fee</code>) — that is a real risk, not a detail, which is why we re-measure it at every update.</div>
+
+    <div class="callout"><b>Who is behind Hobba.</b> Hobba is a <b>Croatian project from Zagreb</b>, with a team carrying experience from leading Solana projects. airKUNA is a <b>user</b> of the protocol, not its author. Investors should run their own due diligence on every protocol in the chain.</div>
+
+    <!-- KAKO RADI -->
+    <h2 id="how">How it works — five steps</h2>
+    <p>The only leg that touches airKUNA is the deposit into the treasury; everything else is the investor's position in <b>self-custody</b>, on an audited third-party protocol.</p>
+
+    <div class="figure" id="simfig">
+      <div class="simctl">
+        <button class="simbtn" id="simPrev">← Back</button>
+        <button class="simbtn primary" id="simNext">Start ▶</button>
+        <button class="simbtn" id="simAuto">Auto</button>
+        <button class="simbtn" id="simReset">Reset</button>
+        <span class="simcount" id="simCount">step 0 / 8</span>
+      </div>
+      <div class="simscroll">
+        <div class="simstage">
+          <svg viewBox="0 0 800 425" aria-hidden="true">
+            <defs>
+              <marker id="ah-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C6CEDD"/></marker>
+              <marker id="ah-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#002F6C"/></marker>
+              <marker id="ah-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C8912A"/></marker>
+            </defs>
+            <path id="se-e1" class="simedge" d="M196 100 L294 100" marker-end="url(#ah-grey)"/>
+            <path id="se-e2" class="simedge" d="M402 226 L402 264" marker-end="url(#ah-grey)"/>
+            <path id="se-e3" class="simedge" d="M511 100 L599 100" marker-end="url(#ah-grey)"/>
+            <path id="se-e4" class="simedge" d="M599 150 L517 150" marker-end="url(#ah-grey)"/>
+            <path id="se-e5" class="simedge" d="M294 150 L202 150" marker-end="url(#ah-grey)"/>
+            <text class="simlbl" x="245" y="88" text-anchor="middle">1 · deposit 1 SOL</text>
+            <text class="simlbl" x="248" y="170" text-anchor="middle">5 · exit: SOL returned</text>
+            <text class="simlbl" x="555" y="88" text-anchor="middle">3 · deployment</text>
+            <text class="simlbl" x="558" y="170" text-anchor="middle">4 · harvest → repay</text>
+            <text class="simlbl" x="415" y="250" text-anchor="start">2 · loan 1.14 USDC</text>
+          </svg>
+          <div class="simnode" id="sn-u" style="left:0;top:52px;width:190px">
+            <div class="lab">Investor</div>
+            <div class="nm">Own wallet</div>
+            <div class="sub">Solflare · self-custody</div>
+            <div class="bal" id="sb-u">1 SOL</div>
+          </div>
+          <div class="simnode" id="sn-h" style="left:300px;top:36px;width:205px">
+            <div class="lab">Router + risk engine</div>
+            <div class="nm">Hobba</div>
+            <div class="sub">audited · Solana mainnet</div>
+            <div class="bal" id="sb-h">—</div>
+            <div class="debt"><div class="dk"><span>Debt</span><b id="sd-val">0.00 USDC</b></div><div class="dbar"><div id="sd-fill"></div></div></div>
+          </div>
+          <div class="simnode" id="sn-v" style="left:605px;top:52px;width:195px">
+            <div class="lab">Yield layer</div>
+            <div class="nm">Vaults</div>
+            <div class="sub">Perena · Kamino · Jupiter Lend</div>
+            <div class="bal" id="sb-v">—</div>
+          </div>
+          <div class="simnode" id="sn-r" style="left:300px;top:268px;width:205px">
+            <div class="lab">Recipient</div>
+            <div class="nm">airKUNA treasury</div>
+            <div class="sub">legal · development · operations</div>
+            <div class="bal" id="sb-r">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="simlog" id="simLog"><b>How the money flows — animated.</b> Press "Start" (or just let it run) and follow the loop: deposit → loan → deployment → harvest/repay → exit.</div>
+      <div class="simzero">Investor's cost across the whole loop: <b id="simCost">€0</b> of principal — the yield pays the debt.</div>
+      <div class="cap"><b>A loop that closes itself.</b> Navy = the step happening right now, gold = already done. The harvest → repay step is the one we measured on-chain — 699 harvests in the last 32 days, 1,033 USDC of debt repaid from yield.</div>
+    </div>
+
+    <!-- ŽIVI DOKAZ -->
+    <h2>Live proof — our own transaction</h2>
+    <p>So that it does not stay theoretical, we opened the smallest possible real position from our own wallet — the first, symbolic stake in the airKUNA flywheel — and let Hobba work:</p>
+
+    <div class="proof">
+      <h3>Position #1 · founder wallet</h3>
+      <div class="sub">Executed on 8 Jul 2026 on Solana mainnet; state re-measured on 27 Jul 2026. Verifiable on Solscan (wallet below).</div>
+      <div class="proofgrid">
+        <div class="pcell"><div class="k">Collateral</div><div class="v">1 SOL</div><div class="hint">in self-custody · ≈ $77</div></div>
+        <div class="pcell"><div class="k">Loan drawn</div><div class="v gold">1.14 USDC</div><div class="hint">LTV ≈ 1.5% · unchanged</div></div>
+        <div class="pcell"><div class="k">Engine borrowed and deployed</div><div class="v" style="font-size:19px">45.04 USDC</div><div class="hint">→ Perena vault, via Hobba</div></div>
+        <div class="pcell"><div class="k">Engine repaid from yield</div><div class="v">7.63 USDC</div><div class="hint">16.95% · measured on-chain</div></div>
+      </div>
+      <div class="addr">
+        Wallet (public): <code>6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA</code> · <a href="https://solscan.io/account/6bwzpkSKSXbjVMBYMSdazEytkaCZatibRdmExpjSgCyA" target="_blank" rel="noopener">open on Solscan</a><br/>
+        Hobba program: <code>Hobbakk1LmW2DhE4nAKnCeU1iK7V7pKHTq3ihaE2i8qG</code>
+      </div>
+    </div>
+    <div class="ctarow" style="margin-top:18px">
+      <a class="btn-gold" href="https://zivo.airkuna.com/en/" target="_blank" rel="noopener">Follow this position live on-chain →</a>
+    </div>
+    <!-- NAPREDAK OTPLATE -->
+    <h2 id="progress">Repayment progress — what actually happened, measured on-chain</h2>
+    <p>This is the part we could previously only project. We have now decoded <b>every Anchor event</b> Hobba's program has ever emitted for our wallet and read the position account state from mainnet. The result is precise — and it forces one honest correction on us.</p>
+
+    <p>It turns out <b>our position carries two separate debts</b>, and the previous version of this page conflated them into one. Separated:</p>
+
+    <div class="tracks">
+      <div class="track measured">
+        <div class="tlab">Debt 1 · engine leverage</div>
+        <h4>What the engine borrowed against our collateral</h4>
+        <div class="tnums"><span class="tbig green">7.63 USDC</span><span class="tof">repaid of 45.04</span></div>
+        <div class="tbar"><i style="width:16.95%"></i></div>
+        <div class="tnums" style="margin-top:8px"><span class="tof"><b>16.95%</b> repaid</span><span class="tof">37.40 USDC remaining</span></div>
+        <p>On 8 Jul the engine borrowed <b>45.038455 USDC</b> against our 1 SOL of collateral and deployed it into a Perena vault (<code>OperatorBorrowed</code>). By 12 Jul it had returned <b>7.634980 USDC</b> (<code>OperatorRepaid</code>). The position account state today shows <code>deposited_to_vault = 37.403475 USDC</code> — <b>45.038455 − 7.634980, exact to the micro-USDC</b>. The decoded events and the live chain state agree to the last digit.</p>
+        <span class="verdict g">measured on-chain</span>
+      </div>
+      <div class="track zero">
+        <div class="tlab">Debt 2 · our own loan</div>
+        <h4>The 1.14 USDC that went into airKUNA's treasury</h4>
+        <div class="tnums"><span class="tbig gold">0.00 USDC</span><span class="tof">repaid of 1.14</span></div>
+        <div class="tbar"><i class="gold" style="width:0%"></i></div>
+        <div class="tnums" style="margin-top:8px"><span class="tof"><b>0%</b> repaid</span><span class="tof">1.14 USDC remaining</span></div>
+        <p><b>Here the number has not moved at all</b> — but not because the capital is idle. For our wallet there is no <code>UserRepaid</code> and no <code>UserHarvestPayout</code>, because <b>the harvest has not yet triggered</b>: yield accrues in the <b>vault share price</b> and is only booked once <code>harvest_vault</code> crystallises it. Our account holds <b>34.713899 shares</b> — the capital is deployed and earning.</p>
+        <p>Why it has not triggered yet: across all 60 positions there is a visible <b>threshold of ~1 USDC</b> — the first harvest of every small position lands between 1.0008 and 1.0035 USDC. At ~0.0084 USDC per day, our accrual today is ≈ 0.18 USDC, so we expect the first harvest <b>around 2 Nov 2026</b>. Repayment is therefore <b>lumpy</b>, not smooth.</p>
+        <span class="verdict y">accruing, not yet booked</span>
+        <p style="margin-top:12px!important"><a href="../hobba-findings/#threshold" style="color:var(--gold);font-weight:600;font-size:13.5px">Evidence and arithmetic → findings and open questions</a></p>
+      </div>
+    </div>
+
+    <div class="callout warn"><b>Why we publish this even though it does not flatter us.</b> It would be easier to show only the first track — it is measured, successful and literally proves that debt repays itself. But that would be cherry-picking. Both things are true: <b>the mechanism works and it shows in the numbers</b> (1,033 USDC of debt repaid from yield at protocol level), and <b>our particular micro-loan is still waiting for its first harvest</b>. When it fires, the change will appear on its own, on the same position account, without anyone having to announce it.</div>
+
+    <div class="callout"><b>Technical detail and questions for Hobba.</b> The full measurement method, the table showing the ~1 USDC threshold across all 60 positions, and <b>eight open questions</b> that cannot be answered from the outside (including the one about gross versus net collateral encumbrance) live on a separate, public page — <a href="../hobba-findings/" style="color:var(--gold);font-weight:600">on-chain findings and open questions →</a> It is public on purpose, so it can be discussed with the Hobba team in the open.</div>
+
+    <h3>The complete log of our position — every event, ever</h3>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Time (UTC)</th><th>Event</th><th class="num">Amount</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="num">8 Jul 14:39:23</td><td><code>UserInitialized</code></td><td class="num">—</td><td>Hobba opens our position account</td></tr>
+        <tr><td class="num">8 Jul 14:39:52</td><td><code>UserDeposited</code></td><td class="num"><b>1.000000000 SOL</b></td><td>collateral enters, stays ours</td></tr>
+        <tr><td class="num">8 Jul 14:39:52</td><td><code>UserBorrowed</code></td><td class="num"><b>1.140000 USDC</b></td><td>our loan → airKUNA treasury</td></tr>
+        <tr><td class="num">8 Jul 15:02:44</td><td><code>OperatorBorrowed</code></td><td class="num">45.038455 USDC</td><td>engine leverages the collateral and deploys into a vault</td></tr>
+        <tr><td class="num">12 Jul 14:00:00</td><td><code>OperatorRepaid</code></td><td class="num">7.634980 USDC</td><td><span class="badge g">repayment from yield</span></td></tr>
+        <tr><td class="num">13 Jul – 27 Jul</td><td><i>nothing</i></td><td class="num">—</td><td>15 days without a single event on our position</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--mute)">Method: every <code>Program data:</code> log of the Hobba program was decoded via Anchor discriminators (<code>sha256("event:&lt;Name&gt;")[0:8]</code>) against IDL 0.1.4, and the account state was read from <code>api.mainnet-beta.solana.com</code>. No number on this page was read off a user interface — all of them are computed from the chain and reproducible.</p>
+
+    <div class="callout warn" style="margin-top:16px"><b>An honest note on the "Loan APY" figure.</b> For small positions Hobba's interface displays a heavily negative "Loan APY" (e.g. −147% to −397%). That does <b>not</b> mean a hidden fee — negative means earnings exceed interest (the loan repays itself). But for <b>tiny</b> loans that percentage is an unstable ratio (earnings ÷ credit) and misleading as a headline; in absolute terms it amounts to cents. We have passed this observation on to the Hobba team as well.</div>
+
+    <!-- VLASTITI KANAL / RIZNICA -->
+    <h2 id="channel">How airKUNA builds its treasury — our own channel</h2>
+    <p>So far you have seen <b>one</b> position — ours. But the real treasury machine is not our position, it is the <b>channel</b>. The two money flows are easy to confuse, so we separate them honestly:</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Flow</th><th>What happens</th><th>Effect on the treasury</th></tr></thead>
+      <tbody>
+        <tr><td><b>Our own position</b> (1 SOL)</td><td>Yield repays our debt; in the end we hold the collateral debt-free.</td><td>Deleveraging — it does <b>not</b> fill the treasury directly; it is skin-in-the-game proof.</td></tr>
+        <tr><td><b>airKUNA as a channel</b> (origin)</td><td>Every user who enters through airKUNA is permanently tied to our channel; a share of their yield comes to us.</td><td><span class="badge g">builds the treasury</span> automatically, on every harvest.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>The fee is transparent and <b>the same for everyone</b>: Hobba takes 15% of the <b>yield</b> (not of the principal — measured on-chain as <code>profit_fee_bps=1500</code>). The contract has an "origin" revenue share built in: when a user enters through a partner channel, that 15% is split.</p>
+
+    <div class="proof">
+      <h3>How the 15% yield fee is split</h3>
+      <div class="sub">The model is identical to the existing partner channel (origin 1) — which <b>went live on-chain on 23 Jul 2026</b> and is now measurable in real money.</div>
+      <div class="proofgrid">
+        <div class="pcell"><div class="k">End user</div><div class="v">pays 15%</div><div class="hint">always the same, through any channel</div></div>
+        <div class="pcell"><div class="k">airKUNA treasury</div><div class="v gold">9% of yield</div><div class="hint">origin fee → Squads multisig</div></div>
+        <div class="pcell"><div class="k">Hobba</div><div class="v">6% of yield</div><div class="hint">protocol</div></div>
+        <div class="pcell"><div class="k">Treasury instrument</div><div class="v" style="font-size:16px">Squads v4</div><div class="hint">the Solana standard (like Safe on EVM)</div></div>
+      </div>
+      <div class="addr">
+        The split was measured empirically on the existing channel: <code>9.0% + 6.0%</code> = 60% of the fee to the partner (<code>fee_share_bps=6000</code>). Revenue lands automatically in the treasury's USDC account on every harvest — with no manual "claim" step.<br/>
+        <b>The first 5 days of that channel (23–27 Jul 2026), decoded from the chain:</b> 15 harvests · 17.3222 USDC of yield · 2.5983 USDC of fees (<b>15.000%</b> — on the nose) · <b>1.5590 USDC to the partner</b> (<b>60.000%</b> of the fee) · 11.5696 USDC went to repaying users' debt.
+      </div>
+    </div>
+
+    <div class="callout"><b>Status — honestly.</b> Until last week, all we could say about the "origin" revenue share was that it exists in the code. Since <b>23 Jul 2026</b> it <b>actually flows</b>: the first partner channel received 1.56 USDC in five days, and the ratios (15% / 60%) match the contract to three decimal places. That is good news for the model — still a small number, because the protocol itself is small. What has <b>not</b> changed: <b>airKUNA's own origin is not yet registered on-chain.</b> The arrangement with the Hobba team is being negotiated and a Squads multisig treasury is planned. Until our origin ID exists on-chain, airKUNA's revenue from this channel is <b>€0</b> — a plan, not a fact.</div>
+
+    <!-- BROJKE -->
+    <h2 id="numbers">The numbers — state of the protocol (honestly)</h2>
+    <p>State as of <b>27 Jul 2026</b>, computed from Hobba's on-chain events (our own Dune queries, not a reading off the interface). We deliberately show both what supports the thesis and what is a risk:</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Metric</th><th class="num">23 Jul 2026</th><th class="num">27 Jul 2026</th><th>Reading</th></tr></thead>
+      <tbody>
+        <tr><td>Total deposits (TVL)</td><td class="num">$338,446</td><td class="num"><b>$345,544</b></td><td><span class="badge g">+2.1% in 4 days</span> · +33% since 8 Jul</td></tr>
+        <tr><td>SOL collateral</td><td class="num">3,753.8 SOL</td><td class="num"><b>3,836.4 SOL</b></td><td>+82.5 SOL of new deposits in 4 days</td></tr>
+        <tr><td>cbBTC collateral</td><td class="num">0.7616</td><td class="num"><b>0.8040</b></td><td>+0.042 cbBTC</td></tr>
+        <tr><td>SOL price</td><td class="num">$76.90</td><td class="num">$76.41</td><td><span class="badge g">important</span> the price <b>fell</b> — all TVL growth comes from deposits, not from price</td></tr>
+        <tr><td>Collateral mix</td><td class="num">85% / 15%</td><td class="num">SOL 84.8% · cbBTC 15.2%</td><td>SOL dominates, as the thesis assumes</td></tr>
+        <tr><td>Positions (wallet × collateral)</td><td class="num">90</td><td class="num"><b>96</b></td><td><span class="badge y">early stage</span> +6 in 4 days</td></tr>
+        <tr><td>Distinct wallets</td><td class="num">79</td><td class="num"><b>84</b></td><td>our own event count; Hobba's dashboard counts by a different definition</td></tr>
+        <tr><td>Transactions (total)</td><td class="num">3,281</td><td class="num"><b>3,436</b></td><td>+155 · the protocol runs every day, without a break since 26 Jun</td></tr>
+        <tr><td>Yield harvests</td><td class="num">—</td><td class="num"><b>130 since 23 Jul</b></td><td>699 in the last 32 days; the latest today</td></tr>
+        <tr><td>Debt repaid from yield</td><td class="num">—</td><td class="num"><b>1,033.01 USDC</b></td><td><span class="badge g">cumulative</span> out of 1,280.73 USDC of harvested yield</td></tr>
+        <tr><td>Concentration</td><td class="num" colspan="2">top 3 wallets ≈ 72% of TVL (8 Jul)</td><td><span class="badge r">high</span> a small number of large depositors</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:14px;color:var(--mute)">A note on user counts: Hobba's public dashboard showed "87 users" on 23 Jul, while our count of the same events gives 79 wallets / 90 positions on that date. This is a <b>different counting rule</b>, not a contradiction — we publish our own, consistently measured definition and state what it is.</p>
+
+    <!-- RIZIK -->
+    <h2 id="risk">Risks — stated plainly</h2>
+    <p>The architecture reduces some risks and accepts others. It does not remove them. Below is every material risk, how it is mitigated and what exposure remains.</p>
+    <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Risk</th><th>Mitigation</th><th>Residual exposure</th></tr></thead>
+      <tbody>
+        <tr><td><b>SOL falls → liquidation</b></td><td>A conservative LTV keeps the liquidation price far below spot; Sonnar can reduce leverage before the threshold.</td><td><span class="badge y">moderate</span> a fast, deep drop can outrun the automation; oracles lag.</td></tr>
+        <tr><td><b>Young protocol / closed testing</b></td><td>Published audit (Ackee), on-chain verifiable code, small amounts for now.</td><td><span class="badge r">high impact</span> a new codebase; a bug or outage can lock or damage funds.</td></tr>
+        <tr><td><b>Low liquidity / concentration</b></td><td>Early stage; keep position size small relative to TVL.</td><td><span class="badge r">high</span> exiting a large position can be slow or expensive.</td></tr>
+        <tr><td><b>Yield falls below the borrow rate</b></td><td>The debt is tiny relative to the collateral, so the rate can rise many times over before carry turns negative.</td><td><span class="badge g">low</span> it only bites if interest exceeds the yield on the entire collateral.</td></tr>
+        <tr><td><b>Stablecoin (USDC)</b></td><td>Fully reserved, an established issuer within the MiCA framework.</td><td><span class="badge y">moderate</span> issuer or reserve failure is possible, though unlikely for a blue chip.</td></tr>
+        <tr><td><b>Smart contract / integrations</b></td><td>Audit, well-established integrated protocols (Kamino, Jupiter Lend, Perena), multisig over the treasury.</td><td><span class="badge r">high impact</span> exploits do happen; a tail risk that can wipe out the position.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="callout warn"><b>Systemic risk — framed honestly.</b> The model rests on the uninterrupted operation of several independent protocols (Hobba, the integrated lenders, the stablecoin issuer). A correlated failure would damage or destroy the position. We do <b>not</b> dismiss that as negligible — we treat it as the principal, consciously accepted risk and size positions accordingly.</div>
+
+    <!-- ŠTO DOBIVA -->
+    <h2>What the investor gets</h2>
+    <ul>
+      <li><b>Retained SOL exposure</b> — the principal stays the investor's, in self-custody, with full upside (and downside) of SOL.</li>
+      <li><b>An allocation in airKUNA</b> — the loan into the treasury funds development; the size and instrument of any stake or allocation is set by a separate, formal agreement, not by this page.</li>
+      <li><b>A stake that repays itself</b> — the debt is serviced out of collateral yield, not by selling the principal at the bottom of the market.</li>
+      <li><b>Full verifiability</b> — every claim is on-chain; nothing has to be taken on trust.</li>
+    </ul>
+
+    <!-- KAKO I TI -->
+    <h2 id="you-too">How you can do it too — from €1</h2>
+    <p>This is what the path from curiosity to your own self-repaying position looks like. First, honestly: Hobba is in <b>closed testing</b> — you cannot sign up on your own through the web. Access goes through a whitelist, and we connect you with the Hobba team. That makes entry slower, but it also means things move in small, controlled steps.</p>
+
+    <div class="howsteps">
+      <div class="hstep"><div class="n">1</div><h4>Get in touch</h4><p>By email or Telegram. We agree the framework and connect you with the Hobba team for the <span class="em">whitelist</span> (closed testing).</p></div>
+      <div class="hstep"><div class="n">2</div><h4>Prepare a wallet</h4><p><span class="em">Solflare</span> (or another Solana wallet) and SOL you intend to hold anyway. The asset stays yours throughout.</p></div>
+      <div class="hstep"><div class="n">3</div><h4>Deposit and borrow</h4><p>SOL goes into Hobba as collateral; you draw a small USDC loan — <span class="em">from ≈ €1 upwards</span>, at a conservative LTV.</p></div>
+      <div class="hstep"><div class="n">4</div><h4>The loan funds airKUNA</h4><p>The funds go into the treasury under a <span class="em">separate, formal agreement</span> defining your stake or allocation.</p></div>
+      <div class="hstep"><div class="n">5</div><h4>Yield repays the debt</h4><p>The engine harvests and repays on its own. When the debt reaches 0, <span class="em">the SOL is free</span>, and your stake in airKUNA remains yours.</p></div>
+    </div>
+
+    <div class="callout" style="margin-top:18px"><b>Before you get in touch.</b> Start with a small amount (which is why we show a €1 position), read the risks above, and expect any real participation to go through a formal agreement with a suitability assessment. This is not investment advice.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20self-repaying%20position%20from%20EUR%201">Get in touch — start from €1</a>
+      <a class="btn-outline" href="https://t.me/airkuna_com">Telegram — t.me/airkuna_com</a>
+      <a class="btn-outline" href="https://zivo.airkuna.com/en/" target="_blank" rel="noopener">See the live position ↗</a>
+    </div>
+
+    <div class="callout"><b>Legal and regulatory notice.</b> This page is an <b>explanation</b>, not an offer of securities, a solicitation, a financial promotion, or investment, tax or legal advice. Any actual participation would be documented in a formal agreement, subject to a suitability assessment and applicable law (incl. MiCA / MiFID II and Croatian regulation). airKUNA / ITalk is a non-custodial software company and does not provide regulated financial services. Hobba and the other protocols named here are independent third parties; their claims (yields, audits, availability) should be verified independently. Crypto assets are volatile and can lose all of their value.</div>
+
+    <div class="ctarow">
+      <a class="btn-gold" href="mailto:ms@airkuna.com?subject=airKUNA%20%E2%80%94%20self-repaying%20investment%20(Hobba)">Talk to the team</a>
+      <a class="btn-outline" href="https://t.me/airkuna_com">Public discussion — t.me/airkuna_com</a>
+      <a class="btn-outline" href="../treasury-flywheel/">See the wider flywheel model</a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="doc">
+    <div class="fgrid">
+      <a class="brand" href="../"><img src="coin.svg" alt="" style="width:28px" /> airKUNA</a>
+      <a class="backbtn" href="../">← Back to airKUNA</a>
+    </div>
+    <p class="fnote">
+      An illustrative explanation for investors. Not an offer, a solicitation, a financial promotion, or investment, legal or tax advice. On-chain data was captured on <b>27 Jul 2026</b> (both the position and the protocol) and changes over time; verify it yourself in a block explorer. Hobba is an independent third-party protocol outside airKUNA's control. Crypto assets are volatile and can lose all of their value. airKUNA / ITalk is a non-custodial software provider; regulated functions are performed by licensed parties.<br/><br/>
+      <b>airKUNA</b> is a project of <b>ITalk d.o.o.</b> · IX. Južna obala 20, 10000 Zagreb, Croatia · VAT/OIB: 54872935051 · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a> · © 2026 airKUNA / ITalk d.o.o.
+    </p>
+  </div>
+</footer>
+
+<script>
+"use strict";
+(function(){
+  var LOAN=1.14;
+  /* each step: e=active edge, n=active nodes, log, debt (null=unchanged), balances u/h/v/r */
+  var STEPS=[
+    {n:["u"],log:"<b>Start.</b> The investor holds 1 SOL in their own wallet (Solflare). Debt: 0.",u:"1 SOL",h:"—",v:"—",r:"—",debt:0},
+    {e:"e1",n:["u","h"],log:"<b>1 · Deposit.</b> 1 SOL enters Hobba as collateral — it is still the investor\u2019s, it has simply started working.",u:"→ 1 SOL as collateral",h:"collateral: 1 SOL",debt:0},
+    {e:"e2",n:["h","r"],log:"<b>2 · Loan.</b> 1.14 USDC (≈ €1) is drawn against the collateral and goes into airKUNA\u2019s treasury. LTV ≈ 1.5% — tiny.",r:"1.14 USDC + stake agreement",debt:1.14},
+    {e:"e3",n:["h","v"],log:"<b>3 · Deployment.</b> Hobba automatically routes the collateral into yield vaults (Perena · Kamino · Jupiter Lend).",v:"1 SOL working (~8% APY)",debt:1.14},
+    {e:"e4",n:["v","h"],log:"<b>4 · HarvestVault + OperatorRepay.</b> The engine harvests yield and uses it to repay the debt automatically. On-chain: 699 harvests in 32 days, 1,033 USDC of debt repaid.",debt:0.76},
+    {e:"e4",n:["v","h"],log:"… weeks pass — harvest → repay, every day, without a single move from the investor …",debt:0.38},
+    {e:"e4",n:["v","h"],log:"<b>≈ 8 months after the deposit:</b> the debt is repaid down to zero. The investor paid in nothing — the yield paid for all of it.",debt:0,h:"collateral: 1 SOL · debt 0"},
+    {e:"e5",n:["h","u"],log:"<b>5 · Exit.</b> The collateral is free — 1 SOL returns to the investor.",u:"1 SOL back ✓",h:"collateral released",debt:0},
+    {n:["u","r"],fin:true,log:"<b>Loop closed.</b> The investor: their SOL + a stake in airKUNA. The treasury: funded. Investor\u2019s cost: €0 of principal.",u:"1 SOL + stake in airKUNA",debt:0}
+  ];
+  var EDGES=["e1","e2","e3","e4","e5"], NODES=["u","h","v","r"];
+  var cur=0, timer=null, started=false;
+  var $=function(id){return document.getElementById(id);};
+  function fmt(n){return n.toFixed(2);}
+  function apply(){
+    var doneEdges={}, bal={u:null,h:null,v:null,r:null}, debt=0;
+    for(var i=0;i<=cur;i++){
+      var s=STEPS[i];
+      if(s.e && i<cur) doneEdges[s.e]=1;
+      NODES.forEach(function(k){ if(s[k]!==undefined) bal[k]=s[k]; });
+      if(s.debt!==undefined) debt=s.debt;
+    }
+    var st=STEPS[cur];
+    EDGES.forEach(function(id){
+      var el=$("se-"+id);
+      el.classList.toggle("active",st.e===id);
+      el.classList.toggle("done",!st.fin && !!doneEdges[id] && st.e!==id || !!st.fin);
+      el.setAttribute("marker-end", st.e===id?"url(#ah-navy)":(doneEdges[id]||st.fin?"url(#ah-gold)":"url(#ah-grey)"));
+    });
+    NODES.forEach(function(k){
+      var el=$("sn-"+k);
+      el.classList.toggle("active",(st.n||[]).indexOf(k)>=0 && !st.fin);
+      el.classList.toggle("done",!!st.fin && (st.n||[]).indexOf(k)>=0);
+      if(bal[k]!==null) $("sb-"+k).textContent=bal[k];
+    });
+    $("sd-val").textContent=fmt(debt)+" USDC";
+    $("sd-fill").style.width=Math.round((1-debt/LOAN)*100)+"%";
+    $("simLog").innerHTML=st.log;
+    $("simCount").textContent="step "+cur+" / "+(STEPS.length-1);
+    $("simPrev").disabled=cur===0;
+    $("simNext").disabled=cur===STEPS.length-1;
+    $("simNext").textContent=cur===0?"Start ▶":"Next step →";
+  }
+  function stopAuto(){ if(timer){clearInterval(timer);timer=null;$("simAuto").textContent="Auto";} }
+  function next(){ if(cur<STEPS.length-1){cur++;apply();} else stopAuto(); }
+  $("simNext").addEventListener("click",function(){stopAuto();next();});
+  $("simPrev").addEventListener("click",function(){stopAuto();if(cur>0){cur--;apply();}});
+  $("simReset").addEventListener("click",function(){stopAuto();cur=0;apply();});
+  $("simAuto").addEventListener("click",function(){
+    if(timer){stopAuto();return;}
+    if(cur===STEPS.length-1)cur=0;
+    apply();$("simAuto").textContent="Pause";timer=setInterval(next,2300);
+  });
+  /* when the user scrolls to the diagram, the animation starts on its own (once) */
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(en){
+      if(en[0].isIntersecting && !started && cur===0 && !timer){
+        started=true;$("simAuto").textContent="Pause";timer=setInterval(next,2300);
+      }
+      if(en[0].isIntersecting) started=true;
+    },{threshold:.45});
+    io.observe($("simfig"));
+  }
+  apply();
+})();
+</script>
+
+<script>
+(function(){
+  var drawer=document.getElementById('drawer'),ov=document.getElementById('drawerOverlay'),
+      tog=document.getElementById('navToggle'),cls=document.getElementById('drawerClose');
+  function open(){drawer.classList.add('open');ov.classList.add('open');tog.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function close(){drawer.classList.remove('open');ov.classList.remove('open');tog.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  tog.addEventListener('click',open);cls.addEventListener('click',close);ov.addEventListener('click',close);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
+</body>
+</html>

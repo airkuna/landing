@@ -6,6 +6,10 @@
 <title>airKUNA — Proof of Croatian Personhood (dokaz osobnosti onchain)</title>
 <meta name="description" content="Otvoreni protokol koji hrvatsku/EU eID prijavu (Certilia danas, EUDI Wallet sutra) pretvara u soulbound token osobnosti na Gnosisu. Jedna osoba, više novčanika, jedan identitet. OIB nikad onchain (GDPR). Tražimo financiranje za razvoj kao javno dobro." />
 <link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.com/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.com/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.com/en/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.com/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -43,6 +47,12 @@ header .nav{max-width:none}
 .navlinks a:hover{color:var(--gold)}
 .navlinks a{position:relative}
 .nav .btn-sm{flex:0 0 auto}
+/* prebacivač jezika */
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.langsw a{padding:5px 11px;border-radius:999px;color:var(--mute);transition:.2s;line-height:1}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+.drawer .langsw{margin-top:18px;align-self:flex-start}
 /* hamburger */
 .navtoggle{display:none;flex:0 0 auto;width:44px;height:44px;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--navy);transition:.2s}
 .navtoggle:hover{border-color:var(--gold);color:var(--gold)}
@@ -231,6 +241,10 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
       <a href="https://airkuna.org">Stablecoin</a>
     </nav>
     <a class="btn btn-navy btn-sm" href="#financiranje">Podrži projekt</a>
+    <div class="langsw">
+      <a href="/" hreflang="hr" aria-current="true">HR</a>
+      <a href="/en/" hreflang="en">EN</a>
+    </div>
     <button class="navtoggle" id="navToggle" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="drawer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
@@ -259,6 +273,10 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
     <a href="https://airkuna.org">Stablecoin</a>
   </nav>
   <a class="btn btn-navy" href="#financiranje">Podrži projekt</a>
+  <div class="langsw">
+    <a href="/" hreflang="hr" aria-current="true">HR</a>
+    <a href="/en/" hreflang="en">EN</a>
+  </div>
 </aside>
 
 <a id="top"></a>
@@ -298,7 +316,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
   <div class="wrap">
     <div class="center"><span class="eyebrow">Problem koji rješavamo</span>
     <h2 class="title">Onchain demokracija ne radi bez dokaza osobnosti</h2>
-    <p class="lead">Građani dobivaju vrhunski digitalni identitet, a onchain svijet nema način da provjeri „ovo je jedna stvarna osoba". Dva jaza blokiraju legitimno glasanje i raspodjelu javnih sredstava.</p></div>
+    <p class="lead">Građani dobivaju vrhunski digitalni identitet, a onchain svijet nema način da provjeri „ovo je jedna stvarna osoba“. Dva jaza blokiraju legitimno glasanje i raspodjelu javnih sredstava.</p></div>
 
     <div class="figure reveal">
       <div class="mermaid">
@@ -444,7 +462,7 @@ flowchart LR
     </div>
     <div class="fact reveal">
       <h3>Zašto baš mi <span style="font-weight:400;font-size:14px;color:#8FA6C9">· sve u produkciji, isprobaj</span></h3>
-      <div class="frow"><span>Certilia eID verifikacija</span><span class="fval"><span class="lnks"><a href="https://domovina.ai/" target="_blank" rel="noopener">domovina.ai</a><a href="https://pinka.io/" target="_blank" rel="noopener">pinka.io</a></span><em>„Login with Certilia" (isti SSO backend)</em></span></div>
+      <div class="frow"><span>Certilia eID verifikacija</span><span class="fval"><span class="lnks"><a href="https://domovina.ai/" target="_blank" rel="noopener">domovina.ai</a><a href="https://pinka.io/" target="_blank" rel="noopener">pinka.io</a></span><em>„Login with Certilia“ (isti SSO backend)</em></span></div>
       <div class="frow"><span>EURe wallet + Safe/relayer</span><span class="fval"><span class="lnks"><a href="https://pay.domovina.ai/" target="_blank" rel="noopener">pay.domovina.ai</a></span><em>offline QR + PDF417 barkodovi</em></span></div>
       <div class="frow"><span>SMS out-of-band dokaz</span><span class="fval"><span class="lnks"><a href="https://sms.domovina.ai/" target="_blank" rel="noopener">sms.domovina.ai</a><a href="https://otp.domovina.ai/" target="_blank" rel="noopener">otp.domovina.ai</a></span><em>otp koristi sms infrastrukturu</em></span></div>
       <div class="frow"><span>Javna GIS karta Hrvatske</span><span class="fval"><span class="lnks"><a href="https://gis.domovina.ai/" target="_blank" rel="noopener">gis.domovina.ai</a></span><em>brza WebGL karta: JLS, klubovi, stadioni, Pinka kampanje, zračne luke</em></span></div>
@@ -476,7 +494,7 @@ flowchart LR
   <div class="narrow center">
     <span class="eyebrow">Što je već napravljeno</span>
     <h2 class="title">Nije samo ideja — MVP je izgrađen</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Točnost iznad hypea: ovo je stvarno gotovo i dokazano lokalno. Ostalo je iskreno označeno kao „u planu".</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Točnost iznad hypea: ovo je stvarno gotovo i dokazano lokalno. Ostalo je iskreno označeno kao „u planu“.</p>
   </div>
   <div class="wrap">
     <ul class="checks">
@@ -547,7 +565,7 @@ flowchart LR
       </div>
     </div>
     <p class="fnote">
-      <b>Napomena:</b> Protokol je u razvoju. Faza 0 (MVP) je izgrađena i dokazana lokalno; sve ostalo (mainnet deploy, mreža potpisnika, EUDI, audit) je iskreno označeno kao „u planu". airKUNA i ITalk su <b>non-custodial software provider</b> — regulirane funkcije (izdavanje eID-a, KYC) obavljaju licencirani subjekti. Ova stranica nije investicijski ni pravni savjet. Prije komercijalizacije planiran je formalni patent/FTO pregled; protokol se objavljuje kao otvoreno javno dobro.<br/><br/>
+      <b>Napomena:</b> Protokol je u razvoju. Faza 0 (MVP) je izgrađena i dokazana lokalno; sve ostalo (mainnet deploy, mreža potpisnika, EUDI, audit) je iskreno označeno kao „u planu“. airKUNA i ITalk su <b>non-custodial software provider</b> — regulirane funkcije (izdavanje eID-a, KYC) obavljaju licencirani subjekti. Ova stranica nije investicijski ni pravni savjet. Prije komercijalizacije planiran je formalni patent/FTO pregled; protokol se objavljuje kao otvoreno javno dobro.<br/><br/>
       <b>airKUNA</b> je projekt tvrtke <b>ITalk d.o.o. za informacijske tehnologije</b> · IX. Južna obala 20, 10000 Zagreb, Hrvatska · OIB: 54872935051 · MBS: 081042440 · EUID: HRSR.081042440 · Trgovački sud u Zagrebu · direktor: Matija Stepanić · <a href="https://t.me/airkuna_com">t.me/airkuna_com</a> · <a href="mailto:ms@airkuna.com">ms@airkuna.com</a> · <a href="https://italk.hr">italk.hr</a><br/><br/>
       Licenca (namjera): Apache-2.0 / MIT. © 2026 airKUNA / ITalk d.o.o.
     </p>
