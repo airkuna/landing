@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Licensing — which HANFA or CNB licence for which crypto or payment project · airKUNA</title>
+<meta name="description" content="An educational guide: which licence (HANFA CASP, Croatian National Bank payment institution, EMI, ECSP) each level of a crypto or payment project in Croatia requires. Why a euro stablecoin is legally e-money, where the licensing obligation starts, and the three zones where no licence is needed. Not legal advice." />
+<link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.org/en/licensing/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.org/licenciranje/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.org/en/licensing/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.org/licenciranje/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+.row>*,.grid>*,.lvl>*,.scnhead>*{min-width:0}
+
+/* ---------- nav ---------- */
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy);flex:0 0 auto}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:20px;font-size:14.5px;font-weight:500;color:var(--ink);flex:1;min-width:0;white-space:nowrap;padding:0 6px}
+.navlinks a{flex:0 0 auto}
+.navlinks a:hover{color:var(--gold)}
+.nav .btn{flex:0 0 auto}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.langsw a{padding:5px 11px;border-radius:999px;color:var(--mute);transition:.2s;line-height:1}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+.navtoggle{display:none;flex:0 0 auto;width:42px;height:42px;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--navy);transition:.2s}
+.navtoggle:hover{border-color:var(--gold);color:var(--gold)}
+.navtoggle svg{width:22px;height:22px}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,22,49,.45);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:60}
+.drawer-overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(330px,86vw);background:var(--paper);box-shadow:-24px 0 70px -34px rgba(0,30,80,.55);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;padding:18px 22px 30px;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.drawer .dhead .brand{font-size:19px}
+.drawer .dclose{width:42px;height:42px;flex:0 0 auto;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:.2s}
+.drawer .dclose:hover{border-color:var(--gold);color:var(--gold)}
+.drawer nav{display:flex;flex-direction:column;margin-top:4px}
+.drawer nav a{padding:13px 4px;font-size:16px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--line)}
+.drawer nav a:hover{color:var(--gold)}
+.drawer .btn{margin-top:20px;justify-content:center;width:100%}
+.drawer .langsw{margin-top:18px;align-self:flex-start}
+@media(max-width:1100px){.navlinks{display:none}.nav>.btn-navy{display:none}.navtoggle{display:inline-flex}}
+
+/* ---------- hero ---------- */
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0;color:#fff}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:760px}
+.dochero p b{color:#fff}
+.verified{display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:26px}
+.vchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#DCE7F8}
+.vchip .dot{width:7px;height:7px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 0 3px rgba(227,175,53,.22)}
+
+/* ---------- prose ---------- */
+.prose{padding:54px 0 30px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:58px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose h2[id],.prose p[id],.scn[id]{scroll-margin-top:86px}
+.prose h3{font-size:17px;color:var(--navy);font-weight:700;margin:28px 0 0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul,.prose ol{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose a.link{color:var(--navy-700);text-decoration:underline;text-underline-offset:2px}
+.prose a.link:hover{color:var(--gold)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82}
+.lede{font-size:18px!important;color:var(--mute)!important}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+.callout a{color:var(--navy-700);text-decoration:underline;text-underline-offset:2px}
+
+/* ---------- mermaid figure ---------- */
+.bleed{width:min(1140px,calc(100vw - 40px));margin-left:50%;transform:translateX(-50%)}
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:28px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
+.figure .mermaid p{margin:0;font-size:inherit;line-height:1.4}
+.mermaid .nodeLabel p{color:inherit}
+/* on narrow screens the diagram must not shrink below ~78 % — it scrolls inside .figure instead */
+@media(max-width:900px){.figure{padding:20px 12px}.figure .mermaid{justify-content:flex-start}}
+
+/* ---------- level ladder ---------- */
+.ladder{display:grid;gap:14px;margin-top:28px}
+.lvl{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}
+.lvl.l0{border-left-color:var(--green)}
+.lvl.l1{border-left-color:#6FA57E}
+.lvl.l2{border-left-color:var(--gold-light)}
+.lvl.l3{border-left-color:var(--gold)}
+.lvl.l4{border-left-color:#D25A2C}
+.lvl.l5{border-left-color:var(--red)}
+.lvl .n{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--navy-700),var(--navy));color:var(--gold-light);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:600;font-size:21px;flex:0 0 auto}
+.lvl h4{font-family:Fraunces,serif;font-weight:600;font-size:19px;color:var(--navy);line-height:1.2}
+.lvl .who{font-size:13.5px;color:var(--mute);margin-top:5px}
+.lvl .lic{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.chip.none{background:var(--green-soft);color:var(--green)}
+.chip.hanfa{background:var(--gold-soft);color:#7a5a12}
+.chip.hnb{background:#E7EEFA;color:var(--navy-700)}
+.chip.hard{background:var(--red-soft);color:var(--red)}
+@media(max-width:640px){.chip{white-space:normal}}
+
+/* ---------- scenarios ---------- */
+.scn{margin-top:34px;border-top:1px solid var(--line);padding-top:30px}
+.scn:first-of-type{border-top:0;padding-top:0}
+.scnhead{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.scnhead .sn{font-family:Fraunces,serif;font-weight:600;font-size:13px;color:#fff;background:var(--navy);border-radius:999px;padding:3px 12px;letter-spacing:.04em}
+.scnhead h3{margin:0!important;font-family:Fraunces,serif;font-size:21px;font-weight:600;color:var(--navy)}
+.verdict{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:14px;color:var(--mute)}
+.verdict .vk{font-weight:700;color:var(--navy)}
+
+/* ---------- tables ---------- */
+.tblwrap{overflow-x:auto;max-width:100%;margin-top:24px}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl td.dim{color:var(--mute)}
+.tbl .no{color:var(--mute);text-align:center}
+@media(max-width:760px){.tbl{min-width:640px;font-size:13.5px}.tbl th,.tbl td{padding:10px 11px}}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+.badge.b{background:#E7EEFA;color:var(--navy-700)}
+
+/* ---------- golden rule ---------- */
+.safe{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:24px}
+.szone{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:20px 22px}
+.szone .k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light)}
+.szone h4{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:#fff;margin-top:7px;line-height:1.24}
+.szone p{font-size:14px;color:#B9C8E2;margin-top:8px!important}
+.goldbox{background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.12),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:32px 30px;box-shadow:var(--shadow);margin-top:28px}
+.goldbox h3{color:#fff!important;font-family:Fraunces,serif;font-weight:600;font-size:22px;margin:0!important}
+.goldbox>p{color:#C9D6EC!important;font-size:15.5px!important}
+.goldbox>p b{color:var(--gold-light)}
+@media(max-width:640px){.goldbox{padding:26px 20px}}
+
+/* ---------- sources ---------- */
+.srcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:24px}
+.srccol{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}
+.srccol h4{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.srccol a{display:block;font-size:14px;color:var(--navy);padding:5px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.srccol a:last-child{border-bottom:0}
+.srccol a:hover{color:var(--gold)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:56px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.fnote b{color:var(--navy)}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#qualification">Why</a>
+      <a href="#regulators">Regulators</a>
+      <a href="#levels">Levels</a>
+      <a href="#scenarios">Scenarios</a>
+      <a href="#catalogue">Catalogue</a>
+      <a href="#deadlines">Deadlines</a>
+      <a href="#rule">Golden rule</a>
+    </nav>
+    <a class="btn btn-navy" href="../">airkuna.org →</a>
+    <div class="langsw">
+      <a href="../../licenciranje/" hreflang="hr">HR</a>
+      <a href="./" hreflang="en" aria-current="true">EN</a>
+    </div>
+    <button class="navtoggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <button class="dclose" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#qualification">Why this page exists</a>
+    <a href="#regulators">Who supervises what</a>
+    <a href="#levels">The level ladder</a>
+    <a href="#scenarios">Seven scenarios</a>
+    <a href="#services">Ten crypto services</a>
+    <a href="#catalogue">Licence catalogue</a>
+    <a href="#deadlines">Deadlines and timeline</a>
+    <a href="#rule">Golden rule</a>
+    <a href="#sources">Sources</a>
+    <a href="../">airkuna.org home</a>
+    <a href="https://airkuna.com">Digital identity (.com)</a>
+  </nav>
+  <a class="btn btn-navy" href="../">airkuna.org →</a>
+  <div class="langsw">
+    <a href="../../licenciranje/" hreflang="hr">HR</a>
+    <a href="./" hreflang="en" aria-current="true">EN</a>
+  </div>
+</aside>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Educational · The regulatory framework in Croatia</span>
+    <h1>Which licence for which crypto or payment project</h1>
+    <p>Most people building something around stablecoins assume that "do I need a licence?" is a question of size or of charging fees. It is not. The question is <b>whether you touch someone else's money, tokens or keys</b> — and at which point in the flow of funds. This page lays out the ladder: from pure software that needs nothing, to issuing your own stablecoin, which requires an electronic money institution licence and a MiCA white paper.</p>
+    <div class="verified">
+      <span class="vchip"><span class="dot"></span>HANFA: 16 categories of authorisation</span>
+      <span class="vchip"><span class="dot"></span>Croatian National Bank: 13 categories</span>
+      <span class="vchip"><span class="dot"></span>MiCA + PSD2 dual regime</span>
+      <span class="vchip"><span class="dot"></span>Status as of 1 August 2026</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <!-- ==================== 1. INTRO ==================== -->
+    <p class="lede" style="margin-top:0" id="qualification">airkuna.org is an educational project. When we explain how a euro stablecoin is issued and why it matters for the local economy, we owe you an equally frank explanation of the other side: <b>where the regulated territory begins</b>. This guide is written for founders, developers and the merely curious — as a map, not as legal advice.</p>
+
+    <h2>First: a euro stablecoin is not "just a token"</h2>
+
+    <p>Everything else hangs on a single chain of legal qualification. A regulated euro stablecoin — the publicly known example being <b>EURe</b>, issued by <a class="link" href="https://monerium.com/eure/" target="_blank" rel="noopener">Monerium EMI hf.</a>, an electronic money institution licensed by the Central Bank of Iceland and passported across the EEA — is an <b>e-money token (EMT)</b> under MiCA. An EMT is legally treated as <b>electronic money</b>. And electronic money constitutes <b>"funds"</b> under the Payment Services Directive.</p>
+
+    <p>The consequence is awkward and widely overlooked: the same service, over the same token, can simultaneously be a <b>crypto-asset service under MiCA</b> (supervised by HANFA) and a <b>payment service under PSD2</b> (supervised by the Croatian National Bank). This is known as <b>dual authorisation</b>.</p>
+
+    <div class="figure bleed">
+      <div class="mermaid">
+flowchart TD
+  A["Euro stablecoin<br/>e.g. EURe"]:::tok --> B["E-money token<br/>EMT · MiCA Title IV"]:::mica
+  B --> C["Legally = electronic money<br/>E-Money Directive"]:::mica
+  C --> D["= funds<br/>Payment Services Directive"]:::psd
+  D --> E{"A service over it can be both<br/>a crypto service and a payment service"}:::key
+  E -- "MiCA" --> F["CASP authorisation<br/>HANFA"]:::hanfa
+  E -- "PSD2" --> G["Payment institution<br/>Croatian National Bank"]:::hnb
+  classDef tok fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef mica fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef psd fill:#0A3B82,stroke:#001631,color:#fff,font-weight:600;
+  classDef key fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+  classDef hanfa fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef hnb fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">The chain of qualification: stablecoin → e-money → funds → two parallel supervisory regimes.</div>
+    </div>
+
+    <div class="callout warn">
+      <b>The most expensive misconception: "we don't charge, so we don't need a licence."</b> Fees are not the criterion. Both MiCA and PSD2 capture services provided <b>to third parties on a professional or business basis</b> — and the benefit may be indirect (platform growth, marketing, margin elsewhere) or absent altogether. Being free of charge does not exempt you. The only thing that does is <b>not providing a regulated service</b>: money and tokens never passing through you, and never being under your control.
+    </div>
+
+    <!-- ==================== 2. REGULATORS ==================== -->
+    <h2 id="regulators">Who supervises what: HANFA and the Croatian National Bank</h2>
+
+    <p>Croatia allocated supervisory competence through the <a class="link" href="https://narodne-novine.nn.hr/clanci/sluzbeni/2024_07_85_1473.html" target="_blank" rel="noopener">Act implementing Regulation (EU) 2023/1114</a> (Official Gazette 85/2024). In short: <b>crypto services go to HANFA, money and payments go to the central bank</b> — and a stablecoin, as we saw, tends to be both.</p>
+
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:150px">Authority</th><th>Competence under MiCA</th><th>Other relevant competences</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>HANFA</b><br/><span style="font-size:12.5px;color:var(--mute)">Croatian Financial Services Supervisory Agency</span></td>
+            <td>Titles II, V and VI — issues <b>authorisations to crypto-asset service providers (CASPs)</b>, supervises offerors of other crypto-assets; contact point towards ESMA</td>
+            <td class="dim">Crowdfunding (ECSP), capital markets, investment and pension funds, insurance, leasing, factoring</td>
+          </tr>
+          <tr>
+            <td><b>Croatian National Bank</b></td>
+            <td>Titles III and IV — authorises issuers of asset-referenced tokens, supervises <b>EMT issuers</b> (credit institutions and e-money institutions); contact point towards the EBA</td>
+            <td class="dim">Credit institutions, <b>payment institutions</b>, <b>electronic money institutions</b>, payment systems, bureaux de change</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <b>The price of getting it wrong.</b> For providing crypto services without authorisation, the implementing act prescribes fines of up to <b>€5,000,000 or 3% of total annual turnover</b> for a legal entity, up to €500,000 for a natural person, and up to €1,000,000 for a responsible board member. The transition periods during which one could "build first and see later" are gone — see the <a href="#deadlines">timeline</a>.
+    </div>
+
+    <!-- ==================== 3. LEVELS ==================== -->
+    <h2 id="levels">The ladder: six levels of a project</h2>
+
+    <p>Rather than starting from a list of licences, it is more useful to ask <b>how deeply the project reaches into other people's money</b>. Each level adds obligations to the one before it. The boundary between level 0 and everything else is the only one that genuinely changes a project's life.</p>
+
+    <div class="figure bleed">
+      <div class="mermaid">
+flowchart TD
+  Q1{"Do third-party funds<br/>land in your account?"}:::q
+  Q1 -- "yes" --> R3A["Level 3 · CASP custody and transfer<br/>+ payment institution"]:::hard
+  Q1 -- "no" --> Q2{"Do you hold<br/>users' keys?"}:::q
+  Q2 -- "yes" --> R3B["Level 3 · CASP custody<br/>+ payment layer"]:::hard
+  Q2 -- "no" --> Q3{"Does your backend<br/>initiate payments?"}:::q
+  Q3 -- "yes" --> R3C["Level 3 · payment initiation service<br/>= payment institution"]:::hard
+  Q3 -- "no" --> Q4{"Exchange from<br/>your own position?"}:::q
+  Q4 -- "yes" --> R2["Level 2 · CASP exchange,<br/>execution and reception of orders"]:::mid
+  Q4 -- "no" --> Q5{"Raising funds<br/>from the public?"}:::q
+  Q5 -- "yes" --> R4["Level 4 · ECSP or prospectus<br/>or alternative investment fund"]:::hard
+  Q5 -- "no" --> Q6{"Issuing your own<br/>stablecoin?"}:::q
+  Q6 -- "yes" --> R5["Level 5 · e-money institution<br/>+ MiCA Title IV"]:::worst
+  Q6 -- "no" --> R0["Level 0 · no licence"]:::good
+  classDef q fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+  classDef mid fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef hard fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef worst fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">A decision tree. The first branch answered "yes" sets the level — combinations add up, they do not cancel out.</div>
+    </div>
+
+    <div class="ladder">
+      <div class="lvl l0">
+        <div class="n">0</div>
+        <div>
+          <h4>Pure software — you touch nothing that belongs to others</h4>
+          <div class="who">An interface, a wallet whose keys the user holds, balance display, notifications. Money moves from the user's account to the user's account, at a licensed institution. The same applies to receiving stablecoins for your own services and paying out of your own treasury.</div>
+          <div class="lic"><span class="chip none">no licence</span><span class="chip none">technical service provider (PSD2 art. 3(j))</span></div>
+        </div>
+      </div>
+      <div class="lvl l1">
+        <div class="n">1</div>
+        <div>
+          <h4>Operating under someone else's licence</h4>
+          <div class="who">Agent of a payment or e-money institution, or distributor of e-money under contract with the issuer. Services are provided under the principal's licence, with entry in its register. Scope is strictly bounded by the contract.</div>
+          <div class="lic"><span class="chip none">no licence of your own</span><span class="chip hnb">principal's register</span></div>
+        </div>
+      </div>
+      <div class="lvl l2">
+        <div class="n">2</div>
+        <div>
+          <h4>You touch others' tokens, but not their money</h4>
+          <div class="who">Exchanging crypto-assets out of your own position, executing or forwarding orders, advice, portfolio management. A CASP authorisation becomes due — service by service, not all-or-nothing.</div>
+          <div class="lic"><span class="chip hanfa">HANFA · CASP</span></div>
+        </div>
+      </div>
+      <div class="lvl l3">
+        <div class="n">3</div>
+        <div>
+          <h4>You hold, transfer or initiate someone else's funds</h4>
+          <div class="who">Custody of keys, transfer of tokens on behalf of clients, hold-and-forward models, initiating payments from third-party accounts. Where e-money tokens are involved, <b>both</b> regimes fire at once.</div>
+          <div class="lic"><span class="chip hanfa">HANFA · CASP (custody, transfer)</span><span class="chip hnb">CNB · payment institution</span></div>
+        </div>
+      </div>
+      <div class="lvl l4">
+        <div class="n">4</div>
+        <div>
+          <h4>You raise funds from the public</h4>
+          <div class="who">A parallel axis rather than a continuation. A platform matching investors with project owners, your own issuance promising a return, or pooling third-party funds for discretionary investment — three distinct routes, all with HANFA.</div>
+          <div class="lic"><span class="chip hanfa">ECSP</span><span class="chip hanfa">prospectus / capital markets act</span><span class="chip hanfa">AIF manager</span></div>
+        </div>
+      </div>
+      <div class="lvl l5">
+        <div class="n">5</div>
+        <div>
+          <h4>You issue your own euro stablecoin</h4>
+          <div class="who">The top of the ladder. An issuer of e-money tokens must be a credit institution or an electronic money institution, with a MiCA white paper, 1:1 backing, safeguarded reserves and redemption at par. A multi-year, capital-intensive undertaking.</div>
+          <div class="lic"><span class="chip hard">CNB · e-money institution</span><span class="chip hard">MiCA Title IV</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 4. SCENARIOS ==================== -->
+    <h2 id="scenarios">Seven scenarios, seven flows of funds</h2>
+
+    <p>The ladder is abstract; the flow of funds is not. For each typical scenario below there is a diagram with <b>the point at which the licensing obligation arises marked explicitly</b>. The scenarios are generic — they describe a shape of architecture, not a specific product.</p>
+
+    <!-- S1 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 1</span><h3>Pure software</h3><span class="badge g">no licence</span></div>
+      <p>The user is onboarded and KYC'd directly by the licensed issuer. The SEPA transfer lands in <b>the user's own IBAN</b>, the stablecoin is minted to a wallet whose keys <b>only the user</b> holds, and every transfer is signed by the user. Your application receives notifications, prepares transactions and shows balances — but never disposes of funds.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  P(["Payer"]):::loc -- "SEPA transfer" --> IB["User's IBAN<br/>at a licensed issuer"]:::ext
+  IB -- "mint 1:1" --> W["User's wallet<br/>keys held by the user"]:::gold
+  W -- "user signs" --> R(["Payee"]):::loc
+  APP["Your application<br/>UX, display, notifications"]:::soft -. "reads and prepares only" .-> W
+  APP --- OK["No licence:<br/>technical service provider"]:::good
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef ext fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef soft fill:#EAF0FA,stroke:#9aa9c2,color:#14202E,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Money and tokens never pass through the software provider. No regulated service — no licence.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge g">Level 0</span> not a crypto service (non-custodial software sits outside MiCA), not a payment service (the technical provider exclusion applies).</div>
+    </div>
+
+    <!-- S2 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 2</span><h3>The hold-and-forward model</h3><span class="badge r">CASP + payment licence</span></div>
+      <p>The most common mistake in early products. Third-party SEPA transfers land in <b>the provider's IBAN</b>, the stablecoin is minted to <b>the provider's</b> wallet, and it is then forwarded to the ultimate payee. The argument that "it is only passing through, the money isn't held" is not a legal defence: the obligation arises the moment third-party funds come into your possession.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  P(["Payer"]):::loc -- "SEPA transfer" --> IB["Provider's IBAN"]:::bad
+  IB -- "mint 1:1" --> W["Provider's wallet<br/>third-party value under your control"]:::bad
+  W -- "forwarded on instruction" --> R(["Payee"]):::loc
+  W --- L["Obligation arises here:<br/>CASP custody + transfer (HANFA)<br/>+ money remittance (CNB)"]:::warn
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+        </div>
+        <div class="cap">The moment third-party funds land in your IBAN or wallet, the technical provider exclusion falls away.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge r">Level 3</span> CASP authorisation for custody and transfer + a payment institution licence for executing payment transactions. The alternative is restructuring into scenario 1.</div>
+    </div>
+
+    <!-- S3 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 3</span><h3>Exchange from your own position</h3><span class="badge r">CASP</span></div>
+      <p>The application offers the user a swap of one token for another, or for fiat — <b>out of your own inventory</b>, even at zero fee. That is a crypto exchange service and requires a CASP authorisation regardless of volume.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  U(["User"]):::loc -- "sends token A" --> T["Your position<br/>own token inventory"]:::mid
+  T -- "returns token B or euro" --> U
+  T --- L["Obligation: CASP exchange of crypto-assets<br/>for funds (c) or for other crypto-assets (d)"]:::warn
+  N["Zero fee<br/>changes nothing"]:::note -.-> L
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef mid fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+  classDef note fill:#EAF0FA,stroke:#9aa9c2,color:#14202E,font-weight:600;
+        </div>
+        <div class="cap">An exchange "from your own position" is a service to third parties, whether or not you charge for it.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge r">Level 2</span> HANFA CASP. If you also hold EMTs or fiat for clients along the way, the payment layer is added.</div>
+    </div>
+
+    <!-- S4 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 4</span><h3>Custody of keys</h3><span class="badge r">the most expensive combination</span></div>
+      <p>An embedded wallet in the application where the provider holds a key, holds a multisig share sufficient to move funds alone, or controls the recovery process. The boundary is not the label but <b>substance over form</b>: the moment an administrative or recovery key exists, the custody analysis opens.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  U(["User"]):::loc --> APP["Application with embedded wallet"]:::mid
+  APP --> K["Keys / recovery<br/>controlled by the provider"]:::bad
+  K --> W["User's wallet<br/>de facto third-party control"]:::bad
+  K --- L["Obligation: CASP custody (a)<br/>+ custody of EMT = operating a payment<br/>account → payment layer"]:::warn
+  SC["Self-custody design<br/>avoids the whole branch"]:::good -.-> W
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef mid fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Regulators treat custody of e-money tokens as the operation of a payment account.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge r">Level 3</span> CASP custody + payment layer. A design in which only the user holds keys removes the obligation entirely.</div>
+    </div>
+
+    <!-- S5 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 5</span><h3>The payment initiation trap</h3><span class="badge r">a payment licence without holding funds</span></div>
+      <p>The subtlest scenario. The architecture looks clean — the user has their own account and their own wallet, the provider holds neither euros nor keys. But the backend stores the user's API token and <b>fires instructions by itself</b>, on a rule or a webhook. Initiating a payment from someone else's account is a distinct payment service: the licence is required <b>even when funds never enter your possession</b>.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  U(["User"]):::loc --> ACC["User's account and wallet"]:::ext
+  BE["Your backend<br/>stores token, rules, schedule"]:::bad -- "fires the instruction itself" --> ACC
+  BE --- L["Obligation: payment initiation service<br/>→ payment institution (CNB)"]:::warn
+  FIX["Correct: the user signs<br/>each transaction in their own session"]:::good -.-> ACC
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef ext fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">A webhook may notify and prepare a transaction. It may not execute it on the user's behalf.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge y">grey zone, best avoided</span> The fix is a design decision: explicit user signature or consent for every transaction.</div>
+    </div>
+
+    <!-- S6 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 6</span><h3>Raising funds from the public</h3><span class="badge r">ECSP / prospectus / fund</span></div>
+      <p>The moment third parties invest expecting a return, you leave crypto regulation and enter capital markets regulation. Three routes lead to different licences and are not interchangeable — which one applies depends on whether you run a platform, issue your own instruments, or pool funds.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart TD
+  J(["The public invests<br/>expecting a return"]):::loc --> Q{"What form does it take?"}:::q
+  Q -- "platform matching investors<br/>and project owners" --> E["ECSP authorisation<br/>HANFA · 3-month decision"]:::mid
+  Q -- "your own issuance<br/>of securities" --> P["Prospectus / capital markets act<br/>HANFA"]:::mid
+  Q -- "pooling funds and<br/>investing at discretion" --> A["Alternative investment fund<br/>manager · HANFA"]:::mid
+  Q -- "offer of crypto-assets<br/>to the public" --> M["MiCA: white paper<br/>and offering rules"]:::hard
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef q fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+  classDef mid fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef hard fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Crowdfunding rules cover loans and transferable securities — not fundraising in crypto-assets.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge r">Level 4</span> never without prior legal analysis; at least one of the three HANFA routes applies.</div>
+    </div>
+
+    <!-- S7 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenario 7</span><h3>Your own stablecoin</h3><span class="badge r">EMI + MiCA Title IV</span></div>
+      <p>The top of the ladder, and the only scenario where the question is not whether a licence is needed but how long it takes to obtain. An issuer of e-money tokens <b>must</b> be a credit institution or an electronic money institution. On top of the licence come the white paper, 1:1 backing, segregated reserves and the holder's right to redeem at par at any time.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart TD
+  L1["E-money institution<br/>licence · CNB"]:::hard --> L2["MiCA Title IV<br/>white paper"]:::hard
+  L2 --> L3["1:1 reserve<br/>segregated, low-risk"]:::mid
+  L3 --> L4["Smart contract<br/>mint and burn"]:::navy
+  L4 --> L5["SEPA on- and off-ramp"]:::navy
+  L5 --> L6(["Right to redeem<br/>at par"]):::gold
+  classDef hard fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef mid fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef navy fill:#0A3B82,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">The same path appears in the <a class="link" href="../#kuharica">cookbook on the home page</a> — here with the regulatory rather than the technical step in focus.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdict:</span> <span class="badge r">Level 5</span> a central-bank e-money licence + MiCA Title IV. Using <b>someone else's</b> already-licensed stablecoin creates no such obligation.</div>
+    </div>
+
+    <!-- ==================== 5. TEN SERVICES ==================== -->
+    <h2 id="services">Ten crypto services: authorisation is granted service by service</h2>
+
+    <p>A CASP authorisation is not all-or-nothing. MiCA lists ten services and you apply only for those you actually provide. The list doubles as the fastest check of whether the regulation catches you at all.</p>
+
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:38px">#</th><th>Crypto-asset service</th><th>When it fires</th></tr></thead>
+        <tbody>
+          <tr><td>a</td><td><b>Custody and administration of crypto-assets on behalf of clients</b></td><td class="dim">As soon as you control private keys or access to user wallets</td></tr>
+          <tr><td>b</td><td>Operation of a trading platform</td><td class="dim">An order book, matching of offers</td></tr>
+          <tr><td>c</td><td><b>Exchange of crypto-assets for funds</b></td><td class="dim">Selling or buying back tokens for euro out of your own position</td></tr>
+          <tr><td>d</td><td><b>Exchange of crypto-assets for other crypto-assets</b></td><td class="dim">A swap out of your own inventory</td></tr>
+          <tr><td>e</td><td>Execution of orders on behalf of clients</td><td class="dim">You buy or sell in the user's name</td></tr>
+          <tr><td>f</td><td>Placing of crypto-assets</td><td class="dim">Distributing an issuance for the issuer</td></tr>
+          <tr><td>g</td><td>Reception and transmission of orders</td><td class="dim">You forward user orders to third parties, e.g. an exchange</td></tr>
+          <tr><td>h</td><td>Advice on crypto-assets</td><td class="dim">Personalised recommendations — mind the copy in your app</td></tr>
+          <tr><td>i</td><td>Portfolio management of crypto-assets</td><td class="dim">Discretionary management of third-party positions</td></tr>
+          <tr><td>j</td><td><b>Transfer services for crypto-assets on behalf of clients</b></td><td class="dim">You send tokens from an address you control, on the user's instruction</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout good">
+      <b>What sits outside MiCA.</b> Providers of <b>non-custodial software and hardware</b> for wallets, where the user holds the keys, are outside the regulation's scope. The boundary is substance over form — the moment a recovery key, administrative access or control over user funds exists, the custody analysis opens regardless of what the product is called. Do not rely on the exemption for "fully decentralised" services either: it is read narrowly and assessed case by case.
+    </div>
+
+    <!-- ==================== 6. CATALOGUE ==================== -->
+    <h2 id="catalogue">The catalogue: every HANFA and central bank licence</h2>
+
+    <p>For the complete picture, here is the full list of authorisations issued by the two regulators, flagged for how relevant each is to a typical crypto or payment project. Most are not — but it is useful to see where a project does <b>not</b> land.</p>
+
+    <h3>HANFA — 16 categories of authorisation</h3>
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:38px">#</th><th>Licence or authorisation</th><th style="width:210px">Legal basis</th><th style="width:250px">Relevant to a crypto/payment project?</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Insurance and reinsurance undertaking</td><td class="dim">Insurance Act</td><td class="no">—</td></tr>
+          <tr><td>2</td><td>Pension insurance company</td><td class="dim">Pension Insurance Companies Act</td><td class="no">—</td></tr>
+          <tr><td>3</td><td>UCITS management company</td><td class="dim">Open-Ended Investment Funds Act</td><td class="no">—</td></tr>
+          <tr><td>4</td><td><b>Alternative investment fund manager</b></td><td class="dim">Alternative Investment Funds Act</td><td><span class="badge y">latent</span> Pooling third-party funds for discretionary investment is fund territory, whatever the technology</td></tr>
+          <tr><td>5</td><td>Mandatory pension fund company</td><td class="dim">Mandatory Pension Funds Act</td><td class="no">—</td></tr>
+          <tr><td>6</td><td>Voluntary pension fund company</td><td class="dim">Voluntary Pension Funds Act</td><td class="no">—</td></tr>
+          <tr><td>7</td><td><b>Investment firm</b></td><td class="dim">Capital Markets Act</td><td><span class="badge y">conditional</span> Tokenised financial instruments and investment advice fall under the capital markets act, not MiCA</td></tr>
+          <tr><td>8</td><td>Market intermediary</td><td class="dim">Capital Markets Act</td><td class="no">—</td></tr>
+          <tr><td>9</td><td>Stock exchange</td><td class="dim">Capital Markets Act</td><td class="no">—</td></tr>
+          <tr><td>10</td><td>Central securities depository</td><td class="dim">Capital Markets Act + Reg. 909/2014</td><td class="no">—</td></tr>
+          <tr><td>11</td><td>Central counterparty</td><td class="dim">Capital Markets Act + EMIR</td><td class="no">—</td></tr>
+          <tr><td>12</td><td>Clearing system operator</td><td class="dim">Capital Markets Act</td><td class="no">—</td></tr>
+          <tr><td>13</td><td>Leasing company</td><td class="dim">Leasing Act</td><td class="no">—</td></tr>
+          <tr><td>14</td><td>Factoring company</td><td class="dim">Factoring Act</td><td class="no">—</td></tr>
+          <tr><td>15</td><td><b>Crowdfunding service provider (ECSP)</b></td><td class="dim">Regulation (EU) 2020/1503, OG 144/21</td><td><span class="badge y">conditional</span> Only for a platform matching investors and project owners; covers loans and transferable securities</td></tr>
+          <tr><td>16</td><td><b>Crypto-asset service provider (CASP)</b></td><td class="dim">Regulation (EU) 2023/1114, OG 85/24, Ordinance OG 95/25</td><td><span class="badge r">the central licence</span> For every scenario in which you touch someone else's tokens</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13.5px;color:var(--mute);margin-top:12px">HANFA additionally maintains registers of insurance distributors. It decides on an ECSP application within three months of a complete filing.</p>
+
+    <h3>Croatian National Bank — 13 categories of authorisation</h3>
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:38px">#</th><th>Licence or authorisation</th><th style="width:210px">Legal basis</th><th style="width:250px">Relevant to a crypto/payment project?</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Bank</td><td class="dim">Credit Institutions Act</td><td class="no">—</td></tr>
+          <tr><td>2</td><td>Savings bank</td><td class="dim">Credit Institutions Act</td><td class="no">—</td></tr>
+          <tr><td>3</td><td>Housing savings bank</td><td class="dim">Credit Institutions Act</td><td class="no">—</td></tr>
+          <tr><td>4</td><td>Credit union</td><td class="dim">Credit Unions Act</td><td class="no">—</td></tr>
+          <tr><td>5</td><td><b>Payment institution</b></td><td class="dim">Payment System Act (PSD2)</td><td><span class="badge r">key</span> For holding or transferring third-party funds, including e-money tokens, and for initiating payments</td></tr>
+          <tr><td>6</td><td><b>Small payment institution</b></td><td class="dim">Payment System Act</td><td><span class="badge b">entry variant</span> Cheaper, but Croatia only (no passporting) and subject to a volume cap</td></tr>
+          <tr><td>7</td><td>Account information service provider</td><td class="dim">Payment System Act</td><td><span class="badge y">conditional</span> Only for aggregating data from third-party bank accounts</td></tr>
+          <tr><td>8</td><td><b>Electronic money institution</b></td><td class="dim">Electronic Money Act</td><td><span class="badge r">only for own issuance</span> Required if you issue your own e-money or stablecoin; not for using someone else's</td></tr>
+          <tr><td>9</td><td>Small electronic money institution</td><td class="dim">Electronic Money Act</td><td><span class="badge b">entry variant</span> As above, limited to Croatia</td></tr>
+          <tr><td>10</td><td>Payment system operator authorisation</td><td class="dim">Payment Systems Act</td><td class="no">—</td></tr>
+          <tr><td>11</td><td>Authorised bureau de change</td><td class="dim">Foreign Exchange Act</td><td class="no">— (physical currency, not crypto-assets)</td></tr>
+          <tr><td>12</td><td>Issuer of asset-referenced tokens</td><td class="dim">MiCA Title III, OG 85/24</td><td><span class="badge y">conditional</span> Only for tokens referencing a basket of assets, not a euro stablecoin</td></tr>
+          <tr><td>13</td><td><b>Supervision of e-money token issuers</b></td><td class="dim">MiCA Title IV, OG 85/24</td><td><span class="badge r">for your own stablecoin</span> The issuer must be a credit institution or an e-money institution</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Statuses that are not licences, but change the picture</h3>
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:230px">Status</th><th>What it means</th><th style="width:250px">The boundary</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Technical service provider</b><br/><span style="font-size:12.5px;color:var(--mute)">PSD2 art. 3(j)</span></td>
+            <td>You support the provision of payment services — IT, networks, data processing, authentication — <b>without ever coming into possession of funds</b></td>
+            <td class="dim">The exclusion falls away the moment funds are touched <b>or</b> a payment is initiated from a third-party account</td>
+          </tr>
+          <tr>
+            <td><b>Distributor of electronic money</b></td>
+            <td>You distribute or redeem e-money <b>in the name and on behalf of the issuer</b>, under contract; no licence or registration of your own is required</td>
+            <td class="dim">The limits are narrow: a distributor may neither provide payment services itself nor issue e-money. Handing over tokens from your own inventory slips easily into a crypto exchange or transfer service</td>
+          </tr>
+          <tr>
+            <td><b>Agent of an institution</b></td>
+            <td>You provide payment services in the name of a licensed institution and are entered in its register, or in the supervisor's</td>
+            <td class="dim">The contract with the principal defines the scope; liability towards the client stays with the principal</td>
+          </tr>
+          <tr>
+            <td><b>Anti-money-laundering obliged entity</b></td>
+            <td>Every CASP and every payment or e-money institution is an obliged entity under the anti-money-laundering legislation</td>
+            <td class="dim">A pure software provider is not — but the moment you take any licence, a full compliance programme comes with it</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ==================== 7. DEADLINES ==================== -->
+    <h2 id="deadlines">Timeline: the transition periods have expired</h2>
+
+    <p>This is the part that goes stale fastest — and the reason advice more than a year old misleads. By mid-2026 both of the reliefs available in the early years had run out.</p>
+
+    <div class="figure bleed">
+      <div class="mermaid">
+timeline
+  30 Dec 2024 : MiCA starts applying to crypto services : HANFA begins issuing CASP authorisations
+  10 Jun 2025 : EBA opinion on the MiCA and PSD2 overlap : e-money token = funds : temporary transition period
+  2 Mar 2026 : Transition period ends : supervisors require payment authorisation for services over e-money tokens
+  1 Jul 2026 : Grandfathering for existing providers ends : operating without MiCA authorisation is no longer permitted
+  in progress : PSD3 and the payment services regulation : dual authorisation expected to be removed
+      </div>
+      <div class="cap">Croatia's first MiCA authorisation was issued in April 2026; three had been granted by July of that year. Status as of 1 August 2026 — the direction of reform is known, its final shape and timing are not.</div>
+    </div>
+
+    <div class="callout">
+      <b>What this means in practice.</b> Anyone providing crypto services in Croatia today must hold a MiCA authorisation — there is no transition period left. And a provider that transfers or holds <b>e-money tokens</b> for clients without having at least filed for payment authorisation must, per supervisory guidance, stop those services and wind the client relationships down in an orderly way. In the longer run, PSD3 and its accompanying regulation are expected to build payment requirements into MiCA itself and remove the need for two licences — but until then the dual regime stands.
+    </div>
+
+    <!-- ==================== 8. GOLDEN RULE ==================== -->
+    <h2 id="rule">The golden rule</h2>
+
+    <div class="goldbox">
+      <h3>There are exactly three zones where no licence is required</h3>
+      <p style="margin-top:12px">Everything outside them means either a licence of your own or operating under someone else's, by contract.</p>
+      <div class="safe">
+        <div class="szone">
+          <div class="k">Zone 1</div>
+          <h4>Pure software</h4>
+          <p>The user holds their own account at a licensed institution and a wallet whose keys they control. Money and tokens never pass through you, and the user signs every transfer.</p>
+        </div>
+        <div class="szone">
+          <div class="k">Zone 2</div>
+          <h4>Charging for your own services</h4>
+          <p>You receive stablecoins as a merchant, for your own invoices, into your own wallet. A payee is not a payment service provider — only accounting and tax remain.</p>
+        </div>
+        <div class="szone">
+          <div class="k">Zone 3</div>
+          <h4>Paying from your own treasury</h4>
+          <p>You pay suppliers and contributors with your own funds and your own keys. Your own payments are not a service to third parties.</p>
+        </div>
+      </div>
+      <p style="margin-top:22px"><b>And one warning alongside it:</b> being free of charge does not exempt you from licensing, and "it's only passing through" is not a legal defence. If third-party funds land in your account for even a second, the technical provider exclusion is spent.</p>
+    </div>
+
+    <div class="callout warn">
+      <b>Before you launch anything outside the three zones.</b> This guide is a map of the terrain, not an opinion on your specific case. For anything that is not pure software, consult a lawyer specialising in financial regulation and, where appropriate, put the question to HANFA or the Croatian National Bank. Both regulators maintain fintech contact points and do respond.
+    </div>
+
+    <!-- ==================== 9. SOURCES ==================== -->
+    <h2 id="sources">Sources</h2>
+
+    <p>Every claim on this page rests on primary sources — legislation and publications of the regulators and the European supervisory authorities. Law firm commentary was used only as secondary confirmation.</p>
+
+    <div class="srcgrid">
+      <div class="srccol">
+        <h4>Legislation · Croatia</h4>
+        <a href="https://narodne-novine.nn.hr/clanci/sluzbeni/2024_07_85_1473.html" target="_blank" rel="noopener">OG 85/2024 — MiCA implementing act ↗</a>
+        <a href="https://www.zakon.hr/z/3808/zakon-o-provedbi-uredbe-%28eu%29-2023-1114-o-trzistima-kriptoimovine" target="_blank" rel="noopener">Zakon.hr — consolidated text ↗</a>
+        <a href="https://narodne-novine.nn.hr/clanci/sluzbeni/2021_12_144_2458.html" target="_blank" rel="noopener">OG 144/21 — crowdfunding implementing act ↗</a>
+        <a href="https://narodne-novine.nn.hr/clanci/sluzbeni/2022_12_150_2315.html" target="_blank" rel="noopener">OG 150/22 — crowdfunding ordinance ↗</a>
+        <a href="https://www.zakon.hr/z/195/zakon-o-kreditnim-institucijama" target="_blank" rel="noopener">Credit Institutions Act ↗</a>
+      </div>
+      <div class="srccol">
+        <h4>HANFA</h4>
+        <a href="https://www.hanfa.hr/licenciranje/odobrenja-za-drustva-iz-nadleznosti-hanfe/" target="_blank" rel="noopener">Catalogue of authorisations ↗</a>
+        <a href="https://www.hanfa.hr/vijesti/donesen-zakon-o-provedbi-uredbe-o-trzistima-kriptoimovine-mica/" target="_blank" rel="noopener">MiCA implementing act adopted ↗</a>
+        <a href="https://www.hanfa.hr/media/zj2a2rxc/%C5%A1to-je-uredba-mica-3.pdf" target="_blank" rel="noopener">What the MiCA Regulation is (PDF) ↗</a>
+        <a href="https://www.hanfa.hr/media/dpdb44yc/smjernice-o-organizacijskim-zahtjevima-casp-a.pdf" target="_blank" rel="noopener">Guidelines on CASP organisational requirements (PDF) ↗</a>
+        <a href="https://www.hanfa.hr/podrucja-nadzora/trziste-kapitala/skupno-financiranje-crowdfunding/" target="_blank" rel="noopener">Crowdfunding ↗</a>
+        <a href="https://www.hanfa.hr/vijesti/sjednica-upravnog-vijeca-hanfe-electrocoin-doo-prvo-drustvo-koje-je-ishodilo-hanfino-odobrenje-za-rad-u-skladu-s-uredbom-mica/" target="_blank" rel="noopener">First Croatian MiCA authorisation ↗</a>
+      </div>
+      <div class="srccol">
+        <h4>Croatian National Bank</h4>
+        <a href="https://www.hnb.hr/core-functions/payment-system/licensing" target="_blank" rel="noopener">Licensing in the payment system ↗</a>
+        <a href="https://www.hnb.hr/en/core-functions/payment-system/licensing/payment-institutions" target="_blank" rel="noopener">Payment institutions ↗</a>
+        <a href="https://www.hnb.hr/en/core-functions/payment-system/licensing/small-payment-institutions" target="_blank" rel="noopener">Small payment institutions ↗</a>
+        <a href="https://www.hnb.hr/en/-/electronic-money-institution" target="_blank" rel="noopener">Electronic money institution ↗</a>
+        <a href="https://www.hnb.hr/en/core-functions/payment-system/licensing/small-electronic-money-institutions" target="_blank" rel="noopener">Small electronic money institutions ↗</a>
+      </div>
+      <div class="srccol">
+        <h4>EBA, ESMA and the EU</h4>
+        <a href="https://www.eba.europa.eu/publications-and-media/press-releases/eba-publishes-no-action-letter-interplay-between-payment-services-directive-psd23-and-markets-crypto" target="_blank" rel="noopener">EBA — on the PSD2 and MiCA interplay ↗</a>
+        <a href="https://eba.europa.eu/publications-and-media/press-releases/eba-advises-national-authorities-actions-take-end-transition-period-under-its-no-action-letter" target="_blank" rel="noopener">EBA — end of the transition period ↗</a>
+        <a href="https://www.eba.europa.eu/single-rule-book-qa/qna/view/publicId/2022_6360" target="_blank" rel="noopener">EBA Q&amp;A — the technical provider exclusion ↗</a>
+        <a href="https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica" target="_blank" rel="noopener">ESMA — MiCA ↗</a>
+        <a href="https://www.mica.wtf/mica/title-i-subject-matter-scope-and-definitions-art.-1-3/article-3" target="_blank" rel="noopener">MiCA art. 3 — definitions ↗</a>
+        <a href="https://finance.ec.europa.eu/document/download/3a9f865b-4b16-4fbd-b25c-3c37d24d80ed_en?filename=e-money-faq-22122016_en.pdf" target="_blank" rel="noopener">European Commission — e-money FAQ (PDF) ↗</a>
+      </div>
+    </div>
+
+    <p style="font-size:13.5px;color:var(--mute);margin-top:20px">Publicly available information on EURe and its issuer: <a class="link" href="https://monerium.com/eure/" target="_blank" rel="noopener">monerium.com/eure</a>. Secondary commentary (Norton Rose Fulbright, DLA Piper, Hogan Lovells, CMS, Morgan Lewis) was used solely to confirm readings of the primary sources.</p>
+
+    <div class="callout warn" style="margin-top:34px">
+      <b>Disclaimer.</b> This page is <b>informational and educational</b>. It is not legal, financial or investment advice, nor an offer of any service. It describes generic architectures and scenarios, not specific products. The regulation is in transition: <b>status as of 1 August 2026</b>. Before making any decision, check the sources and seek advice from a qualified professional and, where appropriate, an opinion from HANFA or the Croatian National Bank.
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <a class="backbtn" href="../">← Back to airkuna.org</a>
+      <div style="display:flex;gap:26px;flex-wrap:wrap">
+        <a href="../#kuharica">Cookbook: issue your own stablecoin</a>
+        <a href="../#razmjer">Scale and infrastructure</a>
+        <a href="https://airkuna.com">Digital identity (.com)</a>
+      </div>
+    </div>
+    <p class="fnote">
+      <b>A note on the name:</b> Croatia has been in the eurozone since 1 January 2023; the kuna no longer exists as a currency. "KUNA" is a <b>brand</b>, and the value the token references is the <b>euro</b>.<br/><br/>
+      Educational and informational content — <b>not legal or financial advice</b> and not an offer. © 2026 airKUNA.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:false,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631',
+    cScale0:'#002F6C',cScaleLabel0:'#ffffff',cScale1:'#C8912A',cScaleLabel1:'#ffffff',
+    cScale2:'#0A3B82',cScaleLabel2:'#ffffff',cScale3:'#1A7A3C',cScaleLabel3:'#ffffff',
+    cScale4:'#C0181C',cScaleLabel4:'#ffffff',cScale5:'#5B6B82',cScaleLabel5:'#ffffff'}});
+
+/* mermaid scales the SVG to the container; below ~78 % the type stops being legible,
+   so we set a floor under which the diagram scrolls horizontally inside .figure instead */
+await mermaid.run();
+document.querySelectorAll('.figure .mermaid svg').forEach(function(svg){
+  var vb = (svg.getAttribute('viewBox') || '').split(/\s+/);
+  var natural = parseFloat(vb[2]);
+  if (natural > 0) svg.style.minWidth = Math.round(natural * 0.78) + 'px';
+});
+</script>
+
+<script>
+(function(){
+  var drawer=document.getElementById('drawer'),ov=document.getElementById('drawerOverlay'),
+      tog=document.getElementById('navToggle'),cls=document.getElementById('drawerClose');
+  function open(){drawer.classList.add('open');ov.classList.add('open');tog.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function close(){drawer.classList.remove('open');ov.classList.remove('open');tog.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  tog.addEventListener('click',open);cls.addEventListener('click',close);ov.addEventListener('click',close);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
+</body>
+</html>

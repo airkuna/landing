@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Licenciranje — koja HANFA ili HNB licenca za koji kripto i platni projekt · airKUNA</title>
+<meta name="description" content="Edukativni vodič: koja licenca (HANFA CASP, HNB institucija za platni promet, EMI, ECSP) treba za koju razinu kripto ili platnog projekta u Hrvatskoj. Zašto je euro stablecoin pravno e-novac, gdje nastaje obveza licence, i tri zone u kojima licenca ne treba. Nije pravni savjet." />
+<link rel="icon" href="coin.svg" />
+<link rel="canonical" href="https://airkuna.org/licenciranje/" />
+<link rel="alternate" hreflang="hr" href="https://airkuna.org/licenciranje/" />
+<link rel="alternate" hreflang="en" href="https://airkuna.org/en/licensing/" />
+<link rel="alternate" hreflang="x-default" href="https://airkuna.org/licenciranje/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#002F6C; --navy-900:#001631; --navy-800:#002250; --navy-700:#0A3B82;
+  --gold:#C8912A; --gold-light:#E3AF35; --gold-soft:#F4E7C6;
+  --ink:#14202E; --mute:#5B6B82; --line:#E5E8EF; --paper:#FCFBF8; --soft:#F5F7FB; --white:#fff;
+  --green:#1A7A3C; --green-soft:#E4F1E9; --red:#C0181C; --red-soft:#FBE7E7;
+  --maxw:1140px; --r:18px;
+  --shadow:0 24px 60px -28px rgba(0,30,80,.28); --shadow-sm:0 10px 30px -18px rgba(0,30,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.doc{max-width:900px;margin:0 auto;padding:0 24px}
+.row>*,.grid>*,.lvl>*,.scnhead>*{min-width:0}
+
+/* ---------- nav ---------- */
+header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:var(--navy);flex:0 0 auto}
+.brand img{width:32px;height:32px}
+.navlinks{display:flex;gap:20px;font-size:14.5px;font-weight:500;color:var(--ink);flex:1;min-width:0;white-space:nowrap;padding:0 6px}
+.navlinks a{flex:0 0 auto}
+.navlinks a:hover{color:var(--gold)}
+.nav .btn{flex:0 0 auto}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
+.btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700;letter-spacing:.04em}
+.langsw a{padding:5px 11px;border-radius:999px;color:var(--mute);transition:.2s;line-height:1}
+.langsw a:hover{color:var(--navy)}
+.langsw a[aria-current]{background:var(--navy);color:#fff}
+.navtoggle{display:none;flex:0 0 auto;width:42px;height:42px;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--navy);transition:.2s}
+.navtoggle:hover{border-color:var(--gold);color:var(--gold)}
+.navtoggle svg{width:22px;height:22px}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,22,49,.45);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:60}
+.drawer-overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(330px,86vw);background:var(--paper);box-shadow:-24px 0 70px -34px rgba(0,30,80,.55);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;padding:18px 22px 30px;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.drawer .dhead .brand{font-size:19px}
+.drawer .dclose{width:42px;height:42px;flex:0 0 auto;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:.2s}
+.drawer .dclose:hover{border-color:var(--gold);color:var(--gold)}
+.drawer nav{display:flex;flex-direction:column;margin-top:4px}
+.drawer nav a{padding:13px 4px;font-size:16px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--line)}
+.drawer nav a:hover{color:var(--gold)}
+.drawer .btn{margin-top:20px;justify-content:center;width:100%}
+.drawer .langsw{margin-top:18px;align-self:flex-start}
+@media(max-width:1100px){.navlinks{display:none}.nav>.btn-navy{display:none}.navtoggle{display:inline-flex}}
+
+/* ---------- hero ---------- */
+.dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
+.dochero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+.dochero h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.06;letter-spacing:-.01em;margin:14px 0 0;color:#fff}
+.dochero p{color:#C9D6EC;font-size:clamp(16px,2vw,19px);margin-top:18px;max-width:760px}
+.dochero p b{color:#fff}
+.verified{display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:26px}
+.vchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#DCE7F8}
+.vchip .dot{width:7px;height:7px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 0 3px rgba(227,175,53,.22)}
+
+/* ---------- prose ---------- */
+.prose{padding:54px 0 30px}
+.prose h2{font-family:Fraunces,serif;font-weight:600;font-size:clamp(23px,3vw,32px);color:var(--navy);line-height:1.14;margin:58px 0 6px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose h2[id],.prose p[id],.scn[id]{scroll-margin-top:86px}
+.prose h3{font-size:17px;color:var(--navy);font-weight:700;margin:28px 0 0}
+.prose p{margin-top:14px;font-size:16.5px;color:var(--ink)}
+.prose ul,.prose ol{margin:14px 0 0 4px;padding-left:22px}
+.prose li{margin-top:9px;font-size:16px}
+.prose b,.prose strong{color:var(--navy)}
+.prose a.link{color:var(--navy-700);text-decoration:underline;text-underline-offset:2px}
+.prose a.link:hover{color:var(--gold)}
+.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#0A3B82}
+.lede{font-size:18px!important;color:var(--mute)!important}
+.eyebrow-s{font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-top:52px}
+
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:20px 24px;margin-top:22px;font-size:15px;color:var(--mute)}
+.callout b{color:var(--navy)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft)}
+.callout a{color:var(--navy-700);text-decoration:underline;text-underline-offset:2px}
+
+/* ---------- mermaid figure ---------- */
+/* dijagrami i široke tablice izlaze iz tekstualnog stupca do pune širine */
+.bleed{width:min(1140px,calc(100vw - 40px));margin-left:50%;transform:translateX(-50%)}
+.figure{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;box-shadow:var(--shadow-sm);margin-top:28px;overflow-x:auto}
+.figure .cap{text-align:center;color:var(--mute);font-size:13.5px;margin-top:14px}
+.mermaid{display:flex;justify-content:center}
+.mermaid .edgeLabel,.mermaid .edgeLabel p,.mermaid .edgeLabel .labelBkg{background:#fff!important;color:var(--ink)!important;font-weight:600}
+.figure .mermaid p{margin:0;font-size:inherit;line-height:1.4}
+.mermaid .nodeLabel p{color:inherit}
+/* na uskim ekranima dijagram ne smije stisnuti tekst ispod ~78 % — radije scrolla unutar .figure */
+@media(max-width:900px){.figure{padding:20px 12px}.figure .mermaid{justify-content:flex-start}}
+
+/* ---------- ljestvica razina ---------- */
+.ladder{display:grid;gap:14px;margin-top:28px}
+.lvl{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}
+.lvl.l0{border-left-color:var(--green)}
+.lvl.l1{border-left-color:#6FA57E}
+.lvl.l2{border-left-color:var(--gold-light)}
+.lvl.l3{border-left-color:var(--gold)}
+.lvl.l4{border-left-color:#D25A2C}
+.lvl.l5{border-left-color:var(--red)}
+.lvl .n{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--navy-700),var(--navy));color:var(--gold-light);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:600;font-size:21px;flex:0 0 auto}
+.lvl h4{font-family:Fraunces,serif;font-weight:600;font-size:19px;color:var(--navy);line-height:1.2}
+.lvl .who{font-size:13.5px;color:var(--mute);margin-top:5px}
+.lvl .lic{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.chip.none{background:var(--green-soft);color:var(--green)}
+.chip.hanfa{background:var(--gold-soft);color:#7a5a12}
+.chip.hnb{background:#E7EEFA;color:var(--navy-700)}
+.chip.hard{background:var(--red-soft);color:var(--red)}
+@media(max-width:640px){.chip{white-space:normal}}
+
+/* ---------- scenariji ---------- */
+.scn{margin-top:34px;border-top:1px solid var(--line);padding-top:30px}
+.scn:first-of-type{border-top:0;padding-top:0}
+.scnhead{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.scnhead .sn{font-family:Fraunces,serif;font-weight:600;font-size:13px;color:#fff;background:var(--navy);border-radius:999px;padding:3px 12px;letter-spacing:.04em}
+.scnhead h3{margin:0!important;font-family:Fraunces,serif;font-size:21px;font-weight:600;color:var(--navy)}
+.verdict{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:14px;color:var(--mute)}
+.verdict .vk{font-weight:700;color:var(--navy)}
+
+/* ---------- tablice ---------- */
+.tblwrap{overflow-x:auto;max-width:100%;margin-top:24px}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl th,.tbl td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;letter-spacing:.02em}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--soft)}
+.tbl b{color:var(--navy)}
+.tbl td.dim{color:var(--mute)}
+.tbl .no{color:var(--mute);text-align:center}
+@media(max-width:760px){.tbl{min-width:640px;font-size:13.5px}.tbl th,.tbl td{padding:10px 11px}}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green)}
+.badge.y{background:var(--gold-soft);color:#7a5a12}
+.badge.r{background:var(--red-soft);color:var(--red)}
+.badge.b{background:#E7EEFA;color:var(--navy-700)}
+
+/* ---------- zlatno pravilo ---------- */
+.safe{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:24px}
+.szone{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:20px 22px}
+.szone .k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light)}
+.szone h4{font-family:Fraunces,serif;font-weight:600;font-size:18px;color:#fff;margin-top:7px;line-height:1.24}
+.szone p{font-size:14px;color:#B9C8E2;margin-top:8px!important}
+.goldbox{background:radial-gradient(700px 420px at 88% 6%,rgba(227,175,53,.12),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-900));color:#fff;border-radius:var(--r);padding:32px 30px;box-shadow:var(--shadow);margin-top:28px}
+.goldbox h3{color:#fff!important;font-family:Fraunces,serif;font-weight:600;font-size:22px;margin:0!important}
+.goldbox>p{color:#C9D6EC!important;font-size:15.5px!important}
+.goldbox>p b{color:var(--gold-light)}
+@media(max-width:640px){.goldbox{padding:26px 20px}}
+
+/* ---------- izvori ---------- */
+.srcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:24px}
+.srccol{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow-sm)}
+.srccol h4{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.srccol a{display:block;font-size:14px;color:var(--navy);padding:5px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.srccol a:last-child{border-bottom:0}
+.srccol a:hover{color:var(--gold)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);font-size:13.5px;margin-top:56px}
+.fgrid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.fnote{max-width:900px;font-size:12.5px;color:var(--mute);margin-top:22px;line-height:1.7;border-top:1px solid var(--line);padding-top:20px}
+.fnote b{color:var(--navy)}
+.backbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--navy)}
+.backbtn:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <nav class="navlinks">
+      <a href="#kvalifikacija">Zašto</a>
+      <a href="#nadleznost">Tko nadzire</a>
+      <a href="#razine">Razine</a>
+      <a href="#scenariji">Scenariji</a>
+      <a href="#katalog">Katalog licenci</a>
+      <a href="#rokovi">Rokovi</a>
+      <a href="#pravilo">Zlatno pravilo</a>
+    </nav>
+    <a class="btn btn-navy" href="../">airkuna.org →</a>
+    <div class="langsw">
+      <a href="./" hreflang="hr" aria-current="true">HR</a>
+      <a href="../en/licensing/" hreflang="en">EN</a>
+    </div>
+    <button class="navtoggle" id="navToggle" aria-label="Otvori izbornik" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <a class="brand" href="../"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <button class="dclose" id="drawerClose" aria-label="Zatvori izbornik">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#kvalifikacija">Zašto ovo postoji</a>
+    <a href="#nadleznost">Tko nadzire što</a>
+    <a href="#razine">Ljestvica razina</a>
+    <a href="#scenariji">Sedam scenarija</a>
+    <a href="#usluge">Deset CASP usluga</a>
+    <a href="#katalog">Katalog licenci</a>
+    <a href="#rokovi">Rokovi i vremenska crta</a>
+    <a href="#pravilo">Zlatno pravilo</a>
+    <a href="#izvori">Izvori</a>
+    <a href="../">Naslovnica airkuna.org</a>
+    <a href="https://airkuna.com">Digitalni identitet (.com)</a>
+  </nav>
+  <a class="btn btn-navy" href="../">airkuna.org →</a>
+  <div class="langsw">
+    <a href="./" hreflang="hr" aria-current="true">HR</a>
+    <a href="../en/licensing/" hreflang="en">EN</a>
+  </div>
+</aside>
+
+<section class="dochero">
+  <div class="doc">
+    <span class="eyebrow">Edukativno · Regulatorni okvir u Hrvatskoj</span>
+    <h1>Koja licenca za koji kripto ili platni projekt</h1>
+    <p>Većina ljudi koji grade nešto oko stablecoina misli da je pitanje „trebam li licencu?“ stvar veličine ili naplate. Nije. Pitanje je <b>diraš li tuđi novac, tuđe tokene ili tuđe ključeve</b> — i u kojem trenutku toka novca. Ova stranica raspisuje ljestvicu: od čistog softvera koji ne treba ništa, do vlastitog stablecoina koji traži licencu institucije za elektronički novac i MiCA bijelu knjigu.</p>
+    <div class="verified">
+      <span class="vchip"><span class="dot"></span>HANFA: 16 kategorija odobrenja</span>
+      <span class="vchip"><span class="dot"></span>HNB: 13 kategorija odobrenja</span>
+      <span class="vchip"><span class="dot"></span>MiCA + PSD2 dvostruki režim</span>
+      <span class="vchip"><span class="dot"></span>Stanje na dan 1. kolovoza 2026.</span>
+    </div>
+  </div>
+</section>
+
+<article class="prose">
+  <div class="doc">
+
+    <!-- ==================== 1. UVOD / KVALIFIKACIJA ==================== -->
+    <p class="lede" style="margin-top:0" id="kvalifikacija">airkuna.org je edukativan projekt. Kad objašnjavamo kako izdati euro stablecoin i zašto je on važan za lokalnu ekonomiju, moramo jednako otvoreno objasniti i drugu stranu: <b>gdje počinje regulirano područje</b>. Ovaj vodič je pisan za osnivače, developere i znatiželjne — kao mapa, ne kao pravni savjet.</p>
+
+    <h2>Prvo: euro stablecoin nije „samo token“</h2>
+
+    <p>Sve ostalo visi o jednom lancu kvalifikacije. Regulirani euro stablecoin (javno poznat primjer je <b>EURe</b>, koji izdaje <a class="link" href="https://monerium.com/eure/" target="_blank" rel="noopener">Monerium EMI hf.</a>, institucija za elektronički novac licencirana kod Središnje banke Islanda s passportingom kroz EEA) pod MiCA-om je <b>token elektroničkog novca (EMT)</b>. EMT se pravno smatra <b>elektroničkim novcem</b>. A elektronički novac su <b>„novčana sredstva“ (funds)</b> u smislu direktive o platnim uslugama.</p>
+
+    <p>Posljedica je nezgodna i mnogi je previde: ista usluga nad istim tokenom može istovremeno biti <b>kripto-usluga po MiCA-i</b> (nadzire HANFA) i <b>platna usluga po PSD2</b> (nadzire HNB). To se zove <b>dvostruka autorizacija</b>.</p>
+
+    <div class="figure bleed">
+      <div class="mermaid">
+flowchart TD
+  A["Euro stablecoin<br/>npr. EURe"]:::tok --> B["Token elektroničkog novca<br/>EMT · MiCA glava IV."]:::mica
+  B --> C["Pravno = elektronički novac<br/>direktiva o e-novcu"]:::mica
+  C --> D["= novčana sredstva (funds)<br/>direktiva o platnim uslugama"]:::psd
+  D --> E{"Usluga nad njim može biti<br/>i kripto-usluga i platna usluga"}:::key
+  E -- "MiCA" --> F["CASP odobrenje<br/>HANFA"]:::hanfa
+  E -- "PSD2" --> G["Institucija za platni promet<br/>HNB"]:::hnb
+  classDef tok fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef mica fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef psd fill:#0A3B82,stroke:#001631,color:#fff,font-weight:600;
+  classDef key fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+  classDef hanfa fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef hnb fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Lanac kvalifikacije: stablecoin → e-novac → novčana sredstva → dva paralelna režima nadzora.</div>
+    </div>
+
+    <div class="callout warn">
+      <b>Najskuplja zabluda: „mi ne naplaćujemo, pa nam ne treba licenca.“</b> Naknada nije kriterij. I MiCA i PSD2 hvataju usluge koje se pružaju <b>trećima na profesionalnoj ili poslovnoj osnovi</b> — a korist može biti neizravna (rast platforme, marketing, marža negdje drugdje) ili je uopće ne mora biti. Besplatnost ne oslobađa od licence. Oslobađa jedino <b>nepružanje regulirane usluge</b>: da novac i tokeni nikad ne prolaze kroz tebe i da ih ne kontroliraš.
+    </div>
+
+    <!-- ==================== 2. NADLEŽNOST ==================== -->
+    <h2 id="nadleznost">Tko nadzire što: HANFA i HNB</h2>
+
+    <p>Hrvatska je podjelu nadležnosti odredila <a class="link" href="https://narodne-novine.nn.hr/clanci/sluzbeni/2024_07_85_1473.html" target="_blank" rel="noopener">Zakonom o provedbi Uredbe (EU) 2023/1114</a> (NN 85/2024). Ukratko: <b>kripto-usluge idu HANFA-i, novac i plaćanja idu HNB-u</b> — a stablecoin, kako smo vidjeli, zna biti oboje.</p>
+
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:130px">Tijelo</th><th>Nadležnost po MiCA-i</th><th>Ostale relevantne nadležnosti</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>HANFA</b></td>
+            <td>Glave II., V. i VI. — izdaje <b>odobrenja pružateljima usluga povezanih s kriptoimovinom (CASP)</b>, nadzire ponuditelje ostale kriptoimovine; kontaktna točka prema ESMA-i</td>
+            <td class="dim">Skupno financiranje (ECSP), tržište kapitala, investicijski i mirovinski fondovi, osiguranje, leasing, faktoring</td>
+          </tr>
+          <tr>
+            <td><b>HNB</b></td>
+            <td>Glave III. i IV. — odobrenja izdavateljima tokena vezanih uz imovinu (ART), nadzor <b>izdavatelja EMT-a</b> (kreditne institucije i institucije za e-novac); kontaktna točka prema EBA-i</td>
+            <td class="dim">Kreditne institucije, <b>institucije za platni promet</b>, <b>institucije za elektronički novac</b>, platni sustavi, mjenjači</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <b>Cijena pogreške.</b> Za pružanje kripto-usluga bez odobrenja NN 85/2024 propisuje kaznu do <b>5.000.000 € ili 3 % ukupnog godišnjeg prihoda</b> za pravnu osobu, do 500.000 € za fizičku osobu i do 1.000.000 € za odgovornu osobu u upravi. Prijelazna razdoblja u kojima se „radilo pa se vidjelo“ više ne postoje — vidi <a href="#rokovi">vremensku crtu</a>.
+    </div>
+
+    <!-- ==================== 3. RAZINE ==================== -->
+    <h2 id="razine">Ljestvica: šest razina projekta</h2>
+
+    <p>Umjesto popisa licenci, korisnije je pitati se <b>koliko duboko projekt ulazi u tuđi novac</b>. Svaka sljedeća razina dodaje obvezu na prethodnu. Granica između razine 0 i svih ostalih jedina je koja stvarno mijenja život projektu.</p>
+
+    <div class="figure tall bleed">
+      <div class="mermaid">
+flowchart TD
+  Q1{"Tuđa sredstva<br/>na tvom računu?"}:::q
+  Q1 -- "da" --> R3A["Razina 3 · CASP skrb i prijenos<br/>+ institucija za platni promet"]:::hard
+  Q1 -- "ne" --> Q2{"Tuđi ključevi<br/>kod tebe?"}:::q
+  Q2 -- "da" --> R3B["Razina 3 · CASP skrb<br/>+ platni sloj"]:::hard
+  Q2 -- "ne" --> Q3{"Backend sam<br/>inicira plaćanja?"}:::q
+  Q3 -- "da" --> R3C["Razina 3 · usluga iniciranja plaćanja<br/>= institucija za platni promet"]:::hard
+  Q3 -- "ne" --> Q4{"Zamjena iz<br/>vlastite pozicije?"}:::q
+  Q4 -- "da" --> R2["Razina 2 · CASP zamjena,<br/>izvršavanje i zaprimanje naloga"]:::mid
+  Q4 -- "ne" --> Q5{"Prikupljanje<br/>od javnosti?"}:::q
+  Q5 -- "da" --> R4["Razina 4 · ECSP ili prospekt<br/>ili alternativni investicijski fond"]:::hard
+  Q5 -- "ne" --> Q6{"Vlastiti<br/>stablecoin?"}:::q
+  Q6 -- "da" --> R5["Razina 5 · institucija za e-novac<br/>+ MiCA glava IV."]:::worst
+  Q6 -- "ne" --> R0["Razina 0 · bez licence"]:::good
+  classDef q fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+  classDef mid fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef hard fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef worst fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+      </div>
+      <div class="cap">Stablo odlučivanja. Prva grana koja odgovori „da“ određuje razinu — kombinacije se zbrajaju, ne poništavaju.</div>
+    </div>
+
+    <div class="ladder">
+      <div class="lvl l0">
+        <div class="n">0</div>
+        <div>
+          <h4>Čisti softver — ne diraš ništa tuđe</h4>
+          <div class="who">Sučelje, wallet u kojem korisnik sam drži ključeve, prikaz stanja, notifikacije. Novac ide s računa korisnika na račun korisnika, kod licencirane institucije. Isto vrijedi za primanje stablecoina za vlastite usluge i plaćanje iz vlastite riznice.</div>
+          <div class="lic"><span class="chip none">bez licence</span><span class="chip none">tehnički pružatelj (PSD2 čl. 3(j))</span></div>
+        </div>
+      </div>
+      <div class="lvl l1">
+        <div class="n">1</div>
+        <div>
+          <h4>Rad pod tuđom licencom</h4>
+          <div class="who">Zastupnik (agent) institucije za platni promet ili e-novac, odnosno distributer e-novca po ugovoru s izdavateljem. Usluge se pružaju pod licencom principala, uz upis u njegov registar. Opseg je strogo ograničen ugovorom.</div>
+          <div class="lic"><span class="chip none">bez vlastite licence</span><span class="chip hnb">registar principala</span></div>
+        </div>
+      </div>
+      <div class="lvl l2">
+        <div class="n">2</div>
+        <div>
+          <h4>Diraš tuđe tokene, ali ne tuđi novac</h4>
+          <div class="who">Zamjena kriptoimovine iz vlastite pozicije, izvršavanje ili prosljeđivanje naloga, savjetovanje, upravljanje portfeljem. Nastaje obveza CASP odobrenja — po pojedinoj usluzi, ne „sve ili ništa“.</div>
+          <div class="lic"><span class="chip hanfa">HANFA · CASP</span></div>
+        </div>
+      </div>
+      <div class="lvl l3">
+        <div class="n">3</div>
+        <div>
+          <h4>Držiš, prenosiš ili iniciraš tuđa novčana sredstva</h4>
+          <div class="who">Skrb nad ključevima, prijenos tokena za račun klijenata, prolazni („hold-and-forward“) modeli, iniciranje plaćanja s tuđih računa. Kod tokena elektroničkog novca ovdje se pale <b>oba</b> režima istodobno.</div>
+          <div class="lic"><span class="chip hanfa">HANFA · CASP (skrb, prijenos)</span><span class="chip hnb">HNB · institucija za platni promet</span></div>
+        </div>
+      </div>
+      <div class="lvl l4">
+        <div class="n">4</div>
+        <div>
+          <h4>Prikupljaš sredstva od javnosti</h4>
+          <div class="who">Paralelna os, ne nastavak prethodne. Platforma koja spaja ulagatelje i nositelje projekata, vlastita emisija uz očekivani povrat, ili objedinjavanje tuđih sredstava radi ulaganja s diskrecijom — tri različite rute, sve kod HANFA-e.</div>
+          <div class="lic"><span class="chip hanfa">ECSP</span><span class="chip hanfa">prospekt / ZTK</span><span class="chip hanfa">AIF / UAIF</span></div>
+        </div>
+      </div>
+      <div class="lvl l5">
+        <div class="n">5</div>
+        <div>
+          <h4>Izdaješ vlastiti euro stablecoin</h4>
+          <div class="who">Vrh ljestvice. Izdavatelj tokena elektroničkog novca mora biti kreditna institucija ili institucija za elektronički novac, uz MiCA bijelu knjigu, pokriće 1:1, safeguarding rezerve i pravo otkupa po nominali. Višegodišnji, kapitalno zahtjevan pothvat.</div>
+          <div class="lic"><span class="chip hard">HNB · institucija za e-novac</span><span class="chip hard">MiCA glava IV.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 4. SCENARIJI ==================== -->
+    <h2 id="scenariji">Sedam scenarija, sedam tokova novca</h2>
+
+    <p>Ljestvica je apstraktna; tok novca nije. Za svaki tipičan scenarij dolje je dijagram s <b>označenim mjestom gdje nastaje obveza licence</b>. Scenariji su generički — opisuju oblik arhitekture, ne konkretan proizvod.</p>
+
+    <!-- S1 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 1</span><h3>Čisti softver</h3><span class="badge g">bez licence</span></div>
+      <p>Korisnik prolazi KYC izravno kod licenciranog izdavatelja. SEPA uplata sjeda na <b>IBAN samog korisnika</b>, stablecoin se minta na wallet čije ključeve drži <b>samo korisnik</b>, a svaki prijenos korisnik potpisuje sam. Aplikacija prima obavijesti, priprema transakciju i prikazuje stanje — ali nikad ne raspolaže sredstvima.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  P(["Platitelj"]):::loc -- "SEPA uplata" --> IB["IBAN korisnika<br/>kod licenciranog izdavatelja"]:::ext
+  IB -- "mint 1:1" --> W["Wallet korisnika<br/>ključevi kod korisnika"]:::gold
+  W -- "korisnik potpisuje" --> R(["Primatelj"]):::loc
+  APP["Tvoja aplikacija<br/>UX, prikaz, obavijesti"]:::soft -. "samo čita i priprema" .-> W
+  APP --- OK["Bez licence:<br/>tehnički pružatelj"]:::good
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef ext fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef soft fill:#EAF0FA,stroke:#9aa9c2,color:#14202E,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Novac i tokeni nikad ne prolaze kroz pružatelja softvera. Nema regulirane usluge — nema licence.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge g">Razina 0</span> nije kripto-usluga (nekustodijalni softver je izvan MiCA-e), nije platna usluga (iznimka za tehničke pružatelje).</div>
+    </div>
+
+    <!-- S2 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 2</span><h3>Prolazni model („hold-and-forward“)</h3><span class="badge r">CASP + platna licenca</span></div>
+      <p>Najčešća greška u ranim proizvodima. SEPA uplate trećih sjedaju na <b>IBAN pružatelja usluge</b>, stablecoin se minta na <b>njegov</b> wallet, a on ga zatim prosljeđuje krajnjem primatelju. Argument „to je samo prolaz, novac se ne zadržava“ nije pravna obrana: obveza nastaje u trenutku kad tuđa sredstva dođu u tvoj posjed.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  P(["Platitelj"]):::loc -- "SEPA uplata" --> IB["IBAN pružatelja usluge"]:::bad
+  IB -- "mint 1:1" --> W["Wallet pružatelja usluge<br/>tuđa vrijednost pod tvojom kontrolom"]:::bad
+  W -- "prosljeđivanje po nalogu" --> R(["Primatelj"]):::loc
+  W --- L["Obveza nastaje ovdje:<br/>CASP skrb + prijenos (HANFA)<br/>+ novčana doznaka (HNB)"]:::warn
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+        </div>
+        <div class="cap">Čim tuđa sredstva sjednu na tvoj IBAN ili wallet, iznimka za tehničke pružatelje otpada.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge r">Razina 3</span> CASP odobrenje za skrb i prijenos + institucija za platni promet zbog izvršavanja platnih transakcija. Alternativa je restrukturiranje u scenarij 1.</div>
+    </div>
+
+    <!-- S3 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 3</span><h3>Zamjena iz vlastite pozicije</h3><span class="badge r">CASP</span></div>
+      <p>Aplikacija nudi korisniku zamjenu jednog tokena za drugi ili za fiat — <b>iz vlastite zalihe</b>, pa makar uz nula naknade. To je kripto-usluga zamjene i traži CASP odobrenje neovisno o veličini prometa.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  U(["Korisnik"]):::loc -- "šalje token A" --> T["Tvoja pozicija<br/>vlastita zaliha tokena"]:::mid
+  T -- "vraća token B ili euro" --> U
+  T --- L["Obveza: CASP zamjena<br/>kriptoimovine za novčana sredstva (c)<br/>ili za drugu kriptoimovinu (d)"]:::warn
+  N["Nula naknade<br/>ne mijenja ništa"]:::note -.-> L
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef mid fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+  classDef note fill:#EAF0FA,stroke:#9aa9c2,color:#14202E,font-weight:600;
+        </div>
+        <div class="cap">Zamjena „iz svoje pozicije“ je usluga trećima, bez obzira na naplatu.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge r">Razina 2</span> HANFA CASP. Ako u lancu držiš i EMT-ove ili fiat za klijente, dodaje se i platni sloj.</div>
+    </div>
+
+    <!-- S4 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 4</span><h3>Skrbništvo nad ključevima</h3><span class="badge r">najskuplja kombinacija</span></div>
+      <p>Ugrađeni („embedded“) wallet u aplikaciji kod kojeg pružatelj drži ključ, ima udio u multisigu koji mu omogućuje samostalno raspolaganje, ili kontrolira postupak oporavka. Granica nije naziv nego <b>substance over form</b>: čim postoji administratorski ili recovery ključ, otvara se analiza skrbništva.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  U(["Korisnik"]):::loc --> APP["Aplikacija s ugrađenim walletom"]:::mid
+  APP --> K["Ključevi / recovery<br/>pod kontrolom pružatelja"]:::bad
+  K --> W["Wallet korisnika<br/>de facto tuđa kontrola"]:::bad
+  K --- L["Obveza: CASP skrb (a)<br/>+ skrb nad EMT-om = vođenje računa<br/>za plaćanje → platni sloj"]:::warn
+  SC["Self-custody dizajn<br/>izbjegava cijelu granu"]:::good -.-> W
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef mid fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Skrb nad tokenima elektroničkog novca regulatori tretiraju kao vođenje računa za plaćanje.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge r">Razina 3</span> CASP skrb + platni sloj. Dizajn u kojem ključeve drži isključivo korisnik uklanja cijelu obvezu.</div>
+    </div>
+
+    <!-- S5 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 5</span><h3>Zamka iniciranja plaćanja</h3><span class="badge r">platna licenca bez posjeda sredstava</span></div>
+      <p>Najsuptilniji scenarij. Arhitektura je uredna — korisnik ima svoj račun i svoj wallet, pružatelj ne drži ni euro ni ključ. Ali backend čuva korisnikov API token i <b>sam pokreće naloge</b> po pravilu ili webhooku. Iniciranje plaćanja s tuđeg računa je zasebna platna usluga: licenca treba <b>i kad sredstva nikad ne dođu u tvoj posjed</b>.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart LR
+  U(["Korisnik"]):::loc --> ACC["Račun i wallet korisnika"]:::ext
+  BE["Tvoj backend<br/>čuva token, pravila, raspored"]:::bad -- "sam pokreće nalog" --> ACC
+  BE --- L["Obveza: usluga iniciranja plaćanja<br/>→ institucija za platni promet (HNB)"]:::warn
+  FIX["Ispravno: korisnik potpisuje<br/>svaku transakciju u svojoj sesiji"]:::good -.-> ACC
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef ext fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef bad fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef warn fill:#F4E7C6,stroke:#C8912A,color:#3a2900,font-weight:600;
+  classDef good fill:#1A7A3C,stroke:#0c3f23,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Webhook smije obavijestiti i pripremiti transakciju. Ne smije je izvršiti umjesto korisnika.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge y">siva zona, izbjegavati</span> Rješenje je dizajn: eksplicitan potpis ili privola korisnika po svakoj transakciji.</div>
+    </div>
+
+    <!-- S6 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 6</span><h3>Javno prikupljanje sredstava</h3><span class="badge r">ECSP / prospekt / fond</span></div>
+      <p>Onog trenutka kad treći ulažu očekujući prinos, izlazi se iz kripto-regulative u regulativu tržišta kapitala. Tri rute vode različitim licencama i nisu zamjenjive — koja se primjenjuje ovisi o tome je li riječ o platformi, vlastitoj emisiji ili objedinjavanju sredstava.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart TD
+  J(["Javnost ulaže<br/>uz očekivani povrat"]):::loc --> Q{"Kakav je oblik?"}:::q
+  Q -- "platforma spaja ulagatelje<br/>i nositelje projekata" --> E["ECSP odobrenje<br/>HANFA · rok 3 mjeseca"]:::mid
+  Q -- "vlastita emisija<br/>vrijednosnih papira" --> P["Prospekt / Zakon o tržištu kapitala<br/>HANFA"]:::mid
+  Q -- "objedinjavanje sredstava<br/>i diskrecijsko ulaganje" --> A["Alternativni investicijski fond<br/>društvo za upravljanje · HANFA"]:::mid
+  Q -- "ponuda kriptoimovine<br/>javnosti" --> M["MiCA: bijela knjiga<br/>i pravila ponude"]:::hard
+  classDef loc fill:#fff,stroke:#002F6C,color:#002F6C,font-weight:600;
+  classDef q fill:#fff,stroke:#C8912A,color:#002F6C,font-weight:600;
+  classDef mid fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+  classDef hard fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Skupno financiranje pokriva kredite i prenosive vrijednosne papire — ne prikupljanje u kriptoimovini.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge r">Razina 4</span> nikad bez prethodne pravne analize; najmanje jedna od tri rute kod HANFA-e.</div>
+    </div>
+
+    <!-- S7 -->
+    <div class="scn">
+      <div class="scnhead"><span class="sn">Scenarij 7</span><h3>Vlastiti stablecoin</h3><span class="badge r">EMI + MiCA glava IV.</span></div>
+      <p>Vrh ljestvice i jedini scenarij u kojem se ne postavlja pitanje treba li licenca, nego koliko dugo traje njezino ishođenje. Izdavatelj tokena elektroničkog novca <b>mora</b> biti kreditna institucija ili institucija za elektronički novac. Uz licencu idu bijela knjiga, pokriće 1:1, segregirana rezerva i pravo imatelja na otkup po nominali u svakom trenutku.</p>
+      <div class="figure bleed">
+        <div class="mermaid">
+flowchart TD
+  L1["Licenca institucije<br/>za e-novac · HNB"]:::hard --> L2["MiCA glava IV.<br/>bijela knjiga"]:::hard
+  L2 --> L3["Rezerva 1:1<br/>segregirana, niskorizična"]:::mid
+  L3 --> L4["Pametni ugovor<br/>mint i burn"]:::navy
+  L4 --> L5["SEPA ulaz i izlaz"]:::navy
+  L5 --> L6(["Pravo na otkup<br/>po nominali"]):::gold
+  classDef hard fill:#C0181C,stroke:#7a1418,color:#fff,font-weight:600;
+  classDef mid fill:#002F6C,stroke:#001631,color:#fff,font-weight:600;
+  classDef navy fill:#0A3B82,stroke:#001631,color:#fff,font-weight:600;
+  classDef gold fill:#C8912A,stroke:#9a6f1f,color:#fff,font-weight:600;
+        </div>
+        <div class="cap">Isti put opisan je i u <a class="link" href="../#kuharica">kuharici na naslovnici</a> — ovdje s naglaskom na regulatorni, ne tehnički korak.</div>
+      </div>
+      <div class="verdict"><span class="vk">Verdikt:</span> <span class="badge r">Razina 5</span> HNB licenca za elektronički novac + MiCA glava IV. Korištenje <b>tuđeg</b>, već licenciranog stablecoina ovu obvezu ne stvara.</div>
+    </div>
+
+    <!-- ==================== 5. DESET USLUGA ==================== -->
+    <h2 id="usluge">Deset kripto-usluga: odobrenje se traži po usluzi</h2>
+
+    <p>CASP odobrenje nije „sve ili ništa“. MiCA nabraja deset usluga i tražiš samo one koje stvarno pružaš. Popis je ujedno najbrža provjera hvata li te regulativa uopće.</p>
+
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:38px">#</th><th>Kripto-usluga</th><th>Kada se pali</th></tr></thead>
+        <tbody>
+          <tr><td>a</td><td><b>Skrb i administriranje kriptoimovine za račun klijenata</b></td><td class="dim">Čim kontroliraš privatne ključeve ili pristup korisničkim walletima</td></tr>
+          <tr><td>b</td><td>Upravljanje platformom za trgovanje</td><td class="dim">Knjiga naloga, uparivanje ponuda</td></tr>
+          <tr><td>c</td><td><b>Zamjena kriptoimovine za novčana sredstva</b></td><td class="dim">Prodaja ili otkup tokena za euro iz vlastite pozicije</td></tr>
+          <tr><td>d</td><td><b>Zamjena kriptoimovine za drugu kriptoimovinu</b></td><td class="dim">Swap iz vlastite zalihe</td></tr>
+          <tr><td>e</td><td>Izvršavanje naloga za račun klijenata</td><td class="dim">Kupuješ ili prodaješ u ime korisnika</td></tr>
+          <tr><td>f</td><td>Plasman kriptoimovine</td><td class="dim">Distribucija emisije za izdavatelja</td></tr>
+          <tr><td>g</td><td>Zaprimanje i prijenos naloga</td><td class="dim">Prosljeđuješ naloge korisnika trećima, npr. burzi</td></tr>
+          <tr><td>h</td><td>Savjetovanje o kriptoimovini</td><td class="dim">Personalizirane preporuke — pazi na tekstove u aplikaciji</td></tr>
+          <tr><td>i</td><td>Upravljanje portfeljem kriptoimovine</td><td class="dim">Diskrecijsko upravljanje tuđim pozicijama</td></tr>
+          <tr><td>j</td><td><b>Usluge prijenosa kriptoimovine za račun klijenata</b></td><td class="dim">Šalješ tokene s adrese koju kontroliraš, po nalogu korisnika</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout good">
+      <b>Što je izvan MiCA-e.</b> Pružatelji <b>nekustodijalnog softvera i hardvera</b> za novčanike, kod kojih korisnik sam drži ključeve, nisu u dosegu uredbe. Granica je „substance over form“ — čim postoji recovery ključ, administratorski pristup ili kontrola nad korisničkim sredstvima, analiza skrbništva se otvara bez obzira na to kako je proizvod nazvan. Na izuzeće za „potpuno decentralizirane“ usluge ne treba se oslanjati: tumači se usko i procjenjuje od slučaja do slučaja.
+    </div>
+
+    <!-- ==================== 6. KATALOG ==================== -->
+    <h2 id="katalog">Katalog: sve licence HANFA-e i HNB-a</h2>
+
+    <p>Za potpunu sliku, evo cijelog popisa odobrenja koja izdaju dva regulatora, s oznakom koliko je koje relevantno za tipičan kripto ili platni projekt. Većina ih nije — ali korisno je vidjeti gdje projekt <b>ne</b> pada.</p>
+
+    <h3>HANFA — 16 kategorija odobrenja</h3>
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:38px">#</th><th>Licenca ili odobrenje</th><th style="width:210px">Propis</th><th style="width:250px">Relevantno za kripto/platni projekt?</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Društvo za osiguranje i reosiguranje</td><td class="dim">Zakon o osiguranju</td><td class="no">—</td></tr>
+          <tr><td>2</td><td>Mirovinsko osiguravajuće društvo</td><td class="dim">ZMOD</td><td class="no">—</td></tr>
+          <tr><td>3</td><td>Društvo za upravljanje UCITS fondovima</td><td class="dim">ZOIFJP</td><td class="no">—</td></tr>
+          <tr><td>4</td><td><b>Društvo za upravljanje alternativnim investicijskim fondovima</b></td><td class="dim">Zakon o AIF-ovima</td><td><span class="badge y">latentno</span> Objedinjavanje tuđih sredstava radi ulaganja uz diskreciju je teritorij fonda, bez obzira na tehnologiju</td></tr>
+          <tr><td>5</td><td>Mirovinsko društvo — obvezni fondovi</td><td class="dim">ZOMF</td><td class="no">—</td></tr>
+          <tr><td>6</td><td>Mirovinsko društvo — dobrovoljni fondovi</td><td class="dim">ZDMF</td><td class="no">—</td></tr>
+          <tr><td>7</td><td><b>Investicijsko društvo</b></td><td class="dim">Zakon o tržištu kapitala</td><td><span class="badge y">uvjetno</span> Tokenizirani financijski instrumenti i investicijsko savjetovanje idu po ZTK-u, ne po MiCA-i</td></tr>
+          <tr><td>8</td><td>Tržišni posrednik</td><td class="dim">ZTK</td><td class="no">—</td></tr>
+          <tr><td>9</td><td>Burza</td><td class="dim">ZTK</td><td class="no">—</td></tr>
+          <tr><td>10</td><td>Središnji depozitorij vrijednosnih papira</td><td class="dim">ZTK + Uredba 909/2014</td><td class="no">—</td></tr>
+          <tr><td>11</td><td>Središnja druga ugovorna strana</td><td class="dim">ZTK + EMIR</td><td class="no">—</td></tr>
+          <tr><td>12</td><td>Operater sustava poravnanja</td><td class="dim">ZTK</td><td class="no">—</td></tr>
+          <tr><td>13</td><td>Leasing društvo</td><td class="dim">Zakon o leasingu</td><td class="no">—</td></tr>
+          <tr><td>14</td><td>Faktoring društvo</td><td class="dim">Zakon o faktoringu</td><td class="no">—</td></tr>
+          <tr><td>15</td><td><b>Pružatelj usluga skupnog financiranja (ECSP)</b></td><td class="dim">Uredba (EU) 2020/1503, NN 144/21</td><td><span class="badge y">uvjetno</span> Samo za platformu koja spaja ulagatelje i nositelje projekata; pokriva kredite i prenosive vrijednosne papire</td></tr>
+          <tr><td>16</td><td><b>Pružatelj usluga povezanih s kriptoimovinom (CASP)</b></td><td class="dim">Uredba (EU) 2023/1114, NN 85/24, Pravilnik NN 95/25</td><td><span class="badge r">središnja licenca</span> Za svaki scenarij u kojem se diraju tuđi tokeni</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13.5px;color:var(--mute);margin-top:12px">HANFA uz to vodi registre distributera osiguranja. O ECSP zahtjevu odlučuje u roku od tri mjeseca od urednog zahtjeva.</p>
+
+    <h3>HNB — 13 kategorija odobrenja</h3>
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:38px">#</th><th>Licenca ili odobrenje</th><th style="width:210px">Propis</th><th style="width:250px">Relevantno za kripto/platni projekt?</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Banka</td><td class="dim">Zakon o kreditnim institucijama</td><td class="no">—</td></tr>
+          <tr><td>2</td><td>Štedna banka</td><td class="dim">ZOKI</td><td class="no">—</td></tr>
+          <tr><td>3</td><td>Stambena štedionica</td><td class="dim">ZOKI</td><td class="no">—</td></tr>
+          <tr><td>4</td><td>Kreditna unija</td><td class="dim">Zakon o kreditnim unijama</td><td class="no">—</td></tr>
+          <tr><td>5</td><td><b>Institucija za platni promet</b></td><td class="dim">Zakon o platnom prometu (PSD2)</td><td><span class="badge r">ključna</span> Za držanje ili prijenos tuđih novčanih sredstava, uključujući tokene e-novca, i za iniciranje plaćanja</td></tr>
+          <tr><td>6</td><td><b>Mala institucija za platni promet</b></td><td class="dim">ZPP</td><td><span class="badge b">ulazna varijanta</span> Jeftinija, ali samo za Hrvatsku (bez passportinga) i uz ograničenje volumena</td></tr>
+          <tr><td>7</td><td>Pružatelj usluge informiranja o računu</td><td class="dim">ZPP</td><td><span class="badge y">uvjetno</span> Samo za agregaciju podataka s tuđih bankovnih računa</td></tr>
+          <tr><td>8</td><td><b>Institucija za elektronički novac</b></td><td class="dim">Zakon o elektroničkom novcu</td><td><span class="badge r">samo za vlastito izdanje</span> Potrebna ako izdaješ vlastiti e-novac ili stablecoin; za korištenje tuđeg nije</td></tr>
+          <tr><td>9</td><td>Mala institucija za elektronički novac</td><td class="dim">ZEN</td><td><span class="badge b">ulazna varijanta</span> Isto kao 8, ograničeno na Hrvatsku</td></tr>
+          <tr><td>10</td><td>Odobrenje za rad platnog sustava</td><td class="dim">Zakon o platnim sustavima</td><td class="no">—</td></tr>
+          <tr><td>11</td><td>Ovlašteni mjenjač</td><td class="dim">Zakon o deviznom poslovanju</td><td class="no">— (fizičke valute, ne kriptoimovina)</td></tr>
+          <tr><td>12</td><td>Izdavatelj tokena vezanih uz imovinu (ART)</td><td class="dim">MiCA glava III., NN 85/24</td><td><span class="badge y">uvjetno</span> Samo za tokene vezane uz košaricu imovine, ne za euro stablecoin</td></tr>
+          <tr><td>13</td><td><b>Nadzor izdavatelja tokena e-novca (EMT)</b></td><td class="dim">MiCA glava IV., NN 85/24</td><td><span class="badge r">za vlastiti stablecoin</span> Izdavatelj mora biti kreditna institucija ili institucija za e-novac</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Statusi koji nisu licenca, a mijenjaju sliku</h3>
+    <div class="tblwrap bleed">
+      <table class="tbl">
+        <thead><tr><th style="width:230px">Status</th><th>Što znači</th><th style="width:250px">Granica</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Tehnički pružatelj usluga</b><br/><span style="font-size:12.5px;color:var(--mute)">PSD2 čl. 3(j)</span></td>
+            <td>Podržavaš pružanje platnih usluga — IT, mreže, obrada podataka, autentifikacija — <b>bez da ikad dođeš u posjed novčanih sredstava</b></td>
+            <td class="dim">Iznimka otpada čim se sredstva dotaknu <b>ili</b> se inicira plaćanje s tuđeg računa</td>
+          </tr>
+          <tr>
+            <td><b>Distributer elektroničkog novca</b></td>
+            <td>Distribuiraš ili otkupljuješ e-novac <b>u ime i za račun izdavatelja</b>, po ugovoru; vlastita licenca ni registracija nisu potrebne</td>
+            <td class="dim">Granice su uske: distributer ne smije sam pružati platne usluge ni izdavati e-novac. Predaja tokena iz vlastite zalihe lako sklizne u kripto-uslugu zamjene ili prijenosa</td>
+          </tr>
+          <tr>
+            <td><b>Zastupnik (agent) institucije</b></td>
+            <td>Pružaš platne usluge u ime licencirane institucije; upisuješ se u njezin registar odnosno registar nadzornog tijela</td>
+            <td class="dim">Opseg određuje ugovor s principalom; odgovornost prema klijentu ostaje na principalu</td>
+          </tr>
+          <tr>
+            <td><b>Obveznik sprječavanja pranja novca</b></td>
+            <td>Svaki CASP i svaka institucija za platni promet ili e-novac obveznik je po Zakonu o sprječavanju pranja novca i financiranja terorizma</td>
+            <td class="dim">Čisti softverski pružatelj nije obveznik — ali čim se uzme bilo koja licenca, dolazi i puni program usklađenosti</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ==================== 7. ROKOVI ==================== -->
+    <h2 id="rokovi">Vremenska crta: prijelazna razdoblja su istekla</h2>
+
+    <p>Ovo je dio koji najbrže zastarijeva — i dio zbog kojeg savjeti stariji od godinu dana zavaravaju. Do sredine 2026. istekle su obje olakšice na koje se u ranim godinama moglo osloniti.</p>
+
+    <div class="figure tall bleed">
+      <div class="mermaid">
+timeline
+  30.12.2024. : MiCA se počinje primjenjivati na kripto-usluge : HANFA počinje izdavati CASP odobrenja
+  10.06.2025. : EBA mišljenje o preklapanju MiCA-e i PSD2 : token e-novca = novčana sredstva : privremeno prijelazno razdoblje
+  02.03.2026. : Istek prijelaznog razdoblja : nadzorna tijela traže i platnu autorizaciju za usluge nad tokenima e-novca
+  01.07.2026. : Istek grandfatheringa za postojeće pružatelje : rad bez MiCA odobrenja više nije dopušten
+  u tijeku : PSD3 i uredba o platnim uslugama : očekuje se ukidanje dvostruke autorizacije
+      </div>
+      <div class="cap">Prvo hrvatsko MiCA odobrenje izdano je u travnju 2026.; do srpnja iste godine izdana su tri. Stanje na dan 1. kolovoza 2026. — smjer reforme je poznat, konačan ishod i rok nisu.</div>
+    </div>
+
+    <div class="callout">
+      <b>Što to konkretno znači.</b> Tko danas u Hrvatskoj pruža kripto-usluge, mora imati MiCA odobrenje — prijelaznog razdoblja više nema. A pružatelj koji za klijente prenosi ili čuva <b>tokene elektroničkog novca</b>, a nije barem predao zahtjev za platnu autorizaciju, prema uputama nadzornih tijela mora prestati s tim uslugama i uredno isprati odnos s klijentima. Dugoročno se očekuje da će PSD3 i pripadajuća uredba ugraditi platne zahtjeve u samu MiCA-u i ukinuti potrebu za dvije licence — ali do tada vrijedi dvostruki režim.
+    </div>
+
+    <!-- ==================== 8. ZLATNO PRAVILO ==================== -->
+    <h2 id="pravilo">Zlatno pravilo</h2>
+
+    <div class="goldbox">
+      <h3>Postoje točno tri zone u kojima ne treba nijedna licenca</h3>
+      <p style="margin-top:12px">Sve izvan njih znači ili vlastitu licencu ili rad pod tuđom, po ugovoru.</p>
+      <div class="safe">
+        <div class="szone">
+          <div class="k">Zona 1</div>
+          <h4>Čisti softver</h4>
+          <p>Korisnik ima vlastiti račun kod licencirane institucije i wallet čije ključeve drži sam. Novac i tokeni nikad ne prolaze kroz tebe, a svaki prijenos korisnik potpisuje sam.</p>
+        </div>
+        <div class="szone">
+          <div class="k">Zona 2</div>
+          <h4>Naplata vlastitih usluga</h4>
+          <p>Primaš stablecoin kao trgovac, za svoje fakture, na svoj wallet. Primatelj plaćanja nije pružatelj platnih usluga — ostaje samo računovodstvo i porez.</p>
+        </div>
+        <div class="szone">
+          <div class="k">Zona 3</div>
+          <h4>Plaćanje iz vlastite riznice</h4>
+          <p>Plaćaš dobavljače i suradnike vlastitim sredstvima, vlastitim ključevima. Vlastita plaćanja nisu usluga trećima.</p>
+        </div>
+      </div>
+      <p style="margin-top:22px"><b>I jedno upozorenje uz to:</b> besplatnost ne oslobađa od licence, a „prolaznost“ ne postoji kao pravna obrana. Ako tuđa sredstva sjednu na tvoj račun makar na jednu sekundu, iznimka za tehničke pružatelje je potrošena.</p>
+    </div>
+
+    <div class="callout warn">
+      <b>Prije nego što pokreneš bilo što izvan tri zone.</b> Ovaj vodič je mapa terena, a ne mišljenje o tvom konkretnom slučaju. Za sve što nije čisti softver obavezna je konzultacija s odvjetnikom specijaliziranim za financijsku regulativu i, po potrebi, upit HANFA-i odnosno HNB-u. Oba regulatora imaju kontakte za fintech upite i odgovaraju.
+    </div>
+
+    <!-- ==================== 9. IZVORI ==================== -->
+    <h2 id="izvori">Izvori</h2>
+
+    <p>Sve tvrdnje na ovoj stranici oslanjaju se na primarne izvore — propise, objave regulatora i europskih nadzornih tijela. Odvjetnički prikazi korišteni su samo kao sekundarna potvrda.</p>
+
+    <div class="srcgrid">
+      <div class="srccol">
+        <h4>Propisi i Hrvatska</h4>
+        <a href="https://narodne-novine.nn.hr/clanci/sluzbeni/2024_07_85_1473.html" target="_blank" rel="noopener">NN 85/2024 — Zakon o provedbi Uredbe o MiCA-i ↗</a>
+        <a href="https://www.zakon.hr/z/3808/zakon-o-provedbi-uredbe-%28eu%29-2023-1114-o-trzistima-kriptoimovine" target="_blank" rel="noopener">Zakon.hr — pročišćeni tekst ↗</a>
+        <a href="https://narodne-novine.nn.hr/clanci/sluzbeni/2021_12_144_2458.html" target="_blank" rel="noopener">NN 144/21 — provedba uredbe o skupnom financiranju ↗</a>
+        <a href="https://narodne-novine.nn.hr/clanci/sluzbeni/2022_12_150_2315.html" target="_blank" rel="noopener">NN 150/22 — pravilnik o skupnom financiranju ↗</a>
+        <a href="https://www.zakon.hr/z/195/zakon-o-kreditnim-institucijama" target="_blank" rel="noopener">Zakon o kreditnim institucijama ↗</a>
+      </div>
+      <div class="srccol">
+        <h4>HANFA</h4>
+        <a href="https://www.hanfa.hr/licenciranje/odobrenja-za-drustva-iz-nadleznosti-hanfe/" target="_blank" rel="noopener">Katalog odobrenja ↗</a>
+        <a href="https://www.hanfa.hr/vijesti/donesen-zakon-o-provedbi-uredbe-o-trzistima-kriptoimovine-mica/" target="_blank" rel="noopener">Donesen zakon o provedbi MiCA-e ↗</a>
+        <a href="https://www.hanfa.hr/media/zj2a2rxc/%C5%A1to-je-uredba-mica-3.pdf" target="_blank" rel="noopener">Što je Uredba MiCA (PDF) ↗</a>
+        <a href="https://www.hanfa.hr/media/dpdb44yc/smjernice-o-organizacijskim-zahtjevima-casp-a.pdf" target="_blank" rel="noopener">Smjernice o organizacijskim zahtjevima CASP-a (PDF) ↗</a>
+        <a href="https://www.hanfa.hr/podrucja-nadzora/trziste-kapitala/skupno-financiranje-crowdfunding/" target="_blank" rel="noopener">Skupno financiranje ↗</a>
+        <a href="https://www.hanfa.hr/vijesti/sjednica-upravnog-vijeca-hanfe-electrocoin-doo-prvo-drustvo-koje-je-ishodilo-hanfino-odobrenje-za-rad-u-skladu-s-uredbom-mica/" target="_blank" rel="noopener">Prvo hrvatsko MiCA odobrenje ↗</a>
+      </div>
+      <div class="srccol">
+        <h4>HNB</h4>
+        <a href="https://www.hnb.hr/core-functions/payment-system/licensing" target="_blank" rel="noopener">Licenciranje u platnom prometu ↗</a>
+        <a href="https://www.hnb.hr/en/core-functions/payment-system/licensing/payment-institutions" target="_blank" rel="noopener">Institucije za platni promet ↗</a>
+        <a href="https://www.hnb.hr/en/core-functions/payment-system/licensing/small-payment-institutions" target="_blank" rel="noopener">Male institucije za platni promet ↗</a>
+        <a href="https://www.hnb.hr/en/-/electronic-money-institution" target="_blank" rel="noopener">Institucija za elektronički novac ↗</a>
+        <a href="https://www.hnb.hr/en/core-functions/payment-system/licensing/small-electronic-money-institutions" target="_blank" rel="noopener">Male institucije za elektronički novac ↗</a>
+      </div>
+      <div class="srccol">
+        <h4>EBA, ESMA i EU</h4>
+        <a href="https://www.eba.europa.eu/publications-and-media/press-releases/eba-publishes-no-action-letter-interplay-between-payment-services-directive-psd23-and-markets-crypto" target="_blank" rel="noopener">EBA — mišljenje o preklapanju PSD2 i MiCA-e ↗</a>
+        <a href="https://eba.europa.eu/publications-and-media/press-releases/eba-advises-national-authorities-actions-take-end-transition-period-under-its-no-action-letter" target="_blank" rel="noopener">EBA — kraj prijelaznog razdoblja ↗</a>
+        <a href="https://www.eba.europa.eu/single-rule-book-qa/qna/view/publicId/2022_6360" target="_blank" rel="noopener">EBA Q&amp;A — iznimka za tehničke pružatelje ↗</a>
+        <a href="https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica" target="_blank" rel="noopener">ESMA — MiCA ↗</a>
+        <a href="https://www.mica.wtf/mica/title-i-subject-matter-scope-and-definitions-art.-1-3/article-3" target="_blank" rel="noopener">MiCA čl. 3 — definicije ↗</a>
+        <a href="https://finance.ec.europa.eu/document/download/3a9f865b-4b16-4fbd-b25c-3c37d24d80ed_en?filename=e-money-faq-22122016_en.pdf" target="_blank" rel="noopener">Europska komisija — FAQ o elektroničkom novcu (PDF) ↗</a>
+      </div>
+    </div>
+
+    <p style="font-size:13.5px;color:var(--mute);margin-top:20px">Javno dostupne informacije o EURe i njegovom izdavatelju: <a class="link" href="https://monerium.com/eure/" target="_blank" rel="noopener">monerium.com/eure</a>. Sekundarni prikazi (Norton Rose Fulbright, DLA Piper, Hogan Lovells, CMS, Morgan Lewis) korišteni su isključivo kao potvrda tumačenja primarnih izvora.</p>
+
+    <div class="callout warn" style="margin-top:34px">
+      <b>Disclaimer.</b> Ova stranica je <b>informativnog i edukativnog karaktera</b> i ne predstavlja pravni, financijski ni investicijski savjet, niti ponudu bilo kakve usluge. Opisuje generičke arhitekture i scenarije, ne konkretne proizvode. Regulativa je u tranziciji: <b>stanje na dan 1. kolovoza 2026.</b> Prije donošenja bilo kakve odluke provjerite izvore i zatražite savjet ovlaštenog stručnjaka te po potrebi mišljenje HANFA-e odnosno HNB-a.
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <a class="backbtn" href="../">← Natrag na airkuna.org</a>
+      <div style="display:flex;gap:26px;flex-wrap:wrap">
+        <a href="../#kuharica">Kuharica: izdaj svoj stablecoin</a>
+        <a href="../#razmjer">Razmjer i infrastruktura</a>
+        <a href="https://airkuna.com">Digitalni identitet (.com)</a>
+      </div>
+    </div>
+    <p class="fnote">
+      <b>Napomena o nazivu:</b> Hrvatska je u eurozoni od 1. 1. 2023.; kuna više ne postoji kao valuta. „KUNA“ je <b>brand</b>, a vrijednost koju token referencira je <b>euro</b>.<br/><br/>
+      Edukativni i informativni sadržaj — <b>nije pravni ni financijski savjet</b> ni ponuda. © 2026 airKUNA.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:false,securityLevel:'loose',theme:'base',
+  themeVariables:{fontFamily:'Inter,sans-serif',fontSize:'15px',lineColor:'#9aa9c2',
+    primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631',
+    cScale0:'#002F6C',cScaleLabel0:'#ffffff',cScale1:'#C8912A',cScaleLabel1:'#ffffff',
+    cScale2:'#0A3B82',cScaleLabel2:'#ffffff',cScale3:'#1A7A3C',cScaleLabel3:'#ffffff',
+    cScale4:'#C0181C',cScaleLabel4:'#ffffff',cScale5:'#5B6B82',cScaleLabel5:'#ffffff'}});
+
+/* mermaid skalira SVG na širinu kontejnera; ispod ~78 % font postaje nečitljiv,
+   pa postavljamo pod ispod kojeg dijagram radije horizontalno scrolla u .figure */
+await mermaid.run();
+document.querySelectorAll('.figure .mermaid svg').forEach(function(svg){
+  var vb = (svg.getAttribute('viewBox') || '').split(/\s+/);
+  var natural = parseFloat(vb[2]);
+  if (natural > 0) svg.style.minWidth = Math.round(natural * 0.78) + 'px';
+});
+</script>
+
+<script>
+(function(){
+  var drawer=document.getElementById('drawer'),ov=document.getElementById('drawerOverlay'),
+      tog=document.getElementById('navToggle'),cls=document.getElementById('drawerClose');
+  function open(){drawer.classList.add('open');ov.classList.add('open');tog.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function close(){drawer.classList.remove('open');ov.classList.remove('open');tog.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  tog.addEventListener('click',open);cls.addEventListener('click',close);ov.addEventListener('click',close);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
+</body>
+</html>
