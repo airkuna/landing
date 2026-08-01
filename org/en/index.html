@@ -38,12 +38,12 @@ h2.title{font-family:Fraunces,serif;font-weight:600;font-size:clamp(28px,4vw,46p
 p.body{font-size:17px;color:var(--ink);margin-top:18px}
 
 header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
-.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:21px;color:var(--navy)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:14px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font-family:Fraunces,serif;font-weight:600;font-size:21px;color:var(--navy);flex:0 0 auto}
 .brand img{width:34px;height:34px}
-.navlinks{display:flex;gap:28px;font-size:14.5px;font-weight:500}
+.navlinks{display:flex;gap:clamp(14px,1.55vw,20px);font-size:14.5px;font-weight:500;flex:1;min-width:0;white-space:nowrap;padding:0 6px}
+.navlinks a{flex:0 0 auto}
 .navlinks a:hover{color:var(--gold)}
-@media(max-width:900px){.navlinks{display:none}}
 
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:13px 24px;border-radius:999px;transition:.2s;cursor:pointer;border:1.5px solid transparent}
 .btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2900;box-shadow:0 8px 22px -10px rgba(200,145,42,.7)}
@@ -160,10 +160,29 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
 .src{font-size:12px;color:#9aa6b8;margin-top:26px;text-align:center}
 .src a{text-decoration:underline}
 
-.langsw{display:inline-flex;align-items:center;flex:0 0 auto;margin-left:10px;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700}
+.langsw{display:inline-flex;align-items:center;flex:0 0 auto;border:1.5px solid var(--line);border-radius:999px;background:#fff;padding:3px;font-size:12px;font-weight:700}
 .langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);line-height:1;transition:.2s}
 .langsw a:hover{color:var(--navy)}
 .langsw a[aria-current]{background:var(--navy);color:#fff}
+
+/* mobilni izbornik (drawer) */
+.navtoggle{display:none;flex:0 0 auto;width:42px;height:42px;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--navy);transition:.2s}
+.navtoggle:hover{border-color:var(--gold);color:var(--gold)}
+.navtoggle svg{width:22px;height:22px}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,22,49,.45);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:60}
+.drawer-overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(330px,86vw);background:var(--paper);box-shadow:-24px 0 70px -34px rgba(0,30,80,.55);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;padding:18px 22px 30px;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.drawer .dhead .brand{font-size:19px}
+.drawer .dclose{width:42px;height:42px;flex:0 0 auto;border:1.5px solid var(--line);border-radius:11px;background:#fff;cursor:pointer;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:.2s}
+.drawer .dclose:hover{border-color:var(--gold);color:var(--gold)}
+.drawer nav{display:flex;flex-direction:column;margin-top:4px}
+.drawer nav a{padding:13px 4px;font-size:16px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--line)}
+.drawer nav a:hover{color:var(--gold)}
+.drawer .btn{margin-top:20px;justify-content:center;width:100%}
+.drawer .langsw{margin-top:18px;align-self:flex-start}
+@media(max-width:1100px){.navlinks{display:none}.nav>.btn-navy{display:none}.navtoggle{display:inline-flex}.nav>.langsw{margin-left:auto}}
 </style>
 </head>
 <body>
@@ -173,17 +192,44 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
     <a class="brand" href="#top"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
     <nav class="navlinks">
       <a href="#stablecoin">Stablecoin</a>
-      <a href="#novac">How money is created</a>
+      <a href="#novac">Money creation</a>
       <a href="#problem">Problem</a>
-      <a href="#banke">Bank comparison</a>
+      <a href="#banke">Banks</a>
       <a href="#kuharica">Cookbook</a>
       <a href="licensing/">Licensing</a>
-      <a href="#partneri">For partners</a>
+      <a href="#partneri">Partners</a>
     </nav>
-    <a class="btn btn-navy btn-sm" href="https://airkuna.com">Digital identity →</a>
+    <a class="btn btn-navy btn-sm" href="https://airkuna.com/en/">airkuna.com →</a>
     <div class="langsw"><a href="/" hreflang="hr">HR</a><a href="/en/" hreflang="en" aria-current="true">EN</a></div>
+    <button class="navtoggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
   </div>
 </header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <a class="brand" href="#top"><img src="coin.svg" alt="airKUNA" /> airKUNA</a>
+    <button class="dclose" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#stablecoin">Stablecoin</a>
+    <a href="#novac">How money is created</a>
+    <a href="#problem">Problem</a>
+    <a href="#banke">Bank comparison</a>
+    <a href="#kuharica">Cookbook</a>
+    <a href="licensing/">Licensing</a>
+    <a href="#partneri">For partners</a>
+  </nav>
+  <a class="btn btn-navy" href="https://airkuna.com/en/">Digital identity →</a>
+  <div class="langsw">
+    <a href="/" hreflang="hr">HR</a>
+    <a href="/en/" hreflang="en" aria-current="true">EN</a>
+  </div>
+</aside>
 
 <a id="top"></a>
 <section class="hero">
@@ -634,6 +680,18 @@ mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',
     primaryColor:'#002F6C',primaryTextColor:'#fff',primaryBorderColor:'#001631'}});
 const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+<script>
+(function(){
+  var drawer=document.getElementById('drawer'),ov=document.getElementById('drawerOverlay'),
+      tog=document.getElementById('navToggle'),cls=document.getElementById('drawerClose');
+  function open(){drawer.classList.add('open');ov.classList.add('open');tog.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function close(){drawer.classList.remove('open');ov.classList.remove('open');tog.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  tog.addEventListener('click',open);cls.addEventListener('click',close);ov.addEventListener('click',close);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
 </script>
 </body>
 </html>
