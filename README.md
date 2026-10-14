@@ -18,7 +18,8 @@ Samostojeće (self-contained) landing stranice za airKUNA brand. Bez build korak
 
 - Navy `#002F6C` (airKUNA / povjerenje), zlato `#C8912A` / `#E3AF35` (novčić, vrijednost, treasury), crvena `#C0181C` (samo .org — stari centralizirani/ekstrakcijski sustav).
 - Tipografija: **Fraunces** (display serif) + **Inter** (tekst).
-- `coin.svg` — novčić: navy + zlatni rub + bijela silueta kune (iz airKUNA media-kita).
+- `logo.svg` — logotip: tamnoplava pločica, bijela okomica K-a i zlatni krakovi (chevron). Koristi se u navu, footeru i kao favicon.
+- `coin.svg` — token: ista K u kovanici sa zlatnim rubom (hero, popisi tokena). Izvor obaju je [mediakit](https://github.com/domovinatv/mediakit.domovina.tv) (`airkuna_logo_square.svg`, `airkuna_token.svg`); kopije su u svakoj mapi da mape ostanu samodostatne.
 - Bez emojija (vidi pravilo u pitch-deck repou).
 
 ## Lokalni pregled
@@ -30,7 +31,7 @@ python3 -m http.server 8755
 
 ## Deploy
 
-Svaki folder je neovisno deployabilan na svoju domenu (statički hosting — Cloudflare Pages, GitHub Pages, Netlify). `coin.svg` je kopiran u svaki folder pa su folderi samodostatni.
+Svaki folder je neovisno deployabilan na svoju domenu (statički hosting — Cloudflare Pages, GitHub Pages, Netlify). `coin.svg` i `logo.svg` su kopirani u svaki folder pa su folderi samodostatni.
 
 ## Izvori podataka
 
