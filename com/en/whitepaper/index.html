@@ -40,6 +40,9 @@ header{position:sticky;top:0;z-index:50;background:rgba(252,251,248,.9);backdrop
 @media(max-width:720px){.navlinks{display:none}}
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;transition:.2s;border:1.5px solid transparent}
 .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+.nav .btn{white-space:nowrap}
+@media(max-width:480px){.brand{font-size:18px;gap:8px}.nav .btn{padding:7px 12px;font-size:13px}.langsw{margin-left:6px}}
+@media(max-width:400px){.brand .bword{display:none}}
 
 /* doc hero */
 .dochero{background:radial-gradient(700px 420px at 82% 10%,rgba(227,175,53,.14),transparent 60%),linear-gradient(160deg,var(--navy-900),var(--navy) 60%,var(--navy-800));color:#fff;padding:64px 0 58px}
@@ -107,7 +110,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="../"><img src="logo.svg" alt="airKUNA" /> airKUNA</a>
+    <a class="brand" href="../"><img src="logo.svg" alt="airKUNA" /> <span class="bword">airKUNA</span></a>
     <nav class="navlinks">
       <a href="../#solution">Solution</a>
       <a href="../#how">How it works</a>

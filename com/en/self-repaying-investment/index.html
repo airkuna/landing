@@ -210,13 +210,14 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 .btn-gold:hover{transform:translateY(-2px)}
 .btn-outline{border:1.5px solid var(--line);color:var(--navy);background:#fff;font-size:15px;padding:13px 24px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
 .btn-outline:hover{border-color:var(--gold)}
+@media(max-width:400px){.brand .bword{display:none}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="../"><img src="logo.svg" alt="airKUNA" /> airKUNA</a>
+    <a class="brand" href="../"><img src="logo.svg" alt="airKUNA" /> <span class="bword">airKUNA</span></a>
     <nav class="navlinks">
       <a href="#idea">Idea</a>
       <a href="#proof">On-chain proof</a>

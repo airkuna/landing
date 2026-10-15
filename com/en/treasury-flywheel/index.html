@@ -137,13 +137,14 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 .langsw a{padding:5px 10px;border-radius:999px;color:var(--mute);line-height:1;transition:.2s}
 .langsw a:hover{color:var(--navy)}
 .langsw a[aria-current]{background:var(--navy);color:#fff}
+@media(max-width:400px){.brand .bword{display:none}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="../"><img src="logo.svg" alt="airKUNA" /> airKUNA</a>
+    <a class="brand" href="../"><img src="logo.svg" alt="airKUNA" /> <span class="bword">airKUNA</span></a>
     <nav class="navlinks">
       <a href="#stack">The stack</a>
       <a href="#flow">How it works</a>

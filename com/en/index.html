@@ -221,13 +221,14 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;color:var(--mute);fo
 
 .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
+@media(max-width:400px){.brand .bword{display:none}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="#top"><img src="logo.svg" alt="airKUNA" /> airKUNA</a>
+    <a class="brand" href="#top"><img src="logo.svg" alt="airKUNA" /> <span class="bword">airKUNA</span></a>
     <nav class="navlinks">
       <a href="#problem">Problem</a>
       <a href="#solution">Solution</a>
