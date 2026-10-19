@@ -286,6 +286,11 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--mute);fo
 <article class="prose">
   <div class="doc">
 
+    <div class="callout warn" id="smart-earn-off" style="margin-top:0;margin-bottom:22px">
+      <b>Status since 15 Oct 2026: smart earn is switched off — self-repayment is not running right now.</b> Hobba pulled the leverage out of the vaults because borrowing (≈ 7.8%) now costs more than the vault earns net (≈ 6.1%). This is exactly the risk described below under “What this is not” — <b>yield has fallen below interest</b>. On the unwind all yield accumulated so far went into repayment (our debt fell from 1.42 to 0.83 USDC), but while the engine is off the loan is <b>an ordinary loan</b>: interest accrues, nothing repays it. The position remains safe (LTV ≈ 0.8%, liquidation only below $0.97 per SOL). Hobba says it will switch the engine back on once the rate spread turns; we track that every morning at <a href="https://live.airkuna.com" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">live.airkuna.com ↗</a>.
+    </div>
+
+
     <!-- IDEJA -->
     <p class="lede" style="margin-top:0" id="idea">In one sentence: instead of selling an asset to fund airKUNA, the investor <b>keeps</b> it — and development is financed out of the <b>yield</b> that asset earns while it sits as collateral. The loan that goes into airKUNA's treasury is small relative to the collateral, so the carry pays it off over time. The result: <b>a stake that repays itself</b>, with SOL exposure retained and an allocation in airKUNA.</p>
 
