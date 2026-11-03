@@ -38,3 +38,18 @@ nullifier = HMAC-SHA256(OIB, PEPPER)     // deterministički, nepovratan
 - **−** Pepper postaje kritična tajna (prostor OIB-ova ~10¹¹ je brute-force-abilan ako pepper curi)
   → rješava [0003](0003-pepper-custody.md).
 - **−** `migrateAnchor` mora biti atomičan i zaštićen od zloupotrebe (svježa eID atestacija po migraciji).
+  Svježina sama nije dovoljna: atestaciju se može ponovno poslati dok vrijedi → `seq` po nullifieru,
+  [0005](0005-seq-anti-replay-i-rotacija-potpisnika.md).
+
+## Dopuna 2026-11-03 (iz analize eidchaina, vidi [0004](0004-eoi-kartica-web-eid-verifier.md))
+
+- **Normalizacija OIB-a prije HMAC-a, ista za sve izvore.** Ulaz u HMAC je točno 11 znamenki.
+  Certilia daje OIB u `sub` (ili `pin`), eOsobna u certifikatu `subject.serialNumber = "PNOHR-<OIB>"`.
+  Prefiks se skida, a kontrolna znamenka (ISO 7064 MOD 11,10) se provjerava. Bez toga ista osoba
+  preko dva izvora dobiva dva nullifiera, a to je Sybil rupa.
+- **Što nikad ne ide onchain:** OIB, ime, certifikat, potpis izdavača (CAdES/JWS) i OCSP odgovor.
+  eidchain pokazuje što se događa ako se to ne poštuje: certifikat s OIB-om ostaje u svakom bloku
+  zauvijek, a explorer ga može samo sakriti, ne i obrisati.
+- **Rok valjanosti identiteta je ograničen dokumentom.** Svaka atestacija ima `expiry ≤ notAfter`
+  certifikata ili dokumenta. Za glasanje se traži `reverifiedAt` unutar politike, jer onchain
+  nema signala o opozivu (izgubljena kartica, smrt).

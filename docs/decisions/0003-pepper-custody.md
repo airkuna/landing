@@ -27,6 +27,11 @@ Dakle pepper nije obična tajna — kompromitacija ruši i privatnost i integrit
    invalidira postojeće identitete (stari nullifieri ostaju valjani pod svojom verzijom), ali
    ograničava štetu curenja na jednu epohu.
 3. **Odvojen pepper po namjeni** (personhood vs phone-SBT) da curenje jednog ne kompromitira drugi.
+4. **(Dopuna 2026-11-03) Klijentski verifieri trebaju OPRF.** zkTLS (A) i čip (B) dokaz rade kod
+   korisnika, a korisnik ne smije imati pepper. Nullifier zato dobiva od čuvara peppera preko
+   **(threshold) OPRF-a** (npr. RFC 9497 VOPRF): čuvar ne vidi OIB, a korisnik ne vidi pepper. ZK dokaz zatim
+   veže taj izlaz uz OIB iz dokumenta. Bez toga se A/B svode na C (verifier vidi OIB).
+   Verifier E ([0004](0004-eoi-kartica-web-eid-verifier.md)) ionako radi provjeru van lanca, pa koristi isti HMAC iza granice.
 
 ## Consequences
 

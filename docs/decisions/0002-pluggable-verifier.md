@@ -30,6 +30,14 @@ stavljala je **M-of-N Android verifier mesh** kao temelj. Dva kruga prior-art is
 | **B. NFC eOI** | pasivna autentikacija eOsobne (tip Rarimo) | državna PKI | **MVP alt.** |
 | **C. EIP-712 orakl** | jedan off-chain verifier potpiše atestaciju | centralno | prijelazno |
 | **D. Android mesh** | M nezavisnih HW-attested potpisnika | visoka (trust-min.) | **Faza 2** |
+| **E. eOsobna + Web eID** | kartica potpiše izjavu o vezivanju (CAdES), verifier provjeri AKD lanac + OCSP — [0004](0004-eoi-kartica-web-eid-verifier.md) | državna PKI; provjera van lanca (C/D) | **MVP alt.** (dokazano u eidchainu) |
+
+> **Dopuna 2026-11-03.** (1) B (pasivna autentikacija eOI čipa) još nije potvrđen za hrvatsku
+> eOsobnu. Za istu karticu postoji E, isproban put s aktivnim potpisom ([0004](0004-eoi-kartica-web-eid-verifier.md)).
+> (2) **A i B ne mogu „izvesti nullifier lokalno”** ako je nullifier `HMAC(OIB, PEPPER)` s tajnim
+> pepperom ([0001](0001-nullifier-registry.md)), jer klijent nema pepper. Klijentski put zato traži
+> OPRF prema čuvarima peppera ([0003](0003-pepper-custody.md) točka 4), inače je A/B u praksi
+> svejedno C. (3) Upravljanje skupom potpisnika C/D i replay atestacija: [0005](0005-seq-anti-replay-i-rotacija-potpisnika.md).
 
 - **MVP = A ili B** (nullifier iz [0001](0001-nullifier-registry.md), bez mreže).
 - **D = Faza 2**, opcionalno, po mogućnosti **na Acurast substratu**; koristi **M zasebnih EIP-712
