@@ -210,14 +210,16 @@ function claim(Attestation calldata a, bytes calldata proof) external {
     <table class="tbl">
       <thead><tr><th>Verifier</th><th>Kako</th><th>Decentralizacija</th><th>Faza</th></tr></thead>
       <tbody>
-        <tr><td><b>A · zkTLS nad Certilia OIDC</b></td><td>Klijent dokaže (Reclaim/zkTLS) da je Certilia JWKS potpisao id_token s njegovim OIB-om; ugovor verificira zk proof</td><td>Nema oraklske mreže; oslanja se na Certilia PKI</td><td><span class="badge mvp">MVP</span></td></tr>
-        <tr><td><b>B · NFC eOI (eOsobna) čip</b></td><td>Klijent pasivno autenticira potpis izdavača čipa (tip Rarimo/zkPassport), izvede nullifier lokalno</td><td>Nema oraklske mreže; oslanja se na državnu PKI</td><td><span class="badge mvp">MVP alt.</span></td></tr>
-        <tr><td><b>C · EIP-712 attestation orakl</b></td><td>Off-chain verifier validira id_token (JWKS/iss/aud), potpiše <code>{nullifier,anchor,loa}</code>; ugovor provjeri potpisnika</td><td>Jedan potpisnik = centralno</td><td><span class="badge next">Prijelazno</span></td></tr>
+        <tr><td><b>A · zkTLS nad Certilia OIDC</b></td><td>Klijent dokaže (Reclaim/zkTLS) da je Certilia JWKS potpisao id_token s njegovim OIB-om; ugovor verificira zk proof. Nullifier preko OPRF-a</td><td>Nema oraklske mreže; oslanja se na Certilia PKI</td><td><span class="badge next">Istraživanje</span></td></tr>
+        <tr><td><b>B · NFC eOI (eOsobna) čip</b></td><td>Klijent pasivno autenticira potpis izdavača čipa (tip Rarimo/zkPassport); nullifier preko OPRF-a. Podrška eOsobne nije potvrđena</td><td>Nema oraklske mreže; oslanja se na državnu PKI</td><td><span class="badge f2">Neprovjereno</span></td></tr>
+        <tr><td><b>C · EIP-712 attestation orakl</b></td><td>Off-chain verifier validira id_token (JWKS/iss/aud), potpiše <code>{nullifier,anchor,loa}</code>; ugovor provjeri potpisnika</td><td>Jedan potpisnik = centralno</td><td><span class="badge mvp">MVP · izgrađeno</span></td></tr>
         <tr><td><b>D · M-of-N Android verifier mesh</b></td><td>Kao C, ali M nezavisnih Android nodeova (StrongBox + Key Attestation) supotpisuje</td><td><b>Visoka</b> — nitko sam ne kuje</td><td><span class="badge f2">Faza 2</span></td></tr>
+        <tr><td><b>E · eOsobna + Web eID</b></td><td>Kartica (čitač + PIN) potpiše izjavu koja veže novčanik (CAdES); verifier provjeri AKD lanac i OCSP. Certifikat nikad onchain</td><td>Državna PKI; dokaz svatko može ponovno provjeriti</td><td><span class="badge next">Prijedlog</span></td></tr>
       </tbody>
     </table>
     </div>
     <div class="callout"><b>Ključni uvid iz prior-arta (potvrđeno u 2 kruga):</b> verifieri A i B daju Sybil-otpornost <b>bez ikakve mreže potpisnika</b>, jer se dokument/sesija sama kriptografski dokazuje. Dodatna potvrda: <b>World ID</b> radi personhood samo s nullifier-registrom + Semaphore zk, bez ikakvog signer-mesha — dokazani industrijski standard. Mesh (D) opravdavaju samo: (1) živi-OIDC root koji se ne može klijentski dokazati, i (2) politička priča „ni AKD ni ITalk ne mogu sami kovati“. Zato: <b>gradi A/B za MVP; mesh je Faza 2, ne preduvjet.</b></div>
+    <div class="callout"><b>Dopuna 2026-11-03 (ADR 0002–0005):</b> izgrađeni MVP je zapravo <b>C</b> (verifier-a2, jedan EIP-712 potpisnik nad Certilijom). A i B ne mogu izvesti nullifier lokalno jer je on HMAC s <b>tajnim</b> pepperom koji klijent nema; trebaju <b>OPRF</b> prema čuvarima peppera, inače se svode na C. B još nije potvrđen za hrvatsku eOsobnu; za istu karticu postoji isproban put <b>E</b> (Web eID, aktivni potpis). Atestacije dobivaju <code>seq</code> po nullifieru protiv replaya, a skup potpisnika mijenja kvorum, ne admin.</div>
     <p>Ako ipak gradiš mesh (Faza 2): razmotri <b>Acurast kao SUBSTRAT</b>, ne gradi od nule. Acurast procesori (250k+ telefona) imaju vlastitu EVM adresu, code-bound hardverski ključ, hardversku atestaciju i mogu potpisati/settlati onchain. M-of-N Safe co-signing je custom logika <i>na</i> Acurastu — pretvara „kupi i pokreni telefone“ u „deploy custom verifier na postojeću mrežu“.</p>
     <div class="callout warn"><b>⚠ Caveat za sve HW-atestacijske pristupe:</b> Android Key Attestation lanac korijeni u <b>Googleu</b> (Google potpisuje attestation ključ). Dakle mesh na Android atestaciji je <b>trust-minimized, ne trustless</b> — Google je root of trust. Pošteno to reci; mitigacija = miješanje vendora (Samsung Knox + Titan + Qualcomm) da nijedan proizvođač nije jedina točka.</div>
 
@@ -268,7 +270,7 @@ function claim(Attestation calldata a, bytes calldata proof) external {
     <table class="tbl">
       <thead><tr><th>Faza</th><th>Isporuka</th></tr></thead>
       <tbody>
-        <tr><td><b>0 — MVP</b></td><td><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> + verifier A (zkTLS/Certilia) ili B (NFC eOI); mock issuer/verifier lokalno</td></tr>
+        <tr><td><b>0 — MVP</b></td><td><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> + verifier C (EIP-712, A2 nad Certilijom) — izgrađeno; A (zkTLS) / B (NFC) / E (Web eID) kao sljedeći korak; mock issuer/verifier lokalno</td></tr>
         <tr><td><b>1</b></td><td>Drugi neovisni izvor (phone-SBT preko sms.domovina.ai reverse-OTP) + credibility score; karta nodeova</td></tr>
         <tr><td><b>2</b></td><td>M-of-N Android verifier mesh (M zasebnih EIP-712 potpisnika, ne MPC) + DAO onboarding + statusi + slashing</td></tr>
         <tr><td><b>3</b></td><td>Socijalna atestacija (web-of-trust score)</td></tr>
@@ -293,8 +295,10 @@ function claim(Attestation calldata a, bytes calldata proof) external {
     <p>airKUNA ima vlastitu ADR bazu (<code>docs/decisions/</code>, kreće od 0001):</p>
     <ul>
       <li><b>0001</b> — nullifier-registar vs per-wallet SBT (jedinstvenost na razini osobe).</li>
-      <li><b>0002</b> — pluggable verifier (A zkTLS / B NFC eOI / C EIP-712 orakl / D Android mesh); MVP = A/B, mesh = Faza 2.</li>
-      <li><b>0003</b> — pepper custody (threshold/HSM, rotacija).</li>
+      <li><b>0002</b> — pluggable verifier (A zkTLS / B NFC eOI / C EIP-712 orakl / D Android mesh); MVP = A/B, mesh = Faza 2 (dopuna: izgrađeni MVP je C; dodan E).</li>
+      <li><b>0003</b> — pepper custody (threshold/HSM, rotacija, OPRF za klijentske verifiere).</li>
+      <li><b>0004</b> — eOsobna kartica preko Web eID-a (CAdES) kao verifier E.</li>
+      <li><b>0005</b> — <code>seq</code> po nullifieru protiv replaya; promjenu skupa potpisnika odobrava kvorum.</li>
     </ul>
 
   </div>

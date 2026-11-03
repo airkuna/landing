@@ -37,7 +37,8 @@ stavljala je **M-of-N Android verifier mesh** kao temelj. Dva kruga prior-art is
 > (2) **A i B ne mogu „izvesti nullifier lokalno”** ako je nullifier `HMAC(OIB, PEPPER)` s tajnim
 > pepperom ([0001](0001-nullifier-registry.md)), jer klijent nema pepper. Klijentski put zato traži
 > OPRF prema čuvarima peppera ([0003](0003-pepper-custody.md) točka 4), inače je A/B u praksi
-> svejedno C. (3) Upravljanje skupom potpisnika C/D i replay atestacija: [0005](0005-seq-anti-replay-i-rotacija-potpisnika.md).
+> svejedno C. (3) **Stvarno stanje MVP-a:** izgrađen je C s N=1 (`services/verifier-a2`, posuđuje
+> Certilia provjeru iz `domovina-api`), ne A ni B. Odluka „MVP = A/B” ostaje cilj, ne opis izgrađenog. (4) Upravljanje skupom potpisnika C/D i replay atestacija: [0005](0005-seq-anti-replay-i-rotacija-potpisnika.md).
 
 - **MVP = A ili B** (nullifier iz [0001](0001-nullifier-registry.md), bez mreže).
 - **D = Faza 2**, opcionalno, po mogućnosti **na Acurast substratu**; koristi **M zasebnih EIP-712

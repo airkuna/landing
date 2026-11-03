@@ -430,20 +430,21 @@ flowchart LR
   <div class="wrap" style="margin-top:56px">
     <div class="center"><span class="eyebrow">The eID → onchain bridge</span>
     <h2 class="title" style="font-size:clamp(24px,3vw,34px)">Pluggable verifier — chosen per phase</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">There is more than one way to prove an eID session to the contract. <b>For the MVP we use A/B — with no signer network at all.</b> A decentralised network is Phase 2, not a prerequisite for it to work.</p></div>
+    <p class="lead" style="margin-left:auto;margin-right:auto">There is more than one way to prove an eID session to the contract. <b>The MVP we built is C — a single EIP-712 oracle over Certilia.</b> The goal is to need less trust in it: proofs anyone can check (A/B/E) and a signer network (D, Phase 2).</p></div>
     <div style="overflow-x:auto">
     <table class="tbl reveal">
       <thead><tr><th>Verifier</th><th>How</th><th>Decentralisation</th><th>Phase</th></tr></thead>
       <tbody>
-        <tr><td><b>A · zkTLS over Certilia OIDC</b></td><td>The client zk-proves that Certilia signed its id_token; the contract verifies the proof</td><td>No oracle network; relies on the Certilia PKI</td><td><span class="badge mvp">MVP</span></td></tr>
-        <tr><td><b>B · NFC eID chip</b></td><td>The client passively authenticates the chip issuer's signature and derives the nullifier locally</td><td>No oracle network; relies on the state PKI</td><td><span class="badge mvp">MVP alt.</span></td></tr>
-        <tr><td><b>C · EIP-712 oracle</b></td><td>An off-chain verifier validates the id_token and signs an attestation; the contract checks the signer</td><td>A single signer = centralised</td><td><span class="badge next">Transitional</span></td></tr>
+        <tr><td><b>A · zkTLS over Certilia OIDC</b></td><td>The client zk-proves that Certilia signed its id_token; the contract verifies the proof. The nullifier comes from the pepper custodians via an OPRF</td><td>No oracle network; relies on the Certilia PKI</td><td><span class="badge next">Research</span></td></tr>
+        <tr><td><b>B · NFC eID chip</b></td><td>The client passively authenticates the chip issuer's signature; the nullifier via an OPRF. Whether the Croatian eID card supports passive authentication is not yet confirmed</td><td>No oracle network; relies on the state PKI</td><td><span class="badge f2">Unverified</span></td></tr>
+        <tr><td><b>C · EIP-712 oracle</b></td><td>An off-chain verifier validates the id_token and signs an attestation; the contract checks the signer</td><td>A single signer = centralised</td><td><span class="badge mvp">MVP · built</span></td></tr>
         <tr><td><b>D · M-of-N Android mesh</b></td><td>Like C, but M independent Android nodes (hardware attestation) co-sign</td><td>High — nobody mints alone</td><td><span class="badge f2">Phase 2</span></td></tr>
+        <tr><td><b>E · eID card + Web eID</b></td><td>The card (reader + PIN) signs a statement that binds the wallet; the verifier checks the AKD certificate chain and OCSP. The certificate never goes onchain</td><td>Relies on the state PKI; anyone can re-check the proof</td><td><span class="badge next">Proposed</span></td></tr>
       </tbody>
     </table>
     </div>
     <div class="notewrap reveal">
-      <b>Honest about trust:</b> verifiers A/B give Sybil resistance without a network because the session itself is proven cryptographically (the same approach as the proven <b>World ID</b> — the difference is the source: a Croatian/EU eID instead of biometrics). Android hardware attestation (the mesh, Phase 2) roots in Google → that is <b>trust-minimised, not trustless</b>; the mitigation is mixing manufacturers. We do not promise what has not been built.
+      <b>Honest about trust:</b> today a single verifier (C) sees the ID number and signs the attestation — that is a central point, and we label it as one. Client-side proofs (A/B) remove it only with an OPRF, because the nullifier is an HMAC with a secret pepper the client must not hold. Android hardware attestation (the mesh, Phase 2) roots in Google → that is <b>trust-minimised, not trustless</b>; the mitigation is mixing manufacturers. We do not promise what has not been built.
     </div>
   </div>
 </section>
@@ -477,14 +478,15 @@ flowchart LR
   <div class="narrow center">
     <span class="eyebrow">Roadmap</span>
     <h2 class="title">Transparently: where we are and where we are going</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Phase 0 (MVP) is built and proven locally. The signer network is Phase 2 — it improves the decentralisation of trust, it is not a prerequisite.</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Phase 0 (MVP) is built and proven locally, with a single verifier (C). The signer network is Phase 2 — it improves the decentralisation of trust, it is not a prerequisite.</p>
   </div>
   <div class="wrap">
     <div class="steps">
-      <div class="step now reveal"><div class="n">0</div><div><h3>MVP — nullifier registry + SBT + verifier A/B</h3><p><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> (EIP-5484) + verifier A (zkTLS/Certilia) or B (NFC eID); mock issuer/verifier harness.</p></div><div class="ph">NOW</div></div>
+      <div class="step now reveal"><div class="n">0</div><div><h3>MVP — nullifier registry + SBT + verifier C</h3><p><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> (EIP-5484) + EIP-712 verifier (A2: checks the Certilia <code>id_token</code>, a single signer); mock issuer/verifier harness.</p></div><div class="ph">NOW</div></div>
       <div class="step reveal"><div class="n">1</div><div><h3>A second independent source + map</h3><p>Phone-SBT via reverse-OTP (sms.domovina.ai) + credibility score; the first real Croatian-eID mints; nodes on a public map.</p></div><div class="ph later">PILOT</div></div>
       <div class="step reveal"><div class="n">2</div><div><h3>M-of-N Android verifier mesh</h3><p>M separate EIP-712 signers (not MPC) + DAO onboarding + statuses + slashing. Acurast is under consideration as the substrate.</p></div><div class="ph later">DECENTRALISATION</div></div>
-      <div class="step reveal"><div class="n">4</div><div><h3>zk anonymous voting</h3><p>MACI / Semaphore — one-human-one-vote without linking a vote to a citizen; threshold custody of the pepper.</p></div><div class="ph later">PRIVACY</div></div>
+      <div class="step reveal"><div class="n">3</div><div><h3>Pepper custody + audit → mainnet</h3><p>The pepper in an HSM or threshold custody (an OPRF for client-side verifiers), replay protection for attestations, a security audit. A prerequisite for mainnet.</p></div><div class="ph later">BEFORE MAINNET</div></div>
+      <div class="step reveal"><div class="n">4</div><div><h3>zk anonymous voting</h3><p>MACI / Semaphore — one-human-one-vote without linking a vote to a citizen.</p></div><div class="ph later">PRIVACY</div></div>
       <div class="step reveal"><div class="n">5</div><div><h3>EUDI Wallet as a source</h3><p>SD-JWT VC / mDoc over OpenID4VP — pan-EU. The same onchain layer, a new identity source for all 27 countries.</p></div><div class="ph later">PAN-EU</div></div>
     </div>
   </div>
@@ -499,11 +501,11 @@ flowchart LR
   </div>
   <div class="wrap">
     <ul class="checks">
-      <li class="reveal"><span class="tick">✓</span><div><b>Whitepaper v0.2 + our own ADR base</b> — protocol, mechanism and key decisions documented (nullifier, pluggable verifier, pepper custody).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/16-whitepaper-proof-of-croatian-personhood.md" target="_blank" rel="noopener">whitepaper ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/docs/decisions" target="_blank" rel="noopener">ADR base ↗</a></div></div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Whitepaper v0.2 + our own ADR base</b> — protocol, mechanism and key decisions documented (nullifier, pluggable verifier, pepper custody, eID card via Web eID, replay protection).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/16-whitepaper-proof-of-croatian-personhood.md" target="_blank" rel="noopener">whitepaper ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/docs/decisions" target="_blank" rel="noopener">ADR base ↗</a></div></div></li>
       <li class="reveal"><span class="tick">✓</span><div><b>Solidity reference contracts</b> — <code>IdentityRegistry</code>, <code>PersonhoodSBT</code> (EIP-5484), EIP-712 verifier + <b>55 Foundry tests (green)</b> and a deploy script.<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/tree/main/contracts/src" target="_blank" rel="noopener">contracts ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/contracts/test" target="_blank" rel="noopener">tests ↗</a><a class="src" href="https://github.com/airkuna/landing/blob/main/contracts/script/DeployMVP.s.sol" target="_blank" rel="noopener">deploy script ↗</a></div></div></li>
       <li class="reveal"><span class="tick">✓</span><div><b>Off-chain verifier A2 harness</b> — mock issuer → verifier → <code>claim</code> → SBT mint; a duplicate ID number reverts; recovery (<code>migrateAnchor</code>) works. Proven end-to-end on a local EVM.<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/tree/main/services/verifier-a2" target="_blank" rel="noopener">verifier-a2 ↗</a></div></div></li>
-      <li class="reveal"><span class="tick">✓</span><div><b>Android verifier node design</b> + MVP verifier-A plan (Phase 2 substrate: Acurast).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/18-android-verifier-node-i-mvp-verifier-a.md" target="_blank" rel="noopener">design + plan ↗</a></div></div></li>
-      <li class="reveal"><span class="tick plan">◷</span><div><b>Planned:</b> deploy to the Gnosis testnet (Chiado), verifier A against the real Certilia, a security audit, the signer network, the EUDI track.</div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Android verifier node design</b> + the MVP verifier A2 plan (Phase 2 substrate: Acurast).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/18-android-verifier-node-i-mvp-verifier-a.md" target="_blank" rel="noopener">design + plan ↗</a></div></div></li>
+      <li class="reveal"><span class="tick plan">◷</span><div><b>Planned:</b> deploy to the Gnosis testnet (Chiado), verifier C against the real Certilia, pepper custody, a security audit, the signer network, the EUDI track.</div></li>
     </ul>
   </div>
 </section>
@@ -519,7 +521,7 @@ flowchart LR
         <div class="tagline">Now</div>
         <div class="u">EU NGI Pilots</div>
         <div class="amt">~€60,000</div>
-        <div class="d">Cascade funding, no consortium required. MVP: nullifier registry + SBT + verifier-A (zkTLS/Certilia), open-source.</div>
+        <div class="d">Cascade funding, no consortium required. Goal: nullifier registry + SBT on testnet + verifier A (zkTLS/Certilia, with an OPRF), open-source.</div>
       </a>
       <div class="lc reveal">
         <div class="tagline">Next</div>

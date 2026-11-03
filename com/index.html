@@ -430,20 +430,21 @@ flowchart LR
   <div class="wrap" style="margin-top:56px">
     <div class="center"><span class="eyebrow">Most eID → onchain</span>
     <h2 class="title" style="font-size:clamp(24px,3vw,34px)">Pluggable verifier — biramo po fazi</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Kako se eID sesija dokazuje ugovoru ima više izvedbi. <b>Za MVP koristimo A/B — bez ikakve mreže potpisnika.</b> Decentralizirana mreža je Faza 2, ne preduvjet za rad.</p></div>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Kako se eID sesija dokazuje ugovoru ima više izvedbi. <b>Izgrađeni MVP je C — jedan EIP-712 orakl nad Certilijom.</b> Cilj je smanjiti povjerenje u njega: dokazi koje svatko može provjeriti (A/B/E) i mreža potpisnika (D, Faza 2).</p></div>
     <div style="overflow-x:auto">
     <table class="tbl reveal">
       <thead><tr><th>Verifier</th><th>Kako</th><th>Decentralizacija</th><th>Faza</th></tr></thead>
       <tbody>
-        <tr><td><b>A · zkTLS nad Certilia OIDC</b></td><td>Klijent zk-dokaže da je Certilia potpisala njegov id_token; ugovor verificira dokaz</td><td>Bez oraklske mreže; oslonac na Certilia PKI</td><td><span class="badge mvp">MVP</span></td></tr>
-        <tr><td><b>B · NFC eOI čip</b></td><td>Klijent pasivno autenticira potpis izdavača čipa i lokalno izvede nullifier</td><td>Bez oraklske mreže; oslonac na državnu PKI</td><td><span class="badge mvp">MVP alt.</span></td></tr>
-        <tr><td><b>C · EIP-712 orakl</b></td><td>Off-chain verifier validira id_token i potpiše atestaciju; ugovor provjeri potpisnika</td><td>Jedan potpisnik = centralno</td><td><span class="badge next">Prijelazno</span></td></tr>
+        <tr><td><b>A · zkTLS nad Certilia OIDC</b></td><td>Klijent zk-dokaže da je Certilia potpisala njegov id_token; ugovor verificira dokaz. Nullifier dobiva preko OPRF-a od čuvara peppera</td><td>Bez oraklske mreže; oslonac na Certilia PKI</td><td><span class="badge next">Istraživanje</span></td></tr>
+        <tr><td><b>B · NFC eOI čip</b></td><td>Klijent pasivno autenticira potpis izdavača čipa; nullifier preko OPRF-a. Podrška eOsobne za pasivnu autentikaciju još nije potvrđena</td><td>Bez oraklske mreže; oslonac na državnu PKI</td><td><span class="badge f2">Neprovjereno</span></td></tr>
+        <tr><td><b>C · EIP-712 orakl</b></td><td>Off-chain verifier validira id_token i potpiše atestaciju; ugovor provjeri potpisnika</td><td>Jedan potpisnik = centralno</td><td><span class="badge mvp">MVP · izgrađeno</span></td></tr>
         <tr><td><b>D · M-of-N Android mesh</b></td><td>Kao C, ali M nezavisnih Android nodeova (hardverska atestacija) supotpisuje</td><td>Visoka — nitko sam ne kuje</td><td><span class="badge f2">Faza 2</span></td></tr>
+        <tr><td><b>E · eOsobna + Web eID</b></td><td>Kartica (čitač + PIN) potpiše izjavu koja veže novčanik; verifier provjeri AKD lanac certifikata i OCSP. Certifikat nikad ne ide onchain</td><td>Oslonac na državnu PKI; dokaz svatko može ponovno provjeriti</td><td><span class="badge next">Prijedlog</span></td></tr>
       </tbody>
     </table>
     </div>
     <div class="notewrap reveal">
-      <b>Pošteno o povjerenju:</b> verifieri A/B daju Sybil-otpornost bez mreže jer se sama sesija kriptografski dokazuje (isti pristup kao dokazani <b>World ID</b> — razlika je izvor: hrvatski/EU eID umjesto biometrije). Android hardverska atestacija (mesh, Faza 2) korijeni u Googleu → to je <b>trust-minimized, ne trustless</b>; mitigacija je miješanje proizvođača. Ne obećavamo ono što nije izgrađeno.
+      <b>Pošteno o povjerenju:</b> danas jedan verifier (C) vidi OIB i potpisuje atestaciju — to je centralna točka i tako je i označavamo. Klijentski dokazi (A/B) uklanjaju tu točku samo uz OPRF, jer je nullifier HMAC s tajnim pepperom koji klijent ne smije imati. Android hardverska atestacija (mesh, Faza 2) korijeni u Googleu → to je <b>trust-minimized, ne trustless</b>; mitigacija je miješanje proizvođača. Ne obećavamo ono što nije izgrađeno.
     </div>
   </div>
 </section>
@@ -477,14 +478,15 @@ flowchart LR
   <div class="narrow center">
     <span class="eyebrow">Roadmap</span>
     <h2 class="title">Transparentno: gdje smo i kamo idemo</h2>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Faza 0 (MVP) je izgrađena i dokazana lokalno. Mreža potpisnika je Faza 2 — poboljšava decentralizaciju povjerenja, nije preduvjet.</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Faza 0 (MVP) je izgrađena i dokazana lokalno, s jednim verifierom (C). Mreža potpisnika je Faza 2 — poboljšava decentralizaciju povjerenja, nije preduvjet.</p>
   </div>
   <div class="wrap">
     <div class="steps">
-      <div class="step now reveal"><div class="n">0</div><div><h3>MVP — nullifier registar + SBT + verifier A/B</h3><p><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> (EIP-5484) + verifier A (zkTLS/Certilia) ili B (NFC eOI); mock issuer/verifier harness.</p></div><div class="ph">SADA</div></div>
+      <div class="step now reveal"><div class="n">0</div><div><h3>MVP — nullifier registar + SBT + verifier C</h3><p><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> (EIP-5484) + EIP-712 verifier (A2: provjera Certilia <code>id_token</code>-a, jedan potpisnik); mock issuer/verifier harness.</p></div><div class="ph">SADA</div></div>
       <div class="step reveal"><div class="n">1</div><div><h3>Drugi neovisni izvor + karta</h3><p>Phone-SBT preko reverse-OTP (sms.domovina.ai) + credibility score; prvi pravi hrvatski-eID mintevi; nodeovi na javnoj karti.</p></div><div class="ph later">PILOT</div></div>
       <div class="step reveal"><div class="n">2</div><div><h3>M-of-N Android verifier mesh</h3><p>M zasebnih EIP-712 potpisnika (ne MPC) + DAO onboarding + statusi + slashing. Razmatra se Acurast kao substrat.</p></div><div class="ph later">DECENTRALIZACIJA</div></div>
-      <div class="step reveal"><div class="n">4</div><div><h3>zk anonimno glasanje</h3><p>MACI / Semaphore — jedan-čovjek-jedan-glas bez povezivanja glasa s građaninom; pepper threshold-custody.</p></div><div class="ph later">PRIVATNOST</div></div>
+      <div class="step reveal"><div class="n">3</div><div><h3>Pepper custody + audit → mainnet</h3><p>Pepper u HSM-u ili threshold custodyju (OPRF za klijentske verifiere), zaštita atestacija od replaya, security audit. Preduvjet za mainnet.</p></div><div class="ph later">PRIJE MAINNETA</div></div>
+      <div class="step reveal"><div class="n">4</div><div><h3>zk anonimno glasanje</h3><p>MACI / Semaphore — jedan-čovjek-jedan-glas bez povezivanja glasa s građaninom.</p></div><div class="ph later">PRIVATNOST</div></div>
       <div class="step reveal"><div class="n">5</div><div><h3>EUDI Wallet izvor</h3><p>SD-JWT VC / mDoc preko OpenID4VP — pan-EU. Isti onchain sloj, novi izvor identiteta za svih 27 zemalja.</p></div><div class="ph later">PAN-EU</div></div>
     </div>
   </div>
@@ -499,11 +501,11 @@ flowchart LR
   </div>
   <div class="wrap">
     <ul class="checks">
-      <li class="reveal"><span class="tick">✓</span><div><b>Whitepaper v0.2 + vlastita ADR baza</b> — protokol, mehanizam i ključne odluke dokumentirani (nullifier, pluggable verifier, pepper custody).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/16-whitepaper-proof-of-croatian-personhood.md" target="_blank" rel="noopener">whitepaper ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/docs/decisions" target="_blank" rel="noopener">ADR baza ↗</a></div></div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Whitepaper v0.2 + vlastita ADR baza</b> — protokol, mehanizam i ključne odluke dokumentirani (nullifier, pluggable verifier, pepper custody, eOsobna preko Web eID-a, zaštita od replaya).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/16-whitepaper-proof-of-croatian-personhood.md" target="_blank" rel="noopener">whitepaper ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/docs/decisions" target="_blank" rel="noopener">ADR baza ↗</a></div></div></li>
       <li class="reveal"><span class="tick">✓</span><div><b>Solidity referentni ugovori</b> — <code>IdentityRegistry</code>, <code>PersonhoodSBT</code> (EIP-5484), EIP-712 verifier + <b>55 Foundry testova (zeleno)</b> i deploy skripta.<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/tree/main/contracts/src" target="_blank" rel="noopener">ugovori ↗</a><a class="src" href="https://github.com/airkuna/landing/tree/main/contracts/test" target="_blank" rel="noopener">testovi ↗</a><a class="src" href="https://github.com/airkuna/landing/blob/main/contracts/script/DeployMVP.s.sol" target="_blank" rel="noopener">deploy skripta ↗</a></div></div></li>
       <li class="reveal"><span class="tick">✓</span><div><b>Off-chain verifier A2 harness</b> — mock issuer → verifier → <code>claim</code> → SBT mint; dupli OIB revertira; oporavak (<code>migrateAnchor</code>) radi. Dokazano e2e na lokalnom EVM-u.<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/tree/main/services/verifier-a2" target="_blank" rel="noopener">verifier-a2 ↗</a></div></div></li>
-      <li class="reveal"><span class="tick">✓</span><div><b>Android verifier node dizajn</b> + MVP verifier-A plan (Faza 2 substrat: Acurast).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/18-android-verifier-node-i-mvp-verifier-a.md" target="_blank" rel="noopener">dizajn + plan ↗</a></div></div></li>
-      <li class="reveal"><span class="tick plan">◷</span><div><b>U planu:</b> deploy na Gnosis testnet (Chiado), verifier A na pravoj Certiliji, security audit, mreža potpisnika, EUDI track.</div></li>
+      <li class="reveal"><span class="tick">✓</span><div><b>Android verifier node dizajn</b> + plan MVP verifiera A2 (Faza 2 substrat: Acurast).<div class="srcs"><a class="src" href="https://github.com/airkuna/landing/blob/main/docs/18-android-verifier-node-i-mvp-verifier-a.md" target="_blank" rel="noopener">dizajn + plan ↗</a></div></div></li>
+      <li class="reveal"><span class="tick plan">◷</span><div><b>U planu:</b> deploy na Gnosis testnet (Chiado), verifier C na pravoj Certiliji, pepper custody, security audit, mreža potpisnika, EUDI track.</div></li>
     </ul>
   </div>
 </section>
@@ -519,7 +521,7 @@ flowchart LR
         <div class="tagline">Sada</div>
         <div class="u">EU NGI Pilots</div>
         <div class="amt">~€60.000</div>
-        <div class="d">Cascade financiranje, bez konzorcija. MVP: nullifier registar + SBT + verifier-A (zkTLS/Certilia), open-source.</div>
+        <div class="d">Cascade financiranje, bez konzorcija. Cilj: nullifier registar + SBT na testnetu + verifier A (zkTLS/Certilia, uz OPRF), open-source.</div>
       </a>
       <div class="lc reveal">
         <div class="tagline">Zatim</div>

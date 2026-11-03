@@ -210,14 +210,16 @@ function claim(Attestation calldata a, bytes calldata proof) external {
     <table class="tbl">
       <thead><tr><th>Verifier</th><th>How</th><th>Decentralisation</th><th>Phase</th></tr></thead>
       <tbody>
-        <tr><td><b>A · zkTLS over Certilia OIDC</b></td><td>The client proves (Reclaim/zkTLS) that the Certilia JWKS signed an id_token containing their ID number; the contract verifies the zk proof</td><td>No oracle network; relies on the Certilia PKI</td><td><span class="badge mvp">MVP</span></td></tr>
-        <tr><td><b>B · NFC eID card chip</b></td><td>The client passively authenticates the chip issuer's signature (Rarimo/zkPassport style) and derives the nullifier locally</td><td>No oracle network; relies on the state PKI</td><td><span class="badge mvp">MVP alt.</span></td></tr>
-        <tr><td><b>C · EIP-712 attestation oracle</b></td><td>An off-chain verifier validates the id_token (JWKS/iss/aud) and signs <code>{nullifier,anchor,loa}</code>; the contract checks the signer</td><td>A single signer = centralised</td><td><span class="badge next">Transitional</span></td></tr>
+        <tr><td><b>A · zkTLS over Certilia OIDC</b></td><td>The client proves (Reclaim/zkTLS) that the Certilia JWKS signed an id_token containing their ID number; the contract verifies the zk proof. Nullifier via an OPRF</td><td>No oracle network; relies on the Certilia PKI</td><td><span class="badge next">Research</span></td></tr>
+        <tr><td><b>B · NFC eID card chip</b></td><td>The client passively authenticates the chip issuer's signature (Rarimo/zkPassport style); nullifier via an OPRF. Support on the Croatian eID card is not confirmed</td><td>No oracle network; relies on the state PKI</td><td><span class="badge f2">Unverified</span></td></tr>
+        <tr><td><b>C · EIP-712 attestation oracle</b></td><td>An off-chain verifier validates the id_token (JWKS/iss/aud) and signs <code>{nullifier,anchor,loa}</code>; the contract checks the signer</td><td>A single signer = centralised</td><td><span class="badge mvp">MVP · built</span></td></tr>
         <tr><td><b>D · M-of-N Android verifier mesh</b></td><td>Like C, but M independent Android nodes (StrongBox + Key Attestation) co-sign</td><td><b>High</b> — nobody mints alone</td><td><span class="badge f2">Phase 2</span></td></tr>
+        <tr><td><b>E · eID card + Web eID</b></td><td>The card (reader + PIN) signs a statement that binds the wallet (CAdES); the verifier checks the AKD chain and OCSP. The certificate never goes onchain</td><td>State PKI; anyone can re-check the proof</td><td><span class="badge next">Proposed</span></td></tr>
       </tbody>
     </table>
     </div>
     <div class="callout"><b>Key insight from the prior art (confirmed over 2 rounds):</b> verifiers A and B give Sybil resistance <b>without any signer network</b>, because the document/session proves itself cryptographically. Further confirmation: <b>World ID</b> does personhood with only a nullifier registry + Semaphore zk, with no signer mesh at all — a proven industry standard. The mesh (D) is justified only by: (1) a live-OIDC root that cannot be proven client-side, and (2) the political story that "neither AKD nor ITalk can mint alone". Hence: <b>build A/B for the MVP; the mesh is Phase 2, not a prerequisite.</b></div>
+    <div class="callout"><b>Amendment 2026-11-03 (ADR 0002–0005):</b> the MVP actually built is <b>C</b> (verifier-a2, a single EIP-712 signer over Certilia). A and B cannot derive the nullifier locally, because it is an HMAC with a <b>secret</b> pepper the client does not hold; they need an <b>OPRF</b> to the pepper custodians, otherwise they reduce to C. B is not yet confirmed for the Croatian eID card; for the same card there is a tested path <b>E</b> (Web eID, an active signature). Attestations get a per-nullifier <code>seq</code> against replay, and the signer set is changed by a quorum, not an admin.</div>
     <p>If you do build the mesh (Phase 2): consider <b>Acurast as a SUBSTRATE</b> rather than building from scratch. Acurast processors (250k+ phones) have their own EVM address, a code-bound hardware key, hardware attestation, and can sign/settle onchain. M-of-N Safe co-signing is custom logic <i>on top of</i> Acurast — it turns "buy and run phones" into "deploy a custom verifier onto an existing network".</p>
     <div class="callout warn"><b>⚠ Caveat for all HW-attestation approaches:</b> the Android Key Attestation chain roots in <b>Google</b> (Google signs the attestation key). So a mesh built on Android attestation is <b>trust-minimised, not trustless</b> — Google is the root of trust. Say so honestly; the mitigation is mixing vendors (Samsung Knox + Titan + Qualcomm) so that no single manufacturer is the sole point of failure.</div>
 
@@ -268,7 +270,7 @@ function claim(Attestation calldata a, bytes calldata proof) external {
     <table class="tbl">
       <thead><tr><th>Phase</th><th>Deliverable</th></tr></thead>
       <tbody>
-        <tr><td><b>0 — MVP</b></td><td><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> + verifier A (zkTLS/Certilia) or B (NFC eID); mock issuer/verifier locally</td></tr>
+        <tr><td><b>0 — MVP</b></td><td><code>IdentityRegistry</code> + <code>PersonhoodSBT</code> + verifier C (EIP-712, A2 over Certilia) — built; A (zkTLS) / B (NFC) / E (Web eID) as the next step; mock issuer/verifier locally</td></tr>
         <tr><td><b>1</b></td><td>A second independent source (phone-SBT via sms.domovina.ai reverse-OTP) + credibility score; node map</td></tr>
         <tr><td><b>2</b></td><td>M-of-N Android verifier mesh (M separate EIP-712 signers, not MPC) + DAO onboarding + statuses + slashing</td></tr>
         <tr><td><b>3</b></td><td>Social attestation (web-of-trust score)</td></tr>
@@ -293,8 +295,10 @@ function claim(Attestation calldata a, bytes calldata proof) external {
     <p>airKUNA maintains its own ADR base (<code>docs/decisions/</code>, starting at 0001):</p>
     <ul>
       <li><b>0001</b> — nullifier registry vs per-wallet SBT (uniqueness at the person level).</li>
-      <li><b>0002</b> — pluggable verifier (A zkTLS / B NFC eID / C EIP-712 oracle / D Android mesh); MVP = A/B, mesh = Phase 2.</li>
-      <li><b>0003</b> — pepper custody (threshold/HSM, rotation).</li>
+      <li><b>0002</b> — pluggable verifier (A zkTLS / B NFC eID / C EIP-712 oracle / D Android mesh); MVP = A/B, mesh = Phase 2 (amended: the MVP built is C; E added).</li>
+      <li><b>0003</b> — pepper custody (threshold/HSM, rotation, an OPRF for client-side verifiers).</li>
+      <li><b>0004</b> — the eID card via Web eID (CAdES) as verifier E.</li>
+      <li><b>0005</b> — a per-nullifier <code>seq</code> against replay; signer-set changes approved by a quorum.</li>
     </ul>
 
   </div>

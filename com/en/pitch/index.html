@@ -307,7 +307,7 @@ flowchart LR
       <div class="card"><h3 style="font-size:15px">Source-agnostic</h3><p>Certilia today → EUDI Wallet (SD-JWT VC / mDoc) tomorrow. Same on-chain layer, all 27 EU states.</p></div>
       <div class="card"><h3 style="font-size:15px">eID = recovery</h3><p>Lose a wallet? Re-login with eID → same nullifier → migrate identity to a new wallet.</p></div>
     </div>
-    <div class="note"><b>Honest on trust:</b> the MVP verifier (zkTLS over the eID session, or NFC chip) needs no signer network — the same proven approach as World ID, but rooted in state eID instead of biometrics. A decentralized signer mesh is a later phase that improves trust-minimization, not a precondition to ship.</div>
+    <div class="note"><b>Honest on trust:</b> the MVP verifier is a single EIP-712 oracle over Certilia — it sees the ID number and is a central point. Client-side proofs (zkTLS, the eID card) and a decentralized signer mesh are later phases that reduce that trust; they are not a precondition to ship.</div>
   </div>
 </section>
 
@@ -535,7 +535,7 @@ flowchart LR
       <div>
         <p class="kicker" style="margin-top:6px">Milestones this round buys:</p>
         <div class="mile" style="grid-template-columns:1fr 1fr">
-          <div class="m"><div class="q">M0–M6</div><h4>Mainnet + audit</h4><p>Contracts on Gnosis mainnet; security audit; verifier A on real Certilia.</p></div>
+          <div class="m"><div class="q">M0–M6</div><h4>Mainnet + audit</h4><p>Contracts on Gnosis mainnet; security audit; pepper custody; the verifier on real Certilia.</p></div>
           <div class="m"><div class="q">M6–M9</div><h4>First real mints + pilot</h4><p>First Croatian-eID personhood mints; live community / municipality vote.</p></div>
           <div class="m"><div class="q">M9–M12</div><h4>Stablecoin pilot</h4><p>Euro stablecoin pilot on the SEPA rail with an ethical-bank partner.</p></div>
           <div class="m"><div class="q">M12–M18</div><h4>EUDI + scale</h4><p>EUDI Wallet verifier; 3+ pilots; CEE expansion groundwork.</p></div>
